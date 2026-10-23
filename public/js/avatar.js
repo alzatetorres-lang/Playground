@@ -75,7 +75,7 @@ export function botSvg(avatar, { mood, size } = {}) {
   const bodyTop = topY(a.body);
   const cls = ['bot', size, mood].filter(Boolean).join(' ');
   return `<svg class="${cls}" viewBox="0 0 100 100" role="img" aria-label="Robot">
-    <circle cx="50" cy="52" r="47" fill="#cfc9ea"/>
+    <polygon points="50,4 91,27 91,77 50,100 9,77 9,27" fill="#d6f6ff" stroke="#27f3ff" stroke-width="2.5" stroke-linejoin="round"/>
     <g class="float">
       <rect x="38" y="76" width="24" height="14" rx="5" fill="${c}" stroke="${INK}" stroke-width="3"/>
       <g class="arm-l"><rect x="26" y="78" width="12" height="6" rx="3" fill="${c}" stroke="${INK}" stroke-width="2.5"/></g>

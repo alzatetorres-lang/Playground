@@ -6,8 +6,8 @@ import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
 
 const app = () => document.querySelector('#app');
-let tickTimer = null, canvas = null, lastTick = -1, nav = () => {};
-export const initRoom = navigate => { nav = navigate; };
+let tickTimer = null, canvas = null, lastTick = -1, nav = () => {}, chrome = () => {};
+export const initRoom = (navigate, onChrome) => { nav = navigate; chrome = onChrome; };
 
 const me = () => S.room?.players.find(p => p.id === S.you);
 const isHost = () => S.room?.hostId === S.you;
@@ -82,6 +82,7 @@ export function render() {
   if (!S.room) return;
   const views = { lobby, question, result, draw, drawresult, finished, wait };
   (views[S.phase] || wait)(root);
+  chrome();
 }
 
 // ---------- vistas ----------
@@ -90,7 +91,7 @@ function lobby(root) {
   canvas?.destroy(); canvas = null;
   const r = S.room, host = isHost();
   root.innerHTML = `
-    <section class="hero"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
+    <section class="hero center"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
     ${r.settings.solo ? '' : `<section class="card"><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code">${esc(r.code)}</div>
       <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button></div>
       <p class="muted" style="text-align:center;margin-top:10px">Comparte el código o el enlace. Máximo 10 jugadores.</p></section>`}
@@ -214,7 +215,7 @@ function finished(root) {
   const order = [top[1], top[0], top[2]].filter(Boolean);
   const cls = p => ['p1', 'p2', 'p3'][p.place - 1];
   root.innerHTML = `
-    <section class="hero"><div class="small">Fin de la partida</div><h1>¡Ganó <span>${esc(top[0].name)}</span>!</h1></section>
+    <section class="hero center"><div class="small">Fin de la partida</div><h1>¡Ganó <span>${esc(top[0].name)}</span>!</h1></section>
     <div class="podium">${order.map(p => `<div class="${cls(p)}">${botSvg(p.avatar, { mood: p.place === 1 ? 'happy' : undefined })}<b>${medal(p.place - 1)} ${esc(p.name)}</b><div class="muted">${p.score}</div></div>`).join('')}</div>
     <section class="card"><h2>Resultado final</h2>
       <ul class="board">${rank.map(p => `<li><span class="pos">${p.place}</span>${botSvg(p.avatar, { size: 'sm' })}<span class="nm">${esc(p.name)}${p.id === S.you ? ' (tú)' : ''}<br><span class="muted" style="font-size:.78rem">${p.quizCorrect} aciertos de quiz · ${p.drawGuesses} dibujos adivinados</span></span><span class="pts">${p.score}</span></li>`).join('')}</ul></section>
@@ -227,7 +228,7 @@ function finished(root) {
 
 function wait(root) {
   const r = S.room;
-  root.innerHTML = `<section class="hero"><div class="small">Sala ${esc(r.code)}</div><h1>Reconectado</h1><p>Esperando a que empiece la siguiente ronda…</p></section><section class="card"><h2>Clasificación</h2>${board([...r.players].sort((a, b) => b.score - a.score))}</section><div class="row center"><button class="ghost" data-act="leave">Salir</button></div>`;
+  root.innerHTML = `<section class="hero center"><div class="small">Sala ${esc(r.code)}</div><h1>Reconectado</h1><p>Esperando a que empiece la siguiente ronda…</p></section><section class="card"><h2>Clasificación</h2>${board([...r.players].sort((a, b) => b.score - a.score))}</section><div class="row center"><button class="ghost" data-act="leave">Salir</button></div>`;
 }
 
 // ---------- acciones ----------

@@ -1,0 +1,490 @@
+[
+{
+"id": 1,
+"categoria": "Naturaleza",
+"pregunta": "¿Cuál es el mamífero más grande del planeta?",
+"opciones": ["Elefante africano", "Ballena azul", "Tiburón ballena", "Jirafa"],
+"respuesta_correcta": "Ballena azul",
+"tiene_imagen": false
+},
+{
+"id": 2,
+"categoria": "Naturaleza",
+"pregunta": "¿Qué proceso utilizan las plantas para convertir la luz solar en alimento?",
+"opciones": ["Respiración", "Fotosíntesis", "Fermentación", "Transpiración"],
+"respuesta_correcta": "Fotosíntesis",
+"tiene_imagen": false
+},
+{
+"id": 3,
+"categoria": "Naturaleza",
+"pregunta": "¿Qué animal se caracteriza por cambiar de color para camuflarse?",
+"opciones": ["Camaleón", "Iguana", "Guepardo", "Salamandra"],
+"respuesta_correcta": "Camaleón",
+"tiene_imagen": false
+},
+{
+"id": 4,
+"categoria": "Naturaleza",
+"pregunta": "¿Cuál de estos animales es un anfibio?",
+"opciones": ["Culebra", "Rana", "Cocodrilo", "Lagartija"],
+"respuesta_correcta": "Rana",
+"tiene_imagen": false
+},
+{
+"id": 5,
+"categoria": "Naturaleza",
+"pregunta": "¿Cómo se llama el grupo de estrellas que forma una figura en el cielo?",
+"opciones": ["Galaxia", "Constelación", "Cometa", "Nebulosa"],
+"respuesta_correcta": "Constelación",
+"tiene_imagen": false
+},
+{
+"id": 6,
+"categoria": "Naturaleza",
+"pregunta": "¿Qué flor se asocia habitualmente con esta imagen?",
+"opciones": ["Margarita", "Girasol", "Rosa", "Orquídea"],
+"respuesta_correcta": "Girasol",
+"tiene_imagen": true,
+"descripcion_imagen": "Imagen de un campo de girasoles mirando al sol"
+},
+{
+"id": 7,
+"categoria": "Naturaleza",
+"pregunta": "¿Cuál es el gas más abundante en la atmósfera terrestre?",
+"opciones": ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Hidrógeno"],
+"respuesta_correcta": "Nitrógeno",
+"tiene_imagen": false
+},
+{
+"id": 8,
+"categoria": "Naturaleza",
+"pregunta": "¿Qué felino es conocido como el animal terrestre más rápido del mundo?",
+"opciones": ["León", "Guepardo", "Tigre", "Leopardo"],
+"respuesta_correcta": "Guepardo",
+"tiene_imagen": false
+},
+{
+"id": 9,
+"categoria": "Deportes",
+"pregunta": "¿Cuántos jugadores hay en un equipo de fútbol sobre el campo?",
+"opciones": ["9", "10", "11", "12"],
+"respuesta_correcta": "11",
+"tiene_imagen": false
+},
+{
+"id": 10,
+"categoria": "Deportes",
+"pregunta": "¿En qué deporte se utiliza una raqueta y una pelota amarilla?",
+"opciones": ["Baloncesto", "Tenis", "Golf", "Balonmano"],
+"respuesta_correcta": "Tenis",
+"tiene_imagen": false
+},
+{
+"id": 11,
+"categoria": "Deportes",
+"pregunta": "¿Cada cuántos años se celebran los Juegos Olímpicos de Verano?",
+"opciones": ["2 años", "3 años", "4 años", "5 años"],
+"respuesta_correcta": "4 años",
+"tiene_imagen": false
+},
+{
+"id": 12,
+"categoria": "Deportes",
+"pregunta": "¿A qué deporte pertenece esta cancha u objeto?",
+"opciones": ["Béisbol", "Baloncesto", "Voleibol", "Rugby"],
+"respuesta_correcta": "Baloncesto",
+"tiene_imagen": true,
+"descripcion_imagen": "Canasta y balón de baloncesto entrando en el aro"
+},
+{
+"id": 13,
+"categoria": "Deportes",
+"pregunta": "¿Qué país ganó el Mundial de Fútbol masculino en 2010?",
+"opciones": ["Brasil", "Alemania", "España", "Holanda"],
+"respuesta_correcta": "España",
+"tiene_imagen": false
+},
+{
+"id": 14,
+"categoria": "Deportes",
+"pregunta": "¿En qué deporte destaca el piloto Fernando Alonso?",
+"opciones": ["MotoGP", "Fórmula 1", "Rally Dakar", "Ciclismo"],
+"respuesta_correcta": "Fórmula 1",
+"tiene_imagen": false
+},
+{
+"id": 15,
+"categoria": "Deportes",
+"pregunta": "¿Cuántos puntos vale un tiro libre en baloncesto?",
+"opciones": ["1 punto", "2 puntos", "3 puntos", "4 puntos"],
+"respuesta_correcta": "1 punto",
+"tiene_imagen": false
+},
+{
+"id": 16,
+"categoria": "Deportes",
+"pregunta": "¿En qué gran competición ciclista el líder lleva un 'maillot amarillo'?",
+"opciones": ["Vuelta a España", "Giro de Italia", "Tour de Francia", "Copa del Mundo"],
+"respuesta_correcta": "Tour de Francia",
+"tiene_imagen": false
+},
+{
+"id": 17,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es la capital de Francia?",
+"opciones": ["Londres", "París", "Berlín", "Roma"],
+"respuesta_correcta": "París",
+"tiene_imagen": false
+},
+{
+"id": 18,
+"categoria": "Geografía",
+"pregunta": "¿En qué continente se encuentra el desierto del Sahara?",
+"opciones": ["Asia", "América", "África", "Oceanía"],
+"respuesta_correcta": "África",
+"tiene_imagen": false
+},
+{
+"id": 19,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es el río más largo del mundo?",
+"opciones": ["Nilo", "Amazonas", "Misisipi", "Danubio"],
+"respuesta_correcta": "Amazonas",
+"tiene_imagen": false
+},
+{
+"id": 20,
+"categoria": "Geografía",
+"pregunta": "¿A qué famoso monumento corresponde esta imagen?",
+"opciones": ["Coliseo Romano", "Torre Eiffel", "Machu Picchu", "Gran Muralla China"],
+"respuesta_correcta": "Coliseo Romano",
+"tiene_imagen": true,
+"descripcion_imagen": "Anfiteatro del Coliseo de Roma en Italia"
+},
+{
+"id": 21,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es el océano más grande de la Tierra?",
+"opciones": ["Océano Atlántico", "Océano Índico", "Océano Pacífico", "Océano Ártico"],
+"respuesta_correcta": "Océano Pacífico",
+"tiene_imagen": false
+},
+{
+"id": 22,
+"categoria": "Geografía",
+"pregunta": "¿Qué país tiene forma de bota en el mapa de Europa?",
+"opciones": ["Grecia", "Portugal", "Italia", "España"],
+"respuesta_correcta": "Italia",
+"tiene_imagen": false
+},
+{
+"id": 23,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es la cordillera más alta del mundo?",
+"opciones": ["Los Andes", "Los Alpes", "El Himalaya", "Los Pirineos"],
+"respuesta_correcta": "El Himalaya",
+"tiene_imagen": false
+},
+{
+"id": 24,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es el país más extenso del mundo por superficie?",
+"opciones": ["Canadá", "China", "Estados Unidos", "Rusia"],
+"respuesta_correcta": "Rusia",
+"tiene_imagen": false
+},
+{
+"id": 25,
+"categoria": "Geografía",
+"pregunta": "¿En qué país se encuentra la famosa estatua del Cristo Redentor?",
+"opciones": ["Argentina", "Brasil", "Colombia", "México"],
+"respuesta_correcta": "Brasil",
+"tiene_imagen": false
+},
+{
+"id": 26,
+"categoria": "Informática",
+"pregunta": "¿Qué significa la sigla 'WWW' en una dirección de internet?",
+"opciones": ["World Wide Web", "World Web Wide", "Web World Wide", "Wide World Web"],
+"respuesta_correcta": "World Wide Web",
+"tiene_imagen": false
+},
+{
+"id": 27,
+"categoria": "Informática",
+"pregunta": "¿Cuál de los siguientes componentes es el 'cerebro' del ordenador?",
+"opciones": ["Disco Duro", "Memoria RAM", "Procesador (CPU)", "Tarjeta de Red"],
+"respuesta_correcta": "Procesador (CPU)",
+"tiene_imagen": false
+},
+{
+"id": 28,
+"categoria": "Informática",
+"pregunta": "¿A qué conocida marca tecnológica pertenece este logotipo?",
+"opciones": ["Microsoft", "Apple", "Android", "Linux"],
+"respuesta_correcta": "Apple",
+"tiene_imagen": true,
+"descripcion_imagen": "Icono de la manzana mordida de Apple"
+},
+{
+"id": 29,
+"categoria": "Informática",
+"pregunta": "¿Qué dispositivo se utiliza principalmente para hacer clic y navegar por la pantalla?",
+"opciones": ["Teclado", "Ratón (Mouse)", "Escáner", "Impresora"],
+"respuesta_correcta": "Ratón (Mouse)",
+"tiene_imagen": false
+},
+{
+"id": 30,
+"categoria": "Informática",
+"pregunta": "¿Cuál de estos es un sistema operativo para teléfonos móviles?",
+"opciones": ["Windows 10", "Android", "Linux Ubuntu", "MS-DOS"],
+"respuesta_correcta": "Android",
+"tiene_imagen": false
+},
+{
+"id": 31,
+"categoria": "Informática",
+"pregunta": "¿Qué atajo de teclado se usa habitualmente para COPIAR un texto seleccionado?",
+"opciones": ["Ctrl + V", "Ctrl + C", "Ctrl + Z", "Ctrl + X"],
+"respuesta_correcta": "Ctrl + C",
+"tiene_imagen": false
+},
+{
+"id": 32,
+"categoria": "Informática",
+"pregunta": "¿Qué tipo de archivo suele llevar la extensión '.pdf'?",
+"opciones": ["Archivo de audio", "Documento de texto", "Vídeo", "Archivo ejecutable"],
+"respuesta_correcta": "Documento de texto",
+"tiene_imagen": false
+},
+{
+"id": 33,
+"categoria": "Videojuegos",
+"pregunta": "¿Cómo se llama el fontanero más famoso de los videojuegos?",
+"opciones": ["Luigi", "Mario", "Link", "Sonic"],
+"respuesta_correcta": "Mario",
+"tiene_imagen": false
+},
+{
+"id": 34,
+"categoria": "Videojuegos",
+"pregunta": "¿De qué famoso videojuego de construcción y bloques es esta imagen?",
+"opciones": ["Terraria", "Minecraft", "Roblox", "Fortnite"],
+"respuesta_correcta": "Minecraft",
+"tiene_imagen": true,
+"descripcion_imagen": "Un paisaje de bloques cúbicos estilo Minecraft"
+},
+{
+"id": 35,
+"categoria": "Videojuegos",
+"pregunta": "¿Qué criatura amarilla es la mascota oficial de Pokémon?",
+"opciones": ["Charmander", "Squirtle", "Pikachu", "Bulbasaur"],
+"respuesta_correcta": "Pikachu",
+"tiene_imagen": false
+},
+{
+"id": 36,
+"categoria": "Videojuegos",
+"pregunta": "¿En qué juego debes sobrevivir en una isla y ser el último jugador en pie (Battle Royale)?",
+"opciones": ["Fortnite", "Tetris", "PAC-MAN", "The Sims"],
+"respuesta_correcta": "Fortnite",
+"tiene_imagen": false
+},
+{
+"id": 37,
+"categoria": "Videojuegos",
+"pregunta": "¿Cómo se llama el erizo azul súper rápido de Sega?",
+"opciones": ["Shadow", "Tails", "Knuckles", "Sonic"],
+"respuesta_correcta": "Sonic",
+"tiene_imagen": false
+},
+{
+"id": 38,
+"categoria": "Videojuegos",
+"pregunta": "¿Qué videojuego clásico consiste en comer puntos amarillos evitando fantasmas?",
+"opciones": ["Space Invaders", "PAC-MAN", "Donkey Kong", "Pong"],
+"respuesta_correcta": "PAC-MAN",
+"tiene_imagen": false
+},
+{
+"id": 39,
+"categoria": "Videojuegos",
+"pregunta": "¿Cuál es el nombre del héroe que viste de verde en 'The Legend of Zelda'?",
+"opciones": ["Zelda", "Link", "Ganon", "Epona"],
+"respuesta_correcta": "Link",
+"tiene_imagen": false
+},
+{
+"id": 40,
+"categoria": "Cultura General",
+"pregunta": "¿Quién pintó la famosa obra de 'La Gioconda' (o Monalisa)?",
+"opciones": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Salvador Dalí"],
+"respuesta_correcta": "Leonardo da Vinci",
+"tiene_imagen": false
+},
+{
+"id": 41,
+"categoria": "Cultura General",
+"pregunta": "¿Cuántos días tiene un año bisiesto?",
+"opciones": ["364", "365", "366", "367"],
+"respuesta_correcta": "366",
+"tiene_imagen": false
+},
+{
+"id": 42,
+"categoria": "Cultura General",
+"pregunta": "¿Cuál es el instrumento musical de viento-madera con teclas negras y blancas?",
+"opciones": ["Violín", "Piano", "Flauta", "Guitarra"],
+"respuesta_correcta": "Piano",
+"tiene_imagen": false
+},
+{
+"id": 43,
+"categoria": "Cultura General",
+"pregunta": "¿A qué obra de arte o autor pertenece este estilo con relojes blandos?",
+"opciones": ["Pablo Picasso", "Salvador Dalí", "Claude Monet", "Diego Velázquez"],
+"respuesta_correcta": "Salvador Dalí",
+"tiene_imagen": true,
+"descripcion_imagen": "Detalle del cuadro 'La persistencia de la memoria' con relojes derretidos de Dalí"
+},
+{
+"id": 44,
+"categoria": "Cultura General",
+"pregunta": "¿Cuál es el idioma oficial más hablado en Brasil?",
+"opciones": ["Español", "Portugués", "Inglés", "Francés"],
+"respuesta_correcta": "Portugués",
+"tiene_imagen": false
+},
+{
+"id": 45,
+"categoria": "Cultura General",
+"pregunta": "¿En qué nota musical empieza la escala básica (Do, Re, Mi...)?",
+"opciones": ["Do", "Sol", "La", "Fa"],
+"respuesta_correcta": "Do",
+"tiene_imagen": false
+},
+{
+"id": 46,
+"categoria": "Cultura General",
+"pregunta": "¿Cuántos colores tiene el arcoíris tradicionalmente?",
+"opciones": ["5", "6", "7", "8"],
+"respuesta_correcta": "7",
+"tiene_imagen": false
+},
+{
+"id": 47,
+"categoria": "Cultura General",
+"pregunta": "¿Quién escribió la célebre obra 'Don Quijote de la Mancha'?",
+"opciones": ["Federico García Lorca", "Miguel de Cervantes", "Gabriel García Márquez", "Lope de Vega"],
+"respuesta_correcta": "Miguel de Cervantes",
+"tiene_imagen": false
+},
+{
+"id": 48,
+"categoria": "Historia de España",
+"pregunta": "¿En qué año llegaron los españoles a América bajo el mando de Cristóbal Colón?",
+"opciones": ["1492", "1512", "1392", "1500"],
+"respuesta_correcta": "1492",
+"tiene_imagen": false
+},
+{
+"id": 49,
+"categoria": "Historia de España",
+"pregunta": "¿Cómo se llamaba la época de dominación musulmana en la península ibérica?",
+"opciones": ["Al-Ándalus", "Hispania", "Lusitania", "Iberia"],
+"respuesta_correcta": "Al-Ándalus",
+"tiene_imagen": false
+},
+{
+"id": 50,
+"categoria": "Historia de España",
+"pregunta": "¿Quiénes eran los Reyes Católicos?",
+"opciones": ["Isabel I y Fernando II", "Juana I y Felipe II", "Carlos I y Sofía", "Isabel II y Alfonso XII"],
+"respuesta_correcta": "Isabel I y Fernando II",
+"tiene_imagen": false
+},
+{
+"id": 51,
+"categoria": "Historia de España",
+"pregunta": "¿A qué famoso monumento hispanomusulmán situado en Granada corresponde esta imagen?",
+"opciones": ["La Mezquita de Córdoba", "La Alhambra", "La Giralda", "El Alcázar de Segovia"],
+"respuesta_correcta": "La Alhambra",
+"tiene_imagen": true,
+"descripcion_imagen": "Vista del palacio de La Alhambra de Granada con la Sierra Nevada de fondo"
+},
+{
+"id": 52,
+"categoria": "Historia de España",
+"pregunta": "¿Qué rey español fue conocido como 'El Hechizado'?",
+"opciones": ["Felipe II", "Carlos II", "Felipe V", "Carlos III"],
+"respuesta_correcta": "Carlos II",
+"tiene_imagen": false
+},
+{
+"id": 53,
+"categoria": "Historia de España",
+"pregunta": "¿En qué año se aprobó la actual Constitución Española?",
+"opciones": ["1975", "1978", "1982", "1986"],
+"respuesta_correcta": "1978",
+"tiene_imagen": false
+},
+{
+"id": 54,
+"categoria": "Historia de España",
+"pregunta": "¿Qué pueblo de la antigüedad fundó la ciudad de Cádiz (Gadir)?",
+"opciones": ["Los Romanos", "Los Fenicios", "Los Visigodos", "Los Cartagineses"],
+"respuesta_correcta": "Los Fenicios",
+"tiene_imagen": false
+},
+{
+"id": 55,
+"categoria": "Historia de España",
+"pregunta": "¿Qué Guerra aconteció en España entre los años 1936 y 1939?",
+"opciones": ["Guerra de la Independencia", "Guerra Civil Española", "Guerra de Sucesión", "Guerra de Flandes"],
+"respuesta_correcta": "Guerra Civil Española",
+"tiene_imagen": false
+},
+{
+"id": 56,
+"categoria": "Historia de España",
+"pregunta": "¿Qué acueducto romano muy famoso se conserva en la ciudad de Segovia?",
+"opciones": ["Acueducto de Segovia", "Acueducto de los Milagros", "Acueducto de Tarragona", "Acueducto de Sevilla"],
+"respuesta_correcta": "Acueducto de Segovia",
+"tiene_imagen": false
+},
+{
+"id": 57,
+"categoria": "Cultura General",
+"pregunta": "¿De qué película o saga de ciencia ficción es esta nave?",
+"opciones": ["Star Wars (El Halcón Milenario)", "Star Trek (Enterprise)", "Interstellar", "Alien"],
+"respuesta_correcta": "Star Wars (El Halcón Milenario)",
+"tiene_imagen": true,
+"descripcion_imagen": "Nave espacial Halcón Milenario volando"
+},
+{
+"id": 58,
+"categoria": "Naturaleza",
+"pregunta": "¿Qué insecto produce la miel que consumimos?",
+"opciones": ["Avispa", "Abeja", "Hormiga", "Mariposa"],
+"respuesta_correcta": "Abeja",
+"tiene_imagen": false
+},
+{
+"id": 59,
+"categoria": "Geografía",
+"pregunta": "¿Cuál es la capital de España?",
+"opciones": ["Barcelona", "Valencia", "Madrid", "Sevilla"],
+"respuesta_correcta": "Madrid",
+"tiene_imagen": false
+},
+{
+"id": 60,
+"categoria": "Deportes",
+"pregunta": "¿En qué deporte de invierno se deslizan sobre hielo con patines y se usa un disco (puck)?",
+"opciones": ["Patinaje artístico", "Curling", "Hockey sobre hielo", "Esquí"],
+"respuesta_correcta": "Hockey sobre hielo",
+"tiene_imagen": false
+}
+]

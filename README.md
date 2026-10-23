@@ -1,14 +1,29 @@
-# Playground - Interactive Web Games (Frontend)
+# Playground
 
-Proyecto exportado e integrado desde **Google Stitch**:
-- **Stitch Project:** Playground Interactive Web Games (`projects/16907053932811126199`)
+Quiz social en directo con rondas de dibujo. Se juega desde el móvil o el ordenador: un anfitrión crea la partida, comparte un código de 5 caracteres y entran hasta 10 jugadores. Entre pregunta y pregunta, un jugador al azar dibuja con el ratón una palabra secreta y los demás la adivinan contra reloj.
 
-## 🎮 Pantallas Disponibles
-- [index.html](index.html) - Página principal (Home)
-- [stitch_screens/PLAYGROUND_-_Home.html](stitch_screens/PLAYGROUND_-_Home.html) - Home Playground
-- [stitch_screens/PLAYGROUND_-_Draw_Guess.html](stitch_screens/PLAYGROUND_-_Draw_Guess.html) - Juego Draw & Guess
-- [stitch_screens/PLAYGROUND_-_Quiz_Arena.html](stitch_screens/PLAYGROUND_-_Quiz_Arena.html) - Quiz Arena
-- [stitch_screens/PLAYGROUND_-_Estadsticas_y_Rcords.html](stitch_screens/PLAYGROUND_-_Estadsticas_y_Rcords.html) - Estadísticas y Récords
+## Qué incluye
+- Quiz en vivo con puntuación por rapidez y tres poderes (Doble apuesta, Escudo, Robo de tiempo).
+- Rondas de dibujo con 1500 palabras del banco de preguntas del equipo.
+- Cuentas de anfitrión, invitados por nombre, quizzes privados o públicos, biblioteca con búsqueda y duplicado.
+- Avatares: robots animados, aleatorios y personalizables.
+- Música de fondo generada en el navegador (WebAudio), con silencio y volumen.
+- Modo individual, reconexión, revancha y récords.
 
-## 🚀 Despliegue / Visualización
-Puedes abrir directamente cualquier archivo `.html` en tu navegador o levantarlo con un servidor local estático.
+## Arrancar
+```
+npm install
+npm run dev     # http://localhost:3000
+npm test
+```
+Necesita Node 22.5 o superior (usa `node:sqlite`). La base se crea sola en `data/` y se rellena con el banco de preguntas la primera vez.
+
+## Estructura
+- `src/`: servidor (db, auth, salas y reglas, API).
+- `public/`: frontend sin framework.
+- `banco-preguntas/`: banco de 1500 conceptos (Excel, JSON y scripts).
+- `stitch_screens/`, `index.html`: diseños de referencia de Google Stitch.
+- `SPEC.md`, `tasks/plan.md`: especificación y plan.
+
+## Despliegue
+`docker-compose.yml` despliega en el VPS detrás de Traefik, con HTTPS. Variables: `PORT`, `DB_FILE`, `COOKIE_SECURE=1`.

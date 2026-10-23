@@ -5,7 +5,7 @@ import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
 import { initTouchFx, decodeAll } from './fx.js';
 import { initScene } from './scene3d.js';
-import { homeHtml, mountHome, selectWorld, WORLDS, worldOf } from './world.js';
+import { homeHtml, mountHome, selectWorld, WORLDS, worldOf, worldArt } from './world.js';
 import { sweepViewers, mountBot, SKIN_INFO, RARITY_COLOR } from './bot3d.js';
 import { initRoom, enter, handleAct, tryResume, leave, render as renderRoom } from './room.js';
 
@@ -286,7 +286,7 @@ async function library(query) {
   const [cats, list] = await Promise.all([api('/api/categories'), api(`/api/quizzes?${new URLSearchParams({ q: S.libQ || '', category: S.libCat || '', ...(mine ? { mine: '1' } : {}) })}`)]);
   app.innerHTML = `
     <a class="back" href="#/">‹ Inicio</a><section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Elige un quiz para jugar solo' : 'Elige un quiz'}</div><h1>Biblioteca</h1></section>
-    <div class="mode-strip" role="radiogroup" aria-label="Modo de juego">${WORLDS.filter(w => !solo || w.solo).map(w => `<a class="mode-chip ${w.mode === mode ? 'on' : ''}" role="radio" aria-checked="${w.mode === mode}" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}" style="--c:${w.color}"><span>${w.icon}</span>${esc(w.name)}</a>`).join('')}</div>
+    <div class="mode-strip" role="radiogroup" aria-label="Modo de juego">${WORLDS.filter(w => !solo || w.solo).map(w => `<a class="mode-chip ${w.mode === mode ? 'on' : ''}" role="radio" aria-checked="${w.mode === mode}" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}" style="--c:${w.color}"><img src="${worldArt(w.mode)}" alt="" loading="lazy"><span>${w.icon}</span>${esc(w.name)}</a>`).join('')}</div>
     <p class="muted">${esc(world.icon)} <b>${esc(world.name)}</b>: ${esc(world.rules[0])} ${esc(world.rules[1] || '')}</p>
     <div class="tabs"><button class="${mine ? '' : 'on'}" data-act="libtab" data-m="0">Públicos</button>${S.user ? `<button class="${mine ? 'on' : ''}" data-act="libtab" data-m="1">Mis quizzes</button><a class="btn violet" href="#/create">+ Crear quiz</a>` : '<a class="btn ghost small-btn" href="#/login">Inicia sesión para crear quizzes</a>'}</div>
     <div class="row" style="align-items:flex-end"><div style="flex:2;min-width:180px"><label for="q">Buscar</label><input id="q" value="${esc(S.libQ || '')}" placeholder="Título o descripción"></div>
@@ -309,6 +309,7 @@ async function hostSetup(id, solo, mode) {
   const range = (id, label, min, max, step, value, unit = '') => `<label for="${id}">${label}: <span id="o${id}"></span>${unit}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${value}">`;
   app.innerHTML = `
     <a class="back" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}">‹ Biblioteca</a>
+    <div class="world-banner" style="--c:${w.color}"><img src="${worldArt(w.mode)}" alt=""></div>
     <section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Partida individual' : 'Nueva partida en directo'} · ${esc(quiz.title)}</div><h1 style="--c:${w.color}"><span class="mode-ico">${w.icon}</span> ${esc(w.name)}</h1><p>${esc(w.story)}</p></section>
     <div class="mode-strip">${WORLDS.filter(x => !solo || x.solo).map(x => `<button class="mode-chip ${x.mode === w.mode ? 'on' : ''}" data-act="pickmode" data-mode="${x.mode}" style="--c:${x.color}"><span>${x.icon}</span>${esc(x.name)}</button>`).join('')}</div>
     <div class="split">

@@ -32,6 +32,7 @@ export const WORLDS = [
     story: 'El trono del Rey Glitch. Tres vidas, ni una más. Quien quede en pie recupera el último chip y repara el Núcleo.',
     rules: ['Preguntas a la vez para todos.', 'Fallar o no responder quita una vida (si fallan todos, nadie pierde).', 'Gana el último robot en pie.'] },
 ];
+export const worldArt = mode => `/img/worlds/${mode}.jpg`;
 export const worldOf = mode => WORLDS.find(w => w.mode === mode) || WORLDS[0];
 
 export const freedWorlds = () => store.get('pg_worlds', []);
@@ -101,8 +102,10 @@ export function homeHtml({ nameField, robotCard }) {
         <path d="${pathD()}" class="road" stroke="url(#road)"/>
         <path d="${pathD()}" class="road-dash"/>
         ${WORLDS.map(w => `<g class="node ${freed.includes(w.mode) ? 'freed' : ''}" data-act="world" data-mode="${w.mode}" tabindex="0" role="button" aria-label="Mundo ${w.n}: ${esc(w.name)}" transform="translate(${w.x} ${w.y})" style="--c:${w.color}">
-          <circle r="46" class="halo"/><circle r="34" class="planet"/><ellipse rx="54" ry="12" class="ring"/>
-          <text class="ico" y="12" text-anchor="middle">${w.icon}</text>
+          <circle r="46" class="halo"/><clipPath id="cp-${w.mode}"><circle r="34"/></clipPath><circle r="34" class="planet"/>
+          <image href="${worldArt(w.mode)}" x="-60" y="-34" width="121" height="68" clip-path="url(#cp-${w.mode})" preserveAspectRatio="xMidYMid slice" class="planet-art"/>
+          <ellipse rx="54" ry="12" class="ring"/>
+          <text class="ico" x="26" y="34" text-anchor="middle">${w.icon}</text>
           <text class="lbl" y="72" text-anchor="middle">${w.n}. ${esc(w.name)}</text>
           ${freed.includes(w.mode) ? '<text class="ok" x="30" y="-28">✔</text>' : ''}
         </g>`).join('')}
@@ -126,7 +129,7 @@ export function worldDetailHtml(mode) {
   const w = worldOf(mode);
   const freed = freedWorlds().includes(w.mode);
   return `<div class="world-detail" style="--c:${w.color}">
-    <div class="wd-icon">${w.icon}</div>
+    <div class="wd-art"><img src="${worldArt(w.mode)}" alt="Ilustración de ${esc(w.name)}" loading="lazy"><span class="wd-icon">${w.icon}</span></div>
     <div class="wd-body">
       <div class="small">Mundo ${w.n}${freed ? ' · liberado' : ''}</div>
       <h3>${esc(w.name)}</h3>

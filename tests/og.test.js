@@ -17,4 +17,10 @@ test('vista previa: etiquetas Open Graph absolutas y enlace de invitación por s
   const bad = await fetch(base + '/j/%3Cx%3E', { redirect: 'manual' });
   assert.equal(bad.status, 302);
   assert.equal((await fetch(base + '/og/cover.jpg')).headers.get('content-type'), 'image/jpeg');
+  const quiz = app.db.prepare('SELECT * FROM quizzes LIMIT 1').get();
+  const { room } = app.manager.create({ quiz: { ...quiz, questions: [{ text: 'p', options: ['a', 'b'], correct: 0 }] }, settings: { mode: 'fish' } });
+  const live = await (await fetch(`${base}/j/${room.code}`)).text();
+  assert.match(live, new RegExp(`og:image" content="${base}/img/worlds/fish.jpg"`));
+  assert.match(live, /og:image:width" content="1280"/);
+  assert.match(live, /Mar de Datos/);
 });

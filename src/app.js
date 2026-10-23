@@ -48,12 +48,15 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
   const indexFile = path.join(__dirname, '..', 'public', 'index.html');
   let indexTpl = null;
   const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  function sendIndex(req, res, { title, desc, url, extra = '' } = {}) {
+  function sendIndex(req, res, { title, desc, url, image = null, extra = '' } = {}) {
     if (!indexTpl || process.env.NODE_ENV !== 'production') indexTpl = require('fs').readFileSync(indexFile, 'utf8');
     const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
     const t = title || 'Playground · Salva Circuitia';
     const d = desc || 'Quiz y dibujo en directo para jugar en grupo: 7 mundos, 7 modos de juego y hasta 10 jugadores desde el móvil. Gratis y sin instalar nada.';
-    const html = indexTpl.replaceAll('%ORIGIN%', escAttr(origin)).replaceAll('%URL%', escAttr(url || origin + '/'))
+    // La invitación usa la ilustración del mundo de la sala (1280x720); la portada, la imagen general (1200x630).
+    let tpl = indexTpl.replaceAll('%ORIGIN%/og/cover.jpg', escAttr(origin + (image || '/og/cover.jpg')));
+    if (image) tpl = tpl.replace('og:image:width" content="1200"', 'og:image:width" content="1280"').replace('og:image:height" content="630"', 'og:image:height" content="720"');
+    const html = tpl.replaceAll('%ORIGIN%', escAttr(origin)).replaceAll('%URL%', escAttr(url || origin + '/'))
       .replaceAll('%TITLE%', escAttr(t)).replaceAll('%PAGETITLE%', escAttr(t)).replaceAll('%DESC%', escAttr(d)).replace('%EXTRA%', extra);
     res.set('Cache-Control', 'no-cache').type('html').send(html);
   }
@@ -70,6 +73,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
       title: `Únete a mi sala ${code} en Playground`,
       desc: room ? `${mode} · ${room.quizSource.title}. ${room.players.size}/10 jugadores. Entra con el código ${code} y elige tu robot.` : `Entra con el código ${code}, elige tu robot y salva Circuitia con tus amigos.`,
       url: `${origin}/j/${code}`,
+      image: room ? `/img/worlds/${room.settings.mode}.jpg` : null,
       extra: `<meta http-equiv="refresh" content="0;url=/#/join/${code}">`,
     });
   });

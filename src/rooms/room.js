@@ -1,7 +1,9 @@
 const crypto = require('crypto');
 const rules = require('./rules');
+const M = require('./modes');
+const { PaceGame } = require('./pace');
 
-const DEFAULT_LIMITS = { minSeconds: 10, maxSeconds: 60, minDrawSeconds: 30, maxDrawSeconds: 120, countdownMs: 5000 };
+const DEFAULT_LIMITS = { minSeconds: 10, maxSeconds: 60, minDrawSeconds: 30, maxDrawSeconds: 120, countdownMs: 5000, minDuration: 60 };
 const NEXT_TIMEOUT_MS = 45_000;
 const SOLO_NEXT_MS = 3500;
 const MAX_STROKE_EVENTS = 4000;
@@ -32,16 +34,25 @@ class Room {
 
   cleanSettings(s) {
     const total = this.quizSource.questions.length;
+    // Modo de juego: si no existe o no se puede jugar solo, vuelve a la Arena clásica.
+    let mode = M.MODES[s.mode] ? s.mode : 'classic';
+    if (this.solo && !M.MODES[mode].solo) mode = 'classic';
     return {
+      mode,
+      duration: clamp(s.duration, this.limits.minDuration, 600, 240),
+      goal: clamp(s.goal, 5, 40, 15),
+      drawRounds: clamp(s.drawRounds, 1, 20, 4),
       seconds: clamp(s.seconds, this.limits.minSeconds, this.limits.maxSeconds, 20),
       drawSeconds: clamp(s.drawSeconds, this.limits.minDrawSeconds, this.limits.maxDrawSeconds, 60),
       questions: clamp(s.questions, 1, Math.max(1, total), Math.min(10, total)),
-      drawEvery: this.solo ? 0 : clamp(s.drawEvery, 0, 10, 4),
+      drawEvery: this.solo || mode !== 'classic' ? 0 : clamp(s.drawEvery, 0, 10, 4),
       solo: this.solo,
     };
   }
 
   reset() {
+    this.pace?.destroy();
+    this.pace = null;
     this.status = 'lobby';
     this.plan = [];
     this.planIndex = -1;
@@ -68,6 +79,11 @@ class Room {
     p.doubled = false;
     p.shielded = false;
     p.deadline = 0;
+    p.lives = 3;
+    p.eliminated = false;
+    p.pos = 0;
+    p.shield = false;
+    p.first = false;
   }
 
   touch() { this.touchedAt = Date.now(); }
@@ -137,20 +153,23 @@ class Room {
   // ---------- vistas ----------
 
   publicPlayer(p) {
-    return { id: p.id, name: p.name, avatar: p.avatar, score: p.score, connected: p.connected, powers: p.powers, isHost: p.id === this.hostId };
+    return { id: p.id, name: p.name, avatar: p.avatar, score: p.score, connected: p.connected, powers: p.powers, isHost: p.id === this.hostId, lives: p.lives, eliminated: p.eliminated, pos: p.pos };
   }
 
   view() {
     return {
       code: this.code, status: this.status, title: this.quizSource.title, settings: this.settings, hostId: this.hostId,
       players: [...this.players.values()].map(p => this.publicPlayer(p)),
-      round: this.planIndex >= 0 ? { number: this.planIndex + 1, total: this.plan.length, type: this.plan[this.planIndex]?.type } : null,
+      mode: this.settings.mode, endsAt: this.status === 'pace' ? this.endsAt : null,
+      round: this.planIndex >= 0 && this.plan[this.planIndex]?.type !== 'pace' ? { number: this.planIndex + 1, total: this.plan.length, type: this.plan[this.planIndex]?.type } : null,
     };
   }
 
   ranking() {
+    // Coliseo: primero quien sigue vivo y con más vidas. Turbo: quien cruzó la meta gana el empate.
+    const battle = this.settings.mode === 'battle';
     return [...this.players.values()]
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => (battle ? b.lives - a.lives : 0) || b.score - a.score || (b.first ? 1 : 0) - (a.first ? 1 : 0))
       .map((p, i) => ({ ...this.publicPlayer(p), place: i + 1, quizCorrect: p.quizCorrect, drawGuesses: p.drawGuesses, drawPoints: p.drawPoints }));
   }
 
@@ -172,8 +191,16 @@ class Room {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     // Copia congelada: editar el quiz después no altera la partida.
-    this.questions = pool.slice(0, this.settings.questions).map(q => ({ text: q.text, options: [...q.options], correct: q.correct, image: q.image || null }));
-    this.plan = rules.buildPlan(this.questions.length, this.settings.drawEvery, connected.length);
+    const mode = this.settings.mode;
+    const kind = M.MODES[mode].kind;
+    if (mode === 'hack' && connected.length < 2) return { error: 'Fortaleza Firewall necesita al menos 2 jugadores.' };
+    if (mode === 'draw' && connected.length < 2) return { error: 'El Taller de Grafitis necesita al menos 2 jugadores.' };
+    // En los modos a ritmo propio cada jugador recorre todo el quiz en su propio orden.
+    const take = kind === 'pace' ? pool : pool.slice(0, this.settings.questions);
+    this.questions = take.map(q => ({ text: q.text, options: [...q.options], correct: q.correct, image: q.image || null }));
+    if (kind === 'pace') { this.plan = [{ type: 'pace' }]; this.pace = new PaceGame(this); }
+    else if (mode === 'draw') this.plan = Array.from({ length: this.settings.drawRounds }, () => ({ type: 'draw' }));
+    else this.plan = rules.buildPlan(this.questions.length, this.settings.drawEvery, connected.length);
     this.planIndex = -1;
     this.startedAt = Date.now();
     this.advance();
@@ -196,12 +223,12 @@ class Room {
     this.emitRoom();
     this.emitter.toRoom(this.code, 'game:countdown', this.countdownInfo());
     clearTimeout(this.timer);
-    this.timer = setTimeout(() => (step.type === 'draw' ? this.startDraw() : this.startQuiz()), ms);
+    this.timer = setTimeout(() => (step.type === 'pace' ? this.pace.start() : step.type === 'draw' ? this.startDraw() : this.startQuiz()), ms);
   }
 
   countdownInfo() {
     const step = this.plan[this.planIndex];
-    return { type: step.type, seconds: this.limits.countdownMs / 1000, endsAt: this.endsAt, now: Date.now(), number: step.type === 'quiz' ? this.quizNumber() : null, total: this.questions.length };
+    return { type: step.type, mode: this.settings.mode, seconds: this.limits.countdownMs / 1000, endsAt: this.endsAt, now: Date.now(), number: step.type === 'quiz' ? this.quizNumber() : null, total: this.questions.length };
   }
 
   quizNumber() { return this.plan.slice(0, this.planIndex + 1).filter(s => s.type === 'quiz').length; }
@@ -227,6 +254,7 @@ class Room {
   answer(socketId, choice) {
     const p = this.playerBySocket(socketId);
     if (!p || this.status !== 'question' || this.answers.has(p.id)) return { error: 'No se puede responder ahora.' };
+    if (p.eliminated) return { error: 'Estás eliminado: mira cómo acaba el Coliseo.' };
     const now = Date.now();
     if (now > p.deadline + 300) return { error: 'Se acabó tu tiempo.' };
     const answer = Number(choice);
@@ -252,7 +280,7 @@ class Room {
   }
 
   maybeFinishQuiz() {
-    const connected = this.connectedPlayers();
+    const connected = this.connectedPlayers().filter(p => !p.eliminated);
     if (connected.length && connected.every(p => this.answers.has(p.id))) this.finishQuiz();
   }
 
@@ -272,10 +300,18 @@ class Room {
       p.doubled = false;
       p.shielded = false;
     }
+    let battle = null;
+    if (this.settings.mode === 'battle') {
+      const alive = [...this.players.values()].filter(p => !p.eliminated);
+      battle = M.battleRound(alive, new Set(results.filter(r => r.correct).map(r => r.id)));
+      for (const r of results) { const p = this.players.get(r.id); r.lives = p.lives; r.eliminated = p.eliminated; }
+      // Con un superviviente (o ninguno) se acaba el Coliseo.
+      if ([...this.players.values()].filter(p => !p.eliminated).length <= 1) this.plan = this.plan.slice(0, this.planIndex + 1);
+    }
     this.status = 'result';
     results.sort((a, b) => b.score - a.score);
     this.emitRoom();
-    this.emitter.toRoom(this.code, 'game:result', { type: 'quiz', correct: q.correct, results, ranking: this.ranking(), hasNext: this.planIndex + 1 < this.plan.length });
+    this.emitter.toRoom(this.code, 'game:result', { type: 'quiz', correct: q.correct, results, battle, ranking: this.ranking(), hasNext: this.planIndex + 1 < this.plan.length });
     this.scheduleNext();
   }
 
@@ -383,6 +419,7 @@ class Room {
   // ---------- final ----------
 
   finishGame() {
+    if (this.status === 'finished') return;
     clearTimeout(this.timer);
     clearTimeout(this.nextTimer);
     this.status = 'finished';
@@ -407,6 +444,7 @@ class Room {
   snapshotFor(player) {
     const out = { room: this.view(), you: player.id };
     if (this.status === 'countdown') out.countdown = this.countdownInfo();
+    if (this.status === 'pace' && this.pace) out.pace = this.pace.snapshot(player);
     if (this.status === 'question') {
       const q = this.questions[this.plan[this.planIndex].index];
       out.question = { number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, image: q.image || null, endsAt: player.deadline || this.endsAt, seconds: this.settings.seconds, now: Date.now(), answered: this.answers.has(player.id) };
@@ -422,7 +460,16 @@ class Room {
     return out;
   }
 
+  // Acciones de los modos a ritmo propio.
+  paceAction(socketId, action, ...args) {
+    const p = this.playerBySocket(socketId);
+    if (!p || this.status !== 'pace' || !this.pace) return { error: 'Ahora no se puede.' };
+    this.touch();
+    return this.pace[action](p, ...args);
+  }
+
   destroy() {
+    this.pace?.destroy();
     clearTimeout(this.timer);
     clearTimeout(this.nextTimer);
   }

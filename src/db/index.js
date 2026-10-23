@@ -43,6 +43,9 @@ function open(dbFile = file) {
   // Bases creadas antes de que existiera la columna image.
   const cols = db.prepare('PRAGMA table_info(questions)').all().map(c => c.name);
   if (!cols.includes('image')) db.exec('ALTER TABLE questions ADD COLUMN image TEXT');
+  const userCols = db.prepare('PRAGMA table_info(users)').all().map(c => c.name);
+  if (!userCols.includes('tokens')) db.exec('ALTER TABLE users ADD COLUMN tokens INTEGER NOT NULL DEFAULT 0');
+  if (!userCols.includes('skins')) db.exec("ALTER TABLE users ADD COLUMN skins TEXT NOT NULL DEFAULT '[0]'");
   return db;
 }
 

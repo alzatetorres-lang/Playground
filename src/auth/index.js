@@ -43,6 +43,9 @@ function createAuth(db, { secureCookie = false } = {}) {
     deleteSession: db.prepare('DELETE FROM sessions WHERE token = ?'),
     purge: db.prepare('DELETE FROM sessions WHERE expires_at <= ?'),
     setAvatar: db.prepare('UPDATE users SET avatar = ? WHERE id = ?'),
+    collection: db.prepare('SELECT tokens, skins FROM users WHERE id = ?'),
+    setCollection: db.prepare('UPDATE users SET tokens = ?, skins = ? WHERE id = ?'),
+    addTokens: db.prepare('UPDATE users SET tokens = tokens + ? WHERE id = ?'),
   };
 
   function startSession(userId) {
@@ -94,7 +97,32 @@ function createAuth(db, { secureCookie = false } = {}) {
     q.setAvatar.run(JSON.stringify(avatar), userId);
   }
 
-  return { register, login, logout, userFromCookieHeader, setCookie, clearCookie, saveAvatar, purgeExpired: () => q.purge.run(Date.now()) };
+  function getCollection(userId) {
+    const row = q.collection.get(userId);
+    if (!row) return null;
+    let skins = [0];
+    try { skins = JSON.parse(row.skins); } catch {}
+    return { tokens: row.tokens, skins: skins.includes(0) ? skins : [0, ...skins] };
+  }
+
+  // Abre una cápsula de forma atómica: cobra, sortea y guarda.
+  function buyCapsule(userId, { cost, refund, open }) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      const col = getCollection(userId);
+      if (!col) throw new Error('Usuario no encontrado.');
+      if (col.tokens < cost) { db.exec('ROLLBACK'); return { error: `Te faltan ${cost - col.tokens} tuercas.` }; }
+      const skin = open();
+      const duplicate = col.skins.includes(skin.id);
+      const tokens = col.tokens - cost + (duplicate ? refund : 0);
+      const skins = duplicate ? col.skins : [...col.skins, skin.id];
+      q.setCollection.run(tokens, JSON.stringify(skins), userId);
+      db.exec('COMMIT');
+      return { skin, duplicate, tokens, skins };
+    } catch (e) { db.exec('ROLLBACK'); throw e; }
+  }
+
+  return { getCollection, buyCapsule, addTokens: (userId, n) => q.addTokens.run(n, userId), register, login, logout, userFromCookieHeader, setCookie, clearCookie, saveAvatar, purgeExpired: () => q.purge.run(Date.now()) };
 }
 
 // Límite simple por IP para login y registro.

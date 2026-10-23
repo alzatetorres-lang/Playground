@@ -117,12 +117,12 @@ function usePower(room, player, power) {
 function sanitizeAvatar(a) {
   const pick = (v, max) => (Number.isInteger(v) && v >= 0 && v < max ? v : 0);
   const src = a && typeof a === 'object' ? a : {};
-  return { body: pick(src.body, 5), eyes: pick(src.eyes, 5), antenna: pick(src.antenna, 5), mouth: pick(src.mouth, 4), accessory: pick(src.accessory, 6), color: pick(src.color, 8) };
+  return { body: pick(src.body, 5), eyes: pick(src.eyes, 5), antenna: pick(src.antenna, 5), mouth: pick(src.mouth, 4), accessory: pick(src.accessory, 6), color: pick(src.color, 8), skin: pick(src.skin, 11) };
 }
 
 function randomAvatar(rand = Math.random) {
   const r = max => Math.floor(rand() * max);
-  return { body: r(5), eyes: r(5), antenna: r(5), mouth: r(4), accessory: r(6), color: r(8) };
+  return { body: r(5), eyes: r(5), antenna: r(5), mouth: r(4), accessory: r(6), color: r(8), skin: 0 };
 }
 
 module.exports = {

@@ -9,6 +9,7 @@ const { createQuizStore, validateQuiz } = require('./api/quizzes');
 const { createStats } = require('./api/stats');
 const { attachSockets } = require('./sockets');
 const rules = require('./rooms/rules');
+const M = require('./rooms/modes');
 
 function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) {
   const db = open(dbFile);
@@ -45,7 +46,10 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
 
   app.get('/healthz', (_req, res) => res.json({ ok: true, rooms: manager.size() }));
 
-  app.get('/api/me', (req, res) => res.json({ user: publicUser(me(req)) }));
+  app.get('/api/me', (req, res) => {
+    const user = publicUser(me(req));
+    res.json({ user: user && { ...user, ...auth.getCollection(user.id) } });
+  });
 
   app.post('/api/register', (req, res) => {
     if (!authLimit(req.ip)) return res.status(429).json({ error: 'Demasiados intentos. Espera un minuto.' });
@@ -71,8 +75,18 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
 
   app.put('/api/avatar', requireUser, (req, res) => {
     const avatar = rules.sanitizeAvatar(req.body);
+    // Solo se puede llevar un acabado que esté en tu colección.
+    if (!auth.getCollection(req.user.id).skins.includes(avatar.skin)) avatar.skin = 0;
     auth.saveAvatar(req.user.id, avatar);
     res.json({ avatar });
+  });
+
+  app.get('/api/collection', requireUser, (req, res) => res.json({ ...auth.getCollection(req.user.id), catalog: M.SKINS, cost: M.CAPSULE_COST, refund: M.DUPLICATE_REFUND }));
+
+  app.post('/api/capsule', requireUser, (req, res) => {
+    const result = auth.buyCapsule(req.user.id, { cost: M.CAPSULE_COST, refund: M.DUPLICATE_REFUND, open: () => M.openCapsule(Math.random) });
+    if (result.error) return res.status(400).json(result);
+    res.json(result);
   });
 
   app.get('/api/categories', (_req, res) => res.json(quizzes.categories()));

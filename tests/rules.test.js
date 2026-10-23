@@ -89,8 +89,8 @@ test('los poderes no valen fuera de pregunta ni tras responder', () => {
 });
 
 test('sanitizeAvatar descarta valores fuera de rango', () => {
-  assert.deepEqual(r.sanitizeAvatar({ body: 99, eyes: 'x', antenna: 2 }), { body: 0, eyes: 0, antenna: 2, mouth: 0, accessory: 0, color: 0 });
-  assert.deepEqual(r.sanitizeAvatar(null), { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0 });
+  assert.deepEqual(r.sanitizeAvatar({ body: 99, eyes: 'x', antenna: 2 }), { body: 0, eyes: 0, antenna: 2, mouth: 0, accessory: 0, color: 0, skin: 0 });
+  assert.deepEqual(r.sanitizeAvatar(null), { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0, skin: 0 });
 });
 
 test('fromBank: trivia con imagen y concepto de Kahoot', () => {

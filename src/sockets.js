@@ -1,4 +1,6 @@
 const { createManager } = require('./rooms/manager');
+const rules = require('./rooms/rules');
+const M = require('./rooms/modes');
 
 // Límite por socket: evita que un cliente inunde el servidor.
 function bucket(max, windowMs) {
@@ -24,7 +26,26 @@ function attachSockets(io, { auth, quizzes, stats, db, limits }) {
     return candidates.find(w => !used.includes(w.word)) || candidates[0] || { word: 'Casa', theme: 'Objetos' };
   }
 
-  const manager = createManager({ emitter, nextWord, onFinish: (room, ranking) => stats.saveGame(room, ranking), limits });
+  // Al terminar: estadísticas y tuercas para quien tiene cuenta.
+  function onFinish(room, ranking) {
+    stats.saveGame(room, ranking);
+    for (const r of ranking) {
+      const p = room.players.get(r.id);
+      if (!p?.userId) continue;
+      const tokens = M.tokensForPlace(r.place, room.solo);
+      auth.addTokens(p.userId, tokens);
+      if (p.connected) emitter.toPlayer(p.socketId, 'game:reward', { tokens, total: auth.getCollection(p.userId)?.tokens ?? 0 });
+    }
+  }
+  const manager = createManager({ emitter, nextWord, onFinish, limits });
+
+  // Un acabado que no es tuyo se cambia por el estándar.
+  const ownAvatar = (user, avatar) => {
+    if (!avatar) return avatar;
+    const a = rules.sanitizeAvatar(avatar);
+    if (a.skin && !(user && auth.getCollection(user.id)?.skins.includes(a.skin))) a.skin = 0;
+    return a;
+  };
 
   io.use((socket, next) => {
     socket.data.user = auth.userFromCookieHeader(socket.handshake.headers.cookie);
@@ -40,7 +61,7 @@ function attachSockets(io, { auth, quizzes, stats, db, limits }) {
 
     function enter(room, { name, avatar }, done) {
       const user = socket.data.user;
-      const res = room.addPlayer({ socketId: socket.id, name: name || user?.username, avatar, userId: user?.id ?? null });
+      const res = room.addPlayer({ socketId: socket.id, name: name || user?.username, avatar: ownAvatar(user, avatar), userId: user?.id ?? null });
       if (res.error) return reply(done, { error: res.error });
       socket.data.code = room.code;
       socket.join(room.code);
@@ -75,13 +96,24 @@ function attachSockets(io, { auth, quizzes, stats, db, limits }) {
       socket.data.code = null;
     });
 
-    socket.on('avatar:change', avatar => roomOf()?.changeAvatar(socket.id, avatar));
+    socket.on('avatar:change', avatar => roomOf()?.changeAvatar(socket.id, ownAvatar(socket.data.user, avatar)));
 
     socket.on('game:start', (_p, done) => reply(done, roomOf()?.start(socket.id) || { error: 'No estás en una sala.' }));
     socket.on('game:answer', ({ answer } = {}, done) => reply(done, roomOf()?.answer(socket.id, answer) || { error: 'No estás en una sala.' }));
     socket.on('game:power', ({ power } = {}, done) => reply(done, roomOf()?.usePower(socket.id, power) || { error: 'No estás en una sala.' }));
     socket.on('game:next', (_p, done) => reply(done, roomOf()?.next(socket.id) || { error: 'No estás en una sala.' }));
     socket.on('game:rematch', (_p, done) => reply(done, roomOf()?.rematch(socket.id) || { error: 'No estás en una sala.' }));
+
+    const pace = (event, action, map = () => []) => socket.on(event, (payload = {}, done) => {
+      if (!generalLimit()) return reply(done, { error: 'Vas demasiado rápido.' });
+      reply(done, roomOf()?.paceAction(socket.id, action, ...map(payload || {})) || { error: 'No estás en una sala.' });
+    });
+    pace('pace:next', 'next');
+    pace('pace:answer', 'answer', p => [p.answer]);
+    pace('chips:pick', 'pick', p => [p.index]);
+    pace('chips:target', 'target', p => [p.target]);
+    pace('hack:begin', 'hackBegin', p => [p.target]);
+    pace('hack:guess', 'hackGuess', p => [p.password]);
 
     socket.on('draw:stroke', data => { if (strokeLimit()) roomOf()?.stroke(socket.id, data); });
     socket.on('draw:clear', () => roomOf()?.clearCanvas(socket.id));

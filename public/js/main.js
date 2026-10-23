@@ -3,6 +3,7 @@ import { esc, toast, avatarEditor } from './ui.js';
 import { botSvg, randomAvatar } from './avatar.js';
 import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
+import { initTouchFx } from './fx.js';
 import { initRoom, enter, handleAct, tryResume, leave, render as renderRoom } from './room.js';
 
 const app = document.querySelector('#app');
@@ -24,7 +25,33 @@ function parse() {
   return { parts: path.split('/').filter(Boolean), query: new URLSearchParams(query) };
 }
 
-async function route() {
+const DEPTH = { '': 0, library: 1, stats: 1, me: 1, login: 1, host: 2, create: 2, edit: 2, join: 2, room: 3 };
+const TAB_ORDER = ['', 'library', 'stats', 'me'];
+let lastKey = null;
+
+// Dirección de la animación: avanzar a una pantalla más profunda o a la pestaña de la derecha va hacia delante.
+function direction(parts) {
+  const a = parts[0] || '';
+  const key = a;
+  let dir = 'forward';
+  if (lastKey !== null) {
+    const d1 = DEPTH[lastKey] ?? 1, d2 = DEPTH[a] ?? 1;
+    if (d2 !== d1) dir = d2 > d1 ? 'forward' : 'back';
+    else dir = TAB_ORDER.indexOf(a) < TAB_ORDER.indexOf(lastKey) ? 'back' : 'forward';
+  }
+  lastKey = key;
+  return dir;
+}
+
+function route() {
+  const dir = direction(parse().parts);
+  document.documentElement.dataset.nav = dir;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.startViewTransition && !reduce) return document.startViewTransition(() => renderRoute()).finished.catch(() => {});
+  return renderRoute();
+}
+
+async function renderRoute() {
   const { parts, query } = parse();
   const [a, b] = parts;
   renderChrome();
@@ -90,11 +117,26 @@ function renderChrome() {
       ${musicHtml()}
     </nav>`;
   bindMusic(top);
-  tabbar.innerHTML = `
-    <a href="#/"${cur('home')}>${ICON.home}Inicio</a>
-    <a href="#/library"${cur('library')}>${ICON.library}Quizzes</a>
-    <a href="#/stats"${cur('stats')}>${ICON.stats}Récords</a>
-    <a href="${S.user ? '#/me' : '#/login'}"${cur('me')}>${ICON.me}${S.user ? 'Perfil' : 'Entrar'}</a>`;
+  updateTabbar();
+}
+
+// La barra inferior se construye una vez para que el indicador pueda deslizarse entre pestañas.
+function updateTabbar() {
+  if (!tabbar.dataset.built) {
+    tabbar.innerHTML = `<i class="ink"></i>
+      <a data-tab="home" href="#/">${ICON.home}<span>Inicio</span></a>
+      <a data-tab="library" href="#/library">${ICON.library}<span>Quizzes</span></a>
+      <a data-tab="stats" href="#/stats">${ICON.stats}<span>Récords</span></a>
+      <a data-tab="me" href="#/login">${ICON.me}<span>Entrar</span></a>`;
+    tabbar.dataset.built = '1';
+  }
+  const order = ['home', 'library', 'stats', 'me'];
+  const now = current();
+  tabbar.style.setProperty('--i', Math.max(0, order.indexOf(now)));
+  tabbar.querySelectorAll('a').forEach(a => { if (a.dataset.tab === now) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  const me = tabbar.querySelector('[data-tab=me]');
+  me.setAttribute('href', S.user ? '#/me' : '#/login');
+  me.querySelector('span').textContent = S.user ? 'Perfil' : 'Entrar';
 }
 audio.onChange(() => renderChrome());
 // La música arranca con el primer gesto del usuario (política de autoplay de los navegadores).
@@ -199,11 +241,13 @@ function home() {
         <h1>Sabe. Dibuja. <span>Adivina.</span></h1>
         <p>Crea una sala, pasa el código y juega con hasta 10 personas desde el móvil. Entre pregunta y pregunta, a alguien le toca dibujar.</p>
         <div class="row"><a class="btn" href="#/library">Crear partida</a><a class="btn violet" href="#/library?solo=1">Jugar solo</a></div>
+        <div class="crew" aria-hidden="true">${Array.from({ length: 4 }, () => botSvg(randomAvatar())).join('')}<span class="more">+ hasta 10 jugadores</span></div>
       </section>
       <section class="card"><h2>Unirme con código</h2>${nameField()}
         <label for="code">Código de sala</label><input id="code" maxlength="5" placeholder="ABCDE" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase;letter-spacing:.3em;font-family:var(--font-mono);font-weight:700">
         <button class="wide" data-act="join">Entrar a la sala</button></section>
     </div>
+    <div class="ticker" aria-hidden="true"><div>${[0, 1].map(() => ['Quiz en directo', 'Dibuja', 'Adivina', 'Doble apuesta', 'Escudo', 'Robo de tiempo', 'Hasta 10 jugadores', 'Sin instalar nada'].map(t => `<span>${t}</span>`).join('')).join('')}</div></div>
     <div class="split">
       <section class="card"><h2>Cómo se juega</h2>
         <ol class="steps">
@@ -227,7 +271,7 @@ async function library(query) {
     <div class="tabs"><button class="${mine ? '' : 'on'}" data-act="libtab" data-m="0">Públicos</button>${S.user ? `<button class="${mine ? 'on' : ''}" data-act="libtab" data-m="1">Mis quizzes</button><a class="btn violet" href="#/create">+ Crear quiz</a>` : '<a class="btn ghost small-btn" href="#/login">Inicia sesión para crear quizzes</a>'}</div>
     <div class="row" style="align-items:flex-end"><div style="flex:2;min-width:180px"><label for="q">Buscar</label><input id="q" value="${esc(S.libQ || '')}" placeholder="Título o descripción"></div>
       <div style="flex:1;min-width:150px"><label for="cat">Categoría</label><select id="cat"><option value="">Todas</option>${cats.map(c => `<option ${S.libCat === c.name ? 'selected' : ''} value="${esc(c.name)}">${esc(c.name)} (${c.count})</option>`).join('')}</select></div></div>
-    <div class="grid" style="margin-top:12px">${list.map(q => `<article class="card qcard"><div class="row between"><span class="pill">${esc(q.category)}</span>${q.isPublic ? '' : '<span class="pill">Privado</span>'}</div><h3>${esc(q.title)}</h3><div class="meta">${q.questionCount} preguntas · por ${esc(q.author)}</div>
+    <div class="grid" style="margin-top:12px">${list.map(q => `<article class="card qcard" style="--accent:${accent(q.category)}"><div class="row between"><span class="pill">${esc(q.category)}</span>${q.isPublic ? '' : '<span class="pill">Privado</span>'}</div><h3>${esc(q.title)}</h3><div class="meta">${q.questionCount} preguntas · por ${esc(q.author)}</div>
       <div class="row"><a class="btn small-btn" href="#/host/${q.id}${solo ? '?solo=1' : ''}">${solo ? 'Jugar solo' : 'En directo'}</a>${solo ? '' : `<a class="btn alt small-btn" href="#/host/${q.id}?solo=1">Solo</a>`}${q.mine ? `<a class="btn ghost small-btn" href="#/edit/${q.id}">Editar</a>` : `<button class="ghost small-btn" data-act="dup" data-id="${q.id}">Duplicar</button>`}</div></article>`).join('') || '<div class="card empty"><span class="big">∅</span>No hay quizzes con ese filtro. Prueba otra búsqueda o crea el tuyo.</div>'}</div>`;
   const apply = () => { S.libQ = val('#q'); S.libCat = val('#cat'); library(query); };
   let t; document.querySelector('#q').oninput = () => { clearTimeout(t); t = setTimeout(apply, 350); };
@@ -264,6 +308,9 @@ function joinView(code) {
     ${robotCard()}`;
   mountRobot();
 }
+
+const ACCENTS = ['var(--cyan)', 'var(--lime)', 'var(--magenta)', 'var(--amber)'];
+const accent = name => ACCENTS[[...String(name)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % ACCENTS.length];
 
 const blankQ = () => ({ text: '', options: ['', '', '', ''], correct: 0 });
 
@@ -356,6 +403,7 @@ async function profile() {
 }
 
 // ---------- arranque ----------
+initTouchFx();
 (async function boot() {
   try { S.user = (await api('/api/me')).user; } catch {}
   if (S.user?.avatar && !localStorage.getItem('pg_avatar')) { S.avatar = S.user.avatar; saveProfile(); }

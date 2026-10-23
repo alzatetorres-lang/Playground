@@ -4,6 +4,13 @@ import { botSvg } from './avatar.js';
 import { audio } from './audio.js';
 import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
+import { flash, confetti, buzz } from './fx.js';
+
+// Mantiene la pantalla encendida durante la partida (móviles que se apagan solos).
+let wakeLock = null;
+async function keepAwake() { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {} }
+function letSleep() { try { wakeLock?.release(); } catch {} wakeLock = null; }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.room) keepAwake(); });
 
 const app = () => document.querySelector('#app');
 let tickTimer = null, canvas = null, lastTick = -1, nav = () => {}, chrome = () => {};
@@ -24,8 +31,10 @@ function runTimer() {
     const left = Math.max(0, S.endsAt - serverTime());
     const el = document.querySelector('#timer');
     const bar = document.querySelector('#bar');
-    if (el) { const s = Math.ceil(left / 1000); el.textContent = s; el.classList.toggle('low', s <= (S.phase === 'countdown' ? 2 : 5)); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw' || S.phase === 'countdown')) { audio.sfx('tick'); } lastTick = s; }
+    if (el) { const s = Math.ceil(left / 1000); el.textContent = s; el.classList.toggle('low', s <= (S.phase === 'countdown' ? 2 : 5)); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw' || S.phase === 'countdown')) { audio.sfx('tick'); buzz(S.phase === 'countdown' ? 12 : 6); } lastTick = s; }
     if (bar) bar.style.width = `${Math.min(100, (left / (S.seconds * 1000)) * 100)}%`;
+    const arc = document.querySelector('#arc');
+    if (arc) { arc.style.strokeDashoffset = 100 - Math.min(100, (left / (S.seconds * 1000)) * 100); document.querySelector('.ring')?.classList.toggle('low', Math.ceil(left / 1000) <= 2); }
     if (left <= 0) stopTimer();
   };
   update();
@@ -37,6 +46,7 @@ export function leave() {
   stopTimer();
   canvas?.destroy(); canvas = null;
   sessionStorage.removeItem('pg_room');
+  letSleep();
   S.room = null; S.phase = null; S.you = null;
   nav('/');
 }
@@ -47,6 +57,7 @@ function rememberRoom() { sessionStorage.setItem('pg_room', JSON.stringify({ cod
 export function enter(snapshot) {
   S.room = snapshot.room; S.you = snapshot.you; S.announce = []; S.chat = []; S.result = null;
   rememberRoom();
+  keepAwake();
   nav('/room', true);
   const st = S.room.status;
   if (st === 'lobby') S.phase = 'lobby';
@@ -131,13 +142,13 @@ function lobby(root) {
   root.innerHTML = `
     <section class="hero center"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
     ${r.settings.solo ? '' : `<section class="card"><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code">${esc(r.code)}</div>
-      <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button></div>
+      <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button>${navigator.share ? '<button class="alt" data-act="share">📤 Compartir</button>' : ''}</div>
       <p class="muted" style="text-align:center;margin-top:10px">Comparte el código o el enlace. Máximo 10 jugadores.</p></section>`}
     <section class="card"><h2>Jugadores (${r.players.length}/10)</h2>
       <div class="players">${r.players.map(p => `<div class="player ${p.connected ? '' : 'off'}">${p.isHost ? '<span class="crown" title="Anfitrión">👑</span>' : ''}${botSvg(p.avatar)}<span class="name">${esc(p.name)}${p.id === S.you ? ' (tú)' : ''}</span></div>`).join('')}</div></section>
     <section class="card"><div class="small">Reglas de esta partida</div>
       <p>${r.settings.questions} preguntas · ${r.settings.seconds} s cada una${r.settings.drawEvery ? ` · una ronda de dibujo cada ${r.settings.drawEvery} preguntas (${r.settings.drawSeconds} s)` : ''}.</p></section>
-    <div class="row center">
+    <div class="row center sticky-actions">
       ${host ? `<button data-act="start" ${!r.settings.solo && r.players.length < 2 ? 'disabled' : ''}>${!r.settings.solo && r.players.length < 2 ? 'Esperando jugadores…' : '▶ Empezar partida'}</button>` : '<p class="muted">Esperando a que el anfitrión empiece…</p>'}
       <button class="ghost" data-act="leave">Salir</button>
     </div>`;
@@ -149,9 +160,8 @@ function countdown(root) {
   root.innerHTML = `
     <section class="countdown card" role="timer" aria-label="Cuenta atrás">
       <div class="small">${esc(what)}</div>
-      <div class="cd-num" id="timer">--</div>
+      <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="arc" id="arc" cx="60" cy="60" r="54" pathLength="100"/></svg><div class="cd-num" id="timer">--</div></div>
       <p class="muted">${c.type === 'draw' ? 'Prepárate: a alguien le toca dibujar.' : 'Prepárate. La pregunta aparece al llegar a cero.'}</p>
-      <div class="bar"><i id="bar"></i></div>
     </section>`;
 }
 
@@ -197,7 +207,7 @@ function result(root) {
 
 function nextBar(hasNext) {
   if (S.room.settings.solo) return '<p class="muted" style="text-align:center">Siguiente pregunta en unos segundos…</p>';
-  return `<div class="row center">${isHost() ? `<button data-act="next">${hasNext ? 'Siguiente ▶' : 'Ver resultado final 🏁'}</button>` : '<p class="muted">Esperando al anfitrión…</p>'}</div>${hasNext ? '<p class="muted" style="text-align:center">La siguiente ronda empieza con una cuenta atrás de 5 s.</p>' : ''}`;
+  return `<div class="row center sticky-actions">${isHost() ? `<button data-act="next">${hasNext ? 'Siguiente ▶' : 'Ver resultado final 🏁'}</button>` : '<p class="muted">Esperando al anfitrión…</p>'}</div>${hasNext ? '<p class="muted" style="text-align:center">La siguiente ronda empieza con una cuenta atrás de 5 s.</p>' : ''}`;
 }
 
 function draw(root) {
@@ -286,6 +296,7 @@ function wait(root) {
 
 export async function handleAct(act, el) {
   if (act === 'leave') return leave();
+  if (act === 'share') { try { await navigator.share({ title: 'Playground', text: `Únete a mi partida en Playground con el código ${S.room.code}`, url: shareLink() }); } catch {} return true; }
   if (act === 'copy') { try { await navigator.clipboard.writeText(shareLink()); toast('Enlace copiado'); } catch { toast(shareLink()); } return true; }
   if (act === 'start') { audio.sfx('go'); const res = await ask('game:start'); if (res.error) toast(res.error, true); return true; }
   if (act === 'answer') {
@@ -349,7 +360,12 @@ socket.on('game:result', r => {
   stopTimer();
   S.result = r;
   S.phase = r.type === 'draw' ? 'drawresult' : 'result';
-  if (r.type === 'quiz') audio.sfx(r.results.find(x => x.id === S.you)?.correct ? 'correct' : 'wrong');
+  if (r.type === 'quiz') {
+    const ok = r.results.find(x => x.id === S.you)?.correct;
+    audio.sfx(ok ? 'correct' : 'wrong');
+    flash(ok ? 'ok' : 'bad');
+    buzz(ok ? 30 : 80);
+  }
   canvas?.destroy(); canvas = null;
   render();
 });
@@ -362,6 +378,7 @@ socket.on('game:finished', ({ ranking }) => {
   audio.sfx('win');
   sessionStorage.removeItem('pg_room');
   render();
+  confetti();
 });
 
 socket.on('game:rematch', () => { S.phase = 'lobby'; S.result = null; rememberRoom(); render(); });
@@ -369,7 +386,7 @@ socket.on('draw:start', d => { if (S.you) setDraw(d); });
 socket.on('draw:stroke', e => canvas?.remote(e));
 socket.on('draw:clear', () => canvas?.clear());
 socket.on('draw:chat', c => { S.chat.push(c); refreshChat(); });
-socket.on('draw:correct', c => { guessed.add(c.id); renderSide(); S.chat.push({ ok: true, ...c }); refreshChat(); if (c.id !== S.you) audio.sfx('join'); });
+socket.on('draw:correct', c => { if (c.id === S.you) { flash('ok'); buzz(30); } guessed.add(c.id); renderSide(); S.chat.push({ ok: true, ...c }); refreshChat(); if (c.id !== S.you) audio.sfx('join'); });
 
 function refreshChat() {
   const el = document.querySelector('#chat');

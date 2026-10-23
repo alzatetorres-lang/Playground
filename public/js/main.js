@@ -4,6 +4,7 @@ import { botSvg, randomAvatar } from './avatar.js';
 import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
 import { initTouchFx } from './fx.js';
+import { initScene } from './scene3d.js';
 import { initRoom, enter, handleAct, tryResume, leave, render as renderRoom } from './room.js';
 
 const app = document.querySelector('#app');
@@ -45,6 +46,8 @@ function direction(parts) {
 
 function route() {
   const dir = direction(parse().parts);
+  if (!S.room) { scene.setMode('menu'); audio.setMood('menu'); }
+  if (audioUnlocked) audio.sfx('nav');
   document.documentElement.dataset.nav = dir;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (document.startViewTransition && !reduce) return document.startViewTransition(() => renderRoute()).finished.catch(() => {});
@@ -140,7 +143,8 @@ function updateTabbar() {
 }
 audio.onChange(() => renderChrome());
 // La música arranca con el primer gesto del usuario (política de autoplay de los navegadores).
-const unlock = () => { if (!audio.state.muted) audio.start(); window.removeEventListener('pointerdown', unlock); window.removeEventListener('keydown', unlock); };
+let audioUnlocked = false;
+const unlock = () => { audioUnlocked = true; if (!audio.state.muted) audio.start(); window.removeEventListener('pointerdown', unlock); window.removeEventListener('keydown', unlock); };
 window.addEventListener('pointerdown', unlock);
 window.addEventListener('keydown', unlock);
 
@@ -404,6 +408,8 @@ async function profile() {
 
 // ---------- arranque ----------
 initTouchFx();
+const scene = initScene();
+window.__scene = scene;
 (async function boot() {
   try { S.user = (await api('/api/me')).user; } catch {}
   if (S.user?.avatar && !localStorage.getItem('pg_avatar')) { S.avatar = S.user.avatar; saveProfile(); }

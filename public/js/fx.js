@@ -53,12 +53,23 @@ export function initTouchFx() {
     setTimeout(() => dot.remove(), 650);
   }, { passive: true });
 
+  let tilted = null;
   document.addEventListener('pointermove', ev => {
     if (ev.pointerType !== 'mouse') return;
     const card = ev.target.closest?.('.card');
-    if (!card) return;
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', `${ev.clientX - r.left}px`);
-    card.style.setProperty('--my', `${ev.clientY - r.top}px`);
+    if (card) {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${ev.clientX - r.left}px`);
+      card.style.setProperty('--my', `${ev.clientY - r.top}px`);
+    }
+    // Inclinación 3D de tarjetas pequeñas bajo el ratón.
+    const tilt = reduce() ? null : ev.target.closest?.('.qcard, .game-card, .player');
+    if (tilted && tilted !== tilt) { tilted.style.removeProperty('--rx'); tilted.style.removeProperty('--ry'); }
+    tilted = tilt;
+    if (tilt) {
+      const r = tilt.getBoundingClientRect();
+      tilt.style.setProperty('--ry', `${((ev.clientX - r.left) / r.width - 0.5) * 10}deg`);
+      tilt.style.setProperty('--rx', `${-((ev.clientY - r.top) / r.height - 0.5) * 10}deg`);
+    }
   }, { passive: true });
 }

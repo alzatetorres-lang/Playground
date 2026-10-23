@@ -6,6 +6,9 @@ import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
 import { flash, confetti, buzz } from './fx.js';
 
+// Fondo 3D y música siguen la fase de la partida.
+const mood = (sceneMode, music) => { window.__scene?.setMode(sceneMode); audio.setMood(music); };
+
 // Mantiene la pantalla encendida durante la partida (móviles que se apagan solos).
 let wakeLock = null;
 async function keepAwake() { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {} }
@@ -31,7 +34,8 @@ function runTimer() {
     const left = Math.max(0, S.endsAt - serverTime());
     const el = document.querySelector('#timer');
     const bar = document.querySelector('#bar');
-    if (el) { const s = Math.ceil(left / 1000); el.textContent = s; el.classList.toggle('low', s <= (S.phase === 'countdown' ? 2 : 5)); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw' || S.phase === 'countdown')) { audio.sfx('tick'); buzz(S.phase === 'countdown' ? 12 : 6); } lastTick = s; }
+    if (el) { const s = Math.ceil(left / 1000);
+      if (S.phase === 'countdown' && s !== lastTick && s > 0) { el.classList.remove('n3d'); void el.offsetWidth; el.classList.add('n3d'); } el.textContent = s; el.classList.toggle('low', s <= (S.phase === 'countdown' ? 2 : 5)); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw' || S.phase === 'countdown')) { audio.sfx('tick'); buzz(S.phase === 'countdown' ? 12 : 6); } lastTick = s; }
     if (bar) bar.style.width = `${Math.min(100, (left / (S.seconds * 1000)) * 100)}%`;
     const arc = document.querySelector('#arc');
     if (arc) { arc.style.strokeDashoffset = 100 - Math.min(100, (left / (S.seconds * 1000)) * 100); document.querySelector('.ring')?.classList.toggle('low', Math.ceil(left / 1000) <= 2); }
@@ -47,6 +51,7 @@ export function leave() {
   canvas?.destroy(); canvas = null;
   sessionStorage.removeItem('pg_room');
   letSleep();
+  mood('menu', 'menu');
   S.room = null; S.phase = null; S.you = null;
   nav('/');
 }
@@ -81,6 +86,8 @@ export function enter(snapshot) {
 function setCountdown(c) {
   syncClock(c.now);
   S.phase = 'countdown'; S.cd = c; S.endsAt = c.endsAt; S.seconds = c.seconds; S.announce = [];
+  mood('countdown', 'game');
+  audio.sfx('riser');
   answered.clear(); guessed.clear();
   canvas?.destroy(); canvas = null;
   render(); runTimer();
@@ -89,6 +96,8 @@ function setCountdown(c) {
 function setQuestion(q) {
   syncClock(q.now);
   answered.clear();
+  mood('game', 'game');
+  window.__scene?.pulse();
   S.phase = 'question'; S.q = q; S.endsAt = q.endsAt; S.seconds = q.seconds; S.picked = null; S.announce = [];
   canvas?.destroy(); canvas = null;
   render(); runTimer();
@@ -97,6 +106,8 @@ function setQuestion(q) {
 function setDraw(d) {
   syncClock(d.now);
   guessed.clear();
+  mood('draw', 'draw');
+  window.__scene?.pulse();
   S.phase = 'draw'; S.draw = d; S.endsAt = d.endsAt; S.seconds = d.seconds; S.chat = []; S.announce = [];
   render(); runTimer();
   if (d.strokes?.length) canvas?.load(d.strokes);
@@ -106,7 +117,7 @@ export function render() {
   const host = app();
   if (!S.room) return;
   // Marcador lateral en todas las fases de juego; en la sala de espera no hace falta.
-  const withSide = !['lobby', 'wait'].includes(S.phase);
+  const withSide = !['lobby', 'wait', 'finished'].includes(S.phase);
   host.innerHTML = `<div class="game-layout${withSide ? ' with-side' : ''}"><div id="stage"></div>${withSide ? '<aside id="side" class="card side" aria-label="Marcador en directo"></aside>' : ''}</div>`;
   const views = { lobby, countdown, question, result, draw, drawresult, finished, wait };
   (views[S.phase] || wait)(host.querySelector('#stage'));
@@ -141,7 +152,7 @@ function lobby(root) {
   const r = S.room, host = isHost();
   root.innerHTML = `
     <section class="hero center"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
-    ${r.settings.solo ? '' : `<section class="card"><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code">${esc(r.code)}</div>
+    ${r.settings.solo ? '' : `<section class="card"><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code" aria-label="${esc(r.code)}">${[...r.code].map((ch, i) => `<span style="--d:${i * 70}ms">${esc(ch)}</span>`).join('')}</div>
       <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button>${navigator.share ? '<button class="alt" data-act="share">📤 Compartir</button>' : ''}</div>
       <p class="muted" style="text-align:center;margin-top:10px">Comparte el código o el enlace. Máximo 10 jugadores.</p></section>`}
     <section class="card"><h2>Jugadores (${r.players.length}/10)</h2>
@@ -172,7 +183,7 @@ function question(root) {
   root.innerHTML = `
     <div class="hud"><div><div class="small">Pregunta ${q.number} de ${q.total}</div></div><div class="timer" id="timer">--</div></div>
     <div class="bar"><i id="bar"></i></div>
-    <section class="card">${q.image ? `<img class="qimg" src="${esc(q.image)}" alt="Imagen de la pregunta">` : ''}<h1 class="question">${esc(q.text)}</h1>
+    <section class="card q3d">${q.image ? `<img class="qimg" src="${esc(q.image)}" alt="Imagen de la pregunta">` : ''}<h1 class="question">${esc(q.text)}</h1>
       <div class="options">${q.options.map((o, i) => `<button class="option ${S.picked === i ? 'picked' : ''}" data-act="answer" data-i="${i}" ${lock ? 'disabled' : ''}><b>${'ABCD'[i]}</b>&nbsp;${esc(o)}</button>`).join('')}</div>
       ${lock ? '<p class="muted" style="margin-top:12px">Respuesta enviada. Esperando al resto…</p>' : ''}
       <div class="powers" id="powers">${powersHtml(powers, lock)}</div>
@@ -379,9 +390,11 @@ socket.on('game:finished', ({ ranking }) => {
   sessionStorage.removeItem('pg_room');
   render();
   confetti();
+  mood('win', 'win');
+  window.__scene?.pulse();
 });
 
-socket.on('game:rematch', () => { S.phase = 'lobby'; S.result = null; rememberRoom(); render(); });
+socket.on('game:rematch', () => { mood('menu', 'menu'); S.phase = 'lobby'; S.result = null; rememberRoom(); render(); });
 socket.on('draw:start', d => { if (S.you) setDraw(d); });
 socket.on('draw:stroke', e => canvas?.remote(e));
 socket.on('draw:clear', () => canvas?.clear());

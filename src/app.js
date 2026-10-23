@@ -127,6 +127,8 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
 
   app.get('/api/stats', (req, res) => res.json(stats.overview(me(req)?.id ?? null)));
 
+  // Three.js se sirve desde node_modules (mismo origen, sin CDN).
+  app.use('/vendor/three', express.static(path.join(__dirname, '..', 'node_modules', 'three', 'build'), { maxAge: '30d', immutable: true }));
   app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], setHeaders: res => res.setHeader('Cache-Control', 'no-cache') }));
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'No encontrado.' });

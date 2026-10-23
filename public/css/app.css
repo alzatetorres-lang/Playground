@@ -382,7 +382,7 @@ html[data-nav='back']::view-transition-new(root) { animation-name: vt-in-r; }
 .crew { display: flex; align-items: center; margin-top: 18px; }
 .crew .bot { width: 54px; height: 54px; margin: 0 -12px 0 0; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .5)); animation: rise .5s both; }
 .crew .bot:nth-child(2) { animation-delay: .08s; } .crew .bot:nth-child(3) { animation-delay: .16s; } .crew .bot:nth-child(4) { animation-delay: .24s; }
-.crew .more { margin-left: 22px; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); letter-spacing: .08em; }
+.crew .more { padding: 4px 8px; background: rgba(6, 7, 13, .75); margin-left: 22px; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); letter-spacing: .08em; }
 
 /* Cuenta atrás con anillo */
 .ring { position: relative; width: min(260px, 68vw); aspect-ratio: 1; margin: 8px auto 12px; }
@@ -400,3 +400,33 @@ html[data-nav='back']::view-transition-new(root) { animation-name: vt-in-r; }
 .confetti { position: fixed; inset: 0; z-index: var(--z-fx); pointer-events: none; width: 100%; height: 100%; }
 .pop { animation: scorepop .5s cubic-bezier(.3, 1.6, .5, 1); }
 @keyframes scorepop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: none; opacity: 1; } }
+
+/* ===================== 3D ===================== */
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; transition: opacity .8s; }
+body.has-3d .orbs { display: none; }
+body.has-3d::before { opacity: .18; }
+.card::after, .game-card::after, .qedit::after { background: linear-gradient(180deg, rgba(14, 17, 32, .9), rgba(10, 12, 23, .94)); }
+@media (hover: hover) and (pointer: fine) {
+  .card::after { background: radial-gradient(260px circle at var(--mx) var(--my), rgba(39, 243, 255, .12), transparent 65%), linear-gradient(180deg, rgba(14, 17, 32, .9), rgba(10, 12, 23, .94)); }
+  .qcard, .game-card, .player { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0)); transition: transform .2s ease-out; }
+  .qcard:hover, .game-card:hover { --lift: -3px; }
+}
+main { perspective: 1400px; }
+.q3d { animation: flip3d .7s cubic-bezier(.2, .9, .25, 1.1) both; transform-origin: 50% 0; }
+@keyframes flip3d { from { opacity: 0; transform: perspective(1000px) rotateX(-38deg) translateZ(-160px) translateY(30px); filter: blur(6px); } }
+.options .option { animation: opt3d .55s cubic-bezier(.2, .9, .3, 1.2) both; }
+.options .option:nth-child(1) { animation-delay: .25s; } .options .option:nth-child(2) { animation-delay: .33s; }
+.options .option:nth-child(3) { animation-delay: .41s; } .options .option:nth-child(4) { animation-delay: .49s; }
+@keyframes opt3d { from { opacity: 0; transform: perspective(700px) rotateY(-55deg) translateX(-24px); } }
+.cd-num.n3d { animation: num3d .9s cubic-bezier(.15, .9, .3, 1) both; }
+@keyframes num3d { 0% { opacity: 0; transform: perspective(600px) translateZ(260px) rotateX(35deg); filter: blur(8px); } 35% { opacity: 1; filter: none; } 100% { transform: perspective(600px) translateZ(0); } }
+.code span { display: inline-block; animation: drop3d .7s cubic-bezier(.2, 1.2, .3, 1) both; animation-delay: var(--d, 0ms); }
+@keyframes drop3d { from { opacity: 0; transform: perspective(500px) translateY(-60px) rotateX(90deg); } }
+.player { animation: card3d .6s cubic-bezier(.2, 1, .3, 1) both; }
+@keyframes card3d { from { opacity: 0; transform: perspective(700px) rotateY(80deg) scale(.8); } }
+.podium > div { animation: podium3d .9s cubic-bezier(.2, 1.1, .3, 1) both; transform-origin: 50% 100%; }
+.podium .p1 { animation-delay: .35s; } .podium .p2 { animation-delay: .15s; } .podium .p3 { animation-delay: .5s; }
+@keyframes podium3d { from { opacity: 0; transform: perspective(800px) rotateX(70deg) scaleY(.2); } }
+.secret { animation: flip3d .7s both; }
+.bot.lg { animation: spin3d 1s cubic-bezier(.2, .9, .3, 1.1) both; }
+@keyframes spin3d { from { transform: perspective(600px) rotateY(-180deg) scale(.6); opacity: 0; } }

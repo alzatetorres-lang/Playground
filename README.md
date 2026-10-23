@@ -7,7 +7,9 @@ Quiz social en directo con rondas de dibujo. Se juega desde el móvil o el orden
 - Rondas de dibujo con 1500 palabras del banco de preguntas del equipo.
 - Cuentas de anfitrión, invitados por nombre, quizzes privados o públicos, biblioteca con búsqueda y duplicado.
 - Avatares: robots animados, aleatorios y personalizables.
-- Música de fondo generada en el navegador (WebAudio), con silencio y volumen.
+- Banda sonora synthwave generada en el navegador (WebAudio), con ambientes por fase, silencio y volumen.
+- Fondo 3D con Three.js (horizonte synthwave que reacciona a la partida) y animaciones 3D en la interfaz.
+- Instalable en el móvil (PWA), con vibración, pantalla siempre encendida y compartir nativo.
 - Modo individual, reconexión, revancha y récords.
 
 ## Arrancar

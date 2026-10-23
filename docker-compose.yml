@@ -1,0 +1,36 @@
+# Despliegue en el VPS. Traefik (ya instalado) publica el dominio con HTTPS.
+services:
+  playground:
+    build: https://github.com/alzatetorres-lang/Playground.git#integracion
+    container_name: playground
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:3010:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      COOKIE_SECURE: "1"
+      DB_FILE: /app/data/playground.sqlite
+    volumes:
+      - playground-data:/app/data
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 150
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.playground.rule=Host(`playground.srv1964559.hstgr.cloud`)"
+      - "traefik.http.routers.playground.entrypoints=websecure"
+      - "traefik.http.routers.playground.tls.certresolver=letsencrypt"
+      - "traefik.http.services.playground.loadbalancer.server.port=3000"
+
+volumes:
+  playground-data:

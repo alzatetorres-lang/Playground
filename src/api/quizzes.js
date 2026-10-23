@@ -31,7 +31,7 @@ function createQuizStore(db) {
     update: db.prepare('UPDATE quizzes SET title = ?, description = ?, category = ?, is_public = ? WHERE id = ?'),
     remove: db.prepare('DELETE FROM quizzes WHERE id = ?'),
     byId: db.prepare('SELECT * FROM quizzes WHERE id = ?'),
-    questions: db.prepare('SELECT text, options, correct FROM questions WHERE quiz_id = ? ORDER BY pos'),
+    questions: db.prepare('SELECT text, options, correct, image FROM questions WHERE quiz_id = ? ORDER BY pos'),
   };
 
   const withTx = fn => (...args) => {
@@ -56,7 +56,7 @@ function createQuizStore(db) {
   function load(id) {
     const row = q.byId.get(id);
     if (!row) return null;
-    const questions = q.questions.all(id).map(x => ({ text: x.text, options: parseOptions(x.options), correct: x.correct }));
+    const questions = q.questions.all(id).map(x => ({ text: x.text, options: parseOptions(x.options), correct: x.correct, image: x.image || null }));
     return { id: row.id, ownerId: row.owner_id, title: row.title, description: row.description, category: row.category, isPublic: !!row.is_public, source: row.source, questions };
   }
 

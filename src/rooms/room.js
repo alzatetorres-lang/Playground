@@ -172,7 +172,7 @@ class Room {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     // Copia congelada: editar el quiz después no altera la partida.
-    this.questions = pool.slice(0, this.settings.questions).map(q => ({ text: q.text, options: [...q.options], correct: q.correct }));
+    this.questions = pool.slice(0, this.settings.questions).map(q => ({ text: q.text, options: [...q.options], correct: q.correct, image: q.image || null }));
     this.plan = rules.buildPlan(this.questions.length, this.settings.drawEvery, connected.length);
     this.planIndex = -1;
     this.startedAt = Date.now();
@@ -203,7 +203,7 @@ class Room {
     for (const p of this.players.values()) { p.doubled = false; p.shielded = false; p.deadline = this.endsAt; }
     this.emitRoom();
     this.emitter.toRoom(this.code, 'game:question', {
-      number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, endsAt: this.endsAt, seconds: secs, now: Date.now(),
+      number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, image: q.image || null, endsAt: this.endsAt, seconds: secs, now: Date.now(),
     });
     clearTimeout(this.timer);
     this.timer = setTimeout(() => this.finishQuiz(), secs * 1000 + 50);
@@ -391,7 +391,7 @@ class Room {
     const out = { room: this.view(), you: player.id };
     if (this.status === 'question') {
       const q = this.questions[this.plan[this.planIndex].index];
-      out.question = { number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, endsAt: player.deadline || this.endsAt, seconds: this.settings.seconds, now: Date.now(), answered: this.answers.has(player.id) };
+      out.question = { number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, image: q.image || null, endsAt: player.deadline || this.endsAt, seconds: this.settings.seconds, now: Date.now(), answered: this.answers.has(player.id) };
     }
     if (this.status === 'draw') {
       out.draw = {

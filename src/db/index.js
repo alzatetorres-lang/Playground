@@ -24,7 +24,7 @@ function open(dbFile = file) {
     );
     CREATE TABLE IF NOT EXISTS questions (
       id INTEGER PRIMARY KEY, quiz_id INTEGER NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE, pos INTEGER NOT NULL,
-      text TEXT NOT NULL, options TEXT NOT NULL, correct INTEGER NOT NULL, category TEXT, difficulty TEXT
+      text TEXT NOT NULL, options TEXT NOT NULL, correct INTEGER NOT NULL, category TEXT, difficulty TEXT, image TEXT
     );
     CREATE INDEX IF NOT EXISTS idx_questions_quiz ON questions(quiz_id, pos);
     CREATE TABLE IF NOT EXISTS words (
@@ -40,6 +40,9 @@ function open(dbFile = file) {
       draw_points INTEGER NOT NULL DEFAULT 0, place INTEGER NOT NULL
     );
   `);
+  // Bases creadas antes de que existiera la columna image.
+  const cols = db.prepare('PRAGMA table_info(questions)').all().map(c => c.name);
+  if (!cols.includes('image')) db.exec('ALTER TABLE questions ADD COLUMN image TEXT');
   return db;
 }
 

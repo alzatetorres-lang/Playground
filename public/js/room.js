@@ -111,7 +111,7 @@ function question(root) {
   root.innerHTML = `
     <div class="hud"><div><div class="small">Pregunta ${q.number} de ${q.total}</div></div><div class="timer" id="timer">--</div></div>
     <div class="bar"><i id="bar"></i></div>
-    <section class="card"><h1 class="question">${esc(q.text)}</h1>
+    <section class="card">${q.image ? `<img class="qimg" src="${esc(q.image)}" alt="Imagen de la pregunta">` : ''}<h1 class="question">${esc(q.text)}</h1>
       <div class="options">${q.options.map((o, i) => `<button class="option ${S.picked === i ? 'picked' : ''}" data-act="answer" data-i="${i}" ${lock ? 'disabled' : ''}><b>${'ABCD'[i]}</b>&nbsp;${esc(o)}</button>`).join('')}</div>
       ${lock ? '<p class="muted" style="margin-top:12px">Respuesta enviada. Esperando al resto…</p>' : ''}
       <div class="powers" id="powers">${powersHtml(powers, lock)}</div>

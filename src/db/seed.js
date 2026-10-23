@@ -2,8 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.join(__dirname, '..', '..');
+// Sube este número cuando cambie el banco de preguntas: se reimporta sin tocar los quizzes de usuarios.
+const SEED_VERSION = 2;
 
-// Baraja determinista para que las opciones no queden siempre en la misma posición.
+// Baraja las opciones para que la correcta no caiga siempre en la misma posición.
 function shuffle(list, rand = Math.random) {
   const a = [...list];
   for (let i = a.length - 1; i > 0; i--) {
@@ -13,72 +15,82 @@ function shuffle(list, rand = Math.random) {
   return a;
 }
 
-// preguntas_trivia.json guarda la respuesta como texto; el motor usa el índice.
-function fromTrivia(item) {
-  const correct = item.opciones.indexOf(item.respuesta_correcta);
-  if (correct < 0) return null;
-  return { text: item.pregunta, options: item.opciones, correct, category: item.categoria, difficulty: null };
-}
+const imageUrl = file => (file ? `/img/questions/${path.basename(file)}` : null);
 
-// El banco de 1500 conceptos asume una imagen. Se juega como texto con la pista de la imagen.
+// Una entrada del banco, ya sea una pregunta de trivia (sin bloque pictionary) o un concepto de Kahoot/Pictionary.
 function fromBank(item, rand) {
   const k = item.kahoot;
   const options = shuffle(k.opciones, rand);
   const correct = options.indexOf(k.respuesta_correcta);
   if (correct < 0) return null;
-  return { text: `${k.imagen_pista} ¿De qué se trata?`, options, correct, category: item.tema, difficulty: item.dificultad };
+  const isTrivia = !item.pictionary;
+  return {
+    // Los conceptos de Kahoot asumían una imagen; se juegan como texto con la pista de la imagen.
+    text: isTrivia ? k.pregunta : `${k.imagen_pista} ¿De qué se trata?`,
+    options, correct,
+    category: isTrivia ? (k.categoria_origen || item.tema) : item.tema,
+    difficulty: item.dificultad,
+    image: isTrivia ? imageUrl(k.url_imagen) : null,
+    isTrivia,
+  };
 }
 
 function insertQuiz(db, { title, description, category, source, questions }) {
   if (!questions.length) return;
-  const now = Date.now();
   const { lastInsertRowid: quizId } = db
     .prepare('INSERT INTO quizzes (owner_id, title, description, category, is_public, source, created_at) VALUES (NULL, ?, ?, ?, 1, ?, ?)')
-    .run(title, description, category, source, now);
-  const ins = db.prepare('INSERT INTO questions (quiz_id, pos, text, options, correct, category, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?)');
-  questions.forEach((q, i) => ins.run(quizId, i, q.text, JSON.stringify(q.options), q.correct, q.category, q.difficulty));
+    .run(title, description, category, source, Date.now());
+  const ins = db.prepare('INSERT INTO questions (quiz_id, pos, text, options, correct, category, difficulty, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+  questions.forEach((q, i) => ins.run(quizId, i, q.text, JSON.stringify(q.options), q.correct, q.category, q.difficulty, q.image));
 }
 
 function seed(db, { rand = Math.random } = {}) {
-  const count = db.prepare('SELECT COUNT(*) AS n FROM quizzes').get().n;
-  if (count > 0) return { seeded: false };
+  const version = db.prepare('PRAGMA user_version').get().user_version;
+  if (version >= SEED_VERSION) return { seeded: false };
+
+  const bankFile = path.join(root, 'banco-preguntas', 'questions_1500.json');
+  if (!fs.existsSync(bankFile)) return { seeded: false };
+  const bank = JSON.parse(fs.readFileSync(bankFile, 'utf8')).questions;
 
   db.exec('BEGIN');
   try {
-    const triviaFile = path.join(root, 'data', 'seed', 'preguntas_trivia.json');
-    if (fs.existsSync(triviaFile)) {
-      const items = JSON.parse(fs.readFileSync(triviaFile, 'utf8'));
-      const byCategory = new Map();
-      for (const it of items) {
-        // Las preguntas con imagen se saltan hasta que existan los archivos.
-        if (it.tiene_imagen) continue;
-        const q = fromTrivia(it);
-        if (!q) continue;
-        if (!byCategory.has(it.categoria)) byCategory.set(it.categoria, []);
-        byCategory.get(it.categoria).push(q);
+    // Solo se reemplaza lo que viene del banco; los quizzes de usuarios se conservan.
+    db.exec("DELETE FROM quizzes WHERE source IN ('trivia', 'banco')");
+    db.exec('DELETE FROM words');
+
+    const groups = new Map();
+    const seenConcepts = new Set();
+    const seenWords = new Set();
+    const insWord = db.prepare('INSERT INTO words (word, hint, theme, difficulty) VALUES (?, ?, ?, ?)');
+
+    for (const item of bank) {
+      const q = fromBank(item, rand);
+      if (!q) continue;
+      if (!q.isTrivia) {
+        // El banco repite cada concepto con distintas opciones: se juega una sola vez.
+        const key = item.concepto.trim().toLowerCase();
+        if (seenConcepts.has(key)) continue;
+        seenConcepts.add(key);
+        const w = item.pictionary.solucion.trim();
+        if (!seenWords.has(w.toLowerCase())) {
+          seenWords.add(w.toLowerCase());
+          insWord.run(w, item.pictionary.pista_referencia, item.tema, item.dificultad);
+        }
       }
-      for (const [category, questions] of byCategory) {
-        insertQuiz(db, { title: `Trivia: ${category}`, description: `${questions.length} preguntas de ${category}.`, category, source: 'trivia', questions });
-      }
+      const groupKey = `${q.isTrivia ? 'trivia' : 'banco'}|${q.category}`;
+      if (!groups.has(groupKey)) groups.set(groupKey, []);
+      groups.get(groupKey).push(q);
     }
 
-    const bankFile = path.join(root, 'banco-preguntas', 'questions_1500.json');
-    if (fs.existsSync(bankFile)) {
-      const bank = JSON.parse(fs.readFileSync(bankFile, 'utf8')).questions;
-      const byTheme = new Map();
-      const insWord = db.prepare('INSERT INTO words (word, hint, theme, difficulty) VALUES (?, ?, ?, ?)');
-      for (const it of bank) {
-        const q = fromBank(it, rand);
-        if (q) {
-          if (!byTheme.has(it.tema)) byTheme.set(it.tema, []);
-          byTheme.get(it.tema).push(q);
-        }
-        insWord.run(it.pictionary.solucion, it.pictionary.pista_referencia, it.tema, it.dificultad);
-      }
-      for (const [theme, questions] of byTheme) {
-        insertQuiz(db, { title: `Banco: ${theme}`, description: `${questions.length} preguntas de ${theme}.`, category: theme, source: 'banco', questions });
-      }
+    for (const [groupKey, questions] of groups) {
+      const [source, category] = groupKey.split('|');
+      insertQuiz(db, {
+        title: `${source === 'trivia' ? 'Trivia' : 'Banco'}: ${category}`,
+        description: `${questions.length} preguntas de ${category}.`,
+        category, source, questions,
+      });
     }
+    db.exec(`PRAGMA user_version = ${SEED_VERSION}`);
     db.exec('COMMIT');
   } catch (e) {
     db.exec('ROLLBACK');
@@ -87,4 +99,4 @@ function seed(db, { rand = Math.random } = {}) {
   return { seeded: true };
 }
 
-module.exports = { seed, fromTrivia, fromBank, shuffle };
+module.exports = { seed, fromBank, shuffle };

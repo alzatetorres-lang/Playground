@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const r = require('../src/rooms/rules');
-const { fromTrivia } = require('../src/db/seed');
+const { fromBank } = require('../src/db/seed');
 
 test('normalizeWord ignora tildes, mayúsculas y signos', () => {
   assert.equal(r.normalizeWord('  ÁTOMO!! '), 'atomo');
@@ -84,8 +84,15 @@ test('sanitizeAvatar descarta valores fuera de rango', () => {
   assert.deepEqual(r.sanitizeAvatar(null), { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0 });
 });
 
-test('fromTrivia convierte la respuesta de texto en índice', () => {
-  const q = fromTrivia({ pregunta: 'p', opciones: ['a', 'b', 'c', 'd'], respuesta_correcta: 'c', categoria: 'X' });
-  assert.equal(q.correct, 2);
-  assert.equal(fromTrivia({ pregunta: 'p', opciones: ['a'], respuesta_correcta: 'z', categoria: 'X' }), null);
+test('fromBank: trivia con imagen y concepto de Kahoot', () => {
+  const identity = () => 0.9999;
+  const trivia = fromBank({ tema: 'Varias', dificultad: 'Fácil', kahoot: { pregunta: '¿Qué flor?', categoria_origen: 'Naturaleza', opciones: ['a', 'b', 'c', 'd'], respuesta_correcta: 'b', url_imagen: 'kahoot_images/trivia_q6.jpg' } }, identity);
+  assert.equal(trivia.text, '¿Qué flor?');
+  assert.equal(trivia.category, 'Naturaleza');
+  assert.equal(trivia.image, '/img/questions/trivia_q6.jpg');
+  assert.equal(trivia.options[trivia.correct], 'b');
+  const concept = fromBank({ tema: 'Geografía', dificultad: 'Media', concepto: 'X', pictionary: { solucion: 'X' }, kahoot: { imagen_pista: 'Torre de hierro.', opciones: ['a', 'b', 'c', 'X'], respuesta_correcta: 'X' } });
+  assert.match(concept.text, /^Torre de hierro\./);
+  assert.equal(concept.image, null);
+  assert.equal(fromBank({ tema: 'T', kahoot: { pregunta: 'p', opciones: ['a'], respuesta_correcta: 'z' } }), null);
 });

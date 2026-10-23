@@ -93,7 +93,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
     if (!quiz || (!quiz.isPublic && quiz.ownerId !== user?.id)) return res.status(404).json({ error: 'Quiz no encontrado.' });
     const owner = user?.id === quiz.ownerId;
     // Las respuestas correctas solo las ve su autor.
-    res.json({ ...quiz, questions: quiz.questions.map(q => (owner ? q : { text: q.text, options: q.options })), mine: owner });
+    res.json({ ...quiz, questions: quiz.questions.map(q => (owner ? q : { text: q.text, options: q.options, image: q.image })), mine: owner });
   });
 
   app.post('/api/quizzes', requireUser, (req, res) => {

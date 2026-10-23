@@ -137,3 +137,5 @@ input[type=range] { accent-color: var(--lime); }
 @media (prefers-reduced-motion: reduce) {
   .bot *, .announce, .timer.low { animation: none !important; }
 }
+
+.qimg { display: block; max-height: 260px; max-width: 100%; margin: 0 auto 14px; border-radius: 12px; object-fit: contain; background: var(--bg); }

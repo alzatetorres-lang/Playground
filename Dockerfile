@@ -6,7 +6,6 @@ RUN npm ci --omit=dev
 COPY server.js ./
 COPY src ./src
 COPY public ./public
-COPY data/seed ./data/seed
 COPY banco-preguntas/questions_1500.json ./banco-preguntas/questions_1500.json
 RUN mkdir -p /app/data && chown -R node:node /app/data
 USER node

@@ -142,6 +142,18 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
   app.get('/api/stats', (req, res) => res.json(stats.overview(me(req)?.id ?? null)));
 
   // Three.js se sirve desde node_modules (mismo origen, sin CDN).
+  // Módulos auxiliares de Three.js: reescribimos `from 'three'` para no necesitar import map (CSP sin inline).
+  const ADDONS = new Set(['geometries/RoundedBoxGeometry.js', 'environments/RoomEnvironment.js']);
+  const addonCache = new Map();
+  app.get('/vendor/three-addons/:dir/:file', (req, res) => {
+    const key = `${req.params.dir}/${req.params.file}`;
+    if (!ADDONS.has(key)) return res.status(404).end();
+    if (!addonCache.has(key)) {
+      const src = require('fs').readFileSync(path.join(__dirname, '..', 'node_modules', 'three', 'examples', 'jsm', key), 'utf8');
+      addonCache.set(key, src.replace(/from\s+['"]three['"]/g, "from '/vendor/three/three.module.js'"));
+    }
+    res.type('application/javascript').set('Cache-Control', 'public, max-age=2592000').send(addonCache.get(key));
+  });
   app.use('/vendor/three', express.static(path.join(__dirname, '..', 'node_modules', 'three', 'build'), { maxAge: '30d', immutable: true }));
   app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], setHeaders: res => res.setHeader('Cache-Control', 'no-cache') }));
   app.get('*', (req, res) => {

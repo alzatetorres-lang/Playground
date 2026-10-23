@@ -5,6 +5,8 @@ import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
 import { initTouchFx } from './fx.js';
 import { initScene } from './scene3d.js';
+import { homeHtml, mountHome, selectWorld, WORLDS, worldOf } from './world.js';
+import { sweepViewers, mountBot, SKIN_INFO, RARITY_COLOR } from './bot3d.js';
 import { initRoom, enter, handleAct, tryResume, leave, render as renderRoom } from './room.js';
 
 const app = document.querySelector('#app');
@@ -26,8 +28,8 @@ function parse() {
   return { parts: path.split('/').filter(Boolean), query: new URLSearchParams(query) };
 }
 
-const DEPTH = { '': 0, library: 1, stats: 1, me: 1, login: 1, host: 2, create: 2, edit: 2, join: 2, room: 3 };
-const TAB_ORDER = ['', 'library', 'stats', 'me'];
+const DEPTH = { '': 0, library: 1, taller: 1, stats: 1, me: 1, login: 1, host: 2, create: 2, edit: 2, join: 2, room: 3 };
+const TAB_ORDER = ['', 'library', 'taller', 'stats', 'me'];
 let lastKey = null;
 
 // Dirección de la animación: avanzar a una pantalla más profunda o a la pestaña de la derecha va hacia delante.
@@ -50,12 +52,19 @@ function route() {
   if (audioUnlocked) audio.sfx('nav');
   document.documentElement.dataset.nav = dir;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (document.startViewTransition && !reduce) return document.startViewTransition(() => renderRoute()).finished.catch(() => {});
+  if (document.startViewTransition && !reduce) {
+    // Una transición puede abortarse (p. ej. al girar el móvil): se ignora y la pantalla se pinta igual.
+    const t = document.startViewTransition(() => renderRoute());
+    t.ready.catch(() => {});
+    t.updateCallbackDone.catch(() => {});
+    return t.finished.catch(() => {});
+  }
   return renderRoute();
 }
 
 async function renderRoute() {
   const { parts, query } = parse();
+  setTimeout(sweepViewers, 0);
   const [a, b] = parts;
   renderChrome();
   window.scrollTo(0, 0);
@@ -63,7 +72,8 @@ async function renderRoute() {
     if (S.room && a !== 'room' && a !== 'stats') return nav('/room', true);
     if (!a) return home();
     if (a === 'library') return library(query);
-    if (a === 'host') return hostSetup(Number(b), query.get('solo') === '1');
+    if (a === 'host') return hostSetup(Number(b), query.get('solo') === '1', query.get('mode'));
+    if (a === 'taller') return taller();
     if (a === 'join') return joinView(b);
     if (a === 'create') return editor(null);
     if (a === 'edit') return editor(Number(b));
@@ -83,10 +93,11 @@ function notFound() {
 const ICON = {
   home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>',
   library: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  taller: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 5 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z"/></svg>',
   stats: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v5a5 5 0 01-10 0z"/><path d="M12 14v4M8 21h8M7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3"/></svg>',
   me: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
 };
-const SECTION = { '': 'home', library: 'library', host: 'library', create: 'library', edit: 'library', stats: 'stats', me: 'me', login: 'me', join: 'home' };
+const SECTION = { '': 'home', library: 'library', host: 'library', create: 'library', edit: 'library', taller: 'taller', stats: 'stats', me: 'me', login: 'me', join: 'home' };
 const current = () => SECTION[parse().parts[0] || ''];
 const cur = k => (current() === k ? ' aria-current="page"' : '');
 
@@ -104,7 +115,7 @@ function renderChrome() {
   if (inRoom) {
     const r = S.room;
     const round = r.round ? `Ronda ${r.round.number}/${r.round.total}` : r.status === 'lobby' ? 'Sala de espera' : '';
-    roombar.innerHTML = `<div class="row"><span class="chip">SALA <b>${esc(r.code)}</b></span><span class="small">${esc(round)}</span></div>
+    roombar.innerHTML = `<div class="row"><span class="chip">SALA <b>${esc(r.code)}</b></span>${round ? `<span class="small">${esc(round)}</span>` : ''}</div>
       <div class="row">${musicHtml()}${S.confirmLeave
         ? '<span class="confirm-row"><span class="small">¿Salir?</span><button class="danger small-btn" data-act="leave">Sí</button><button class="ghost small-btn" data-act="leaveno">No</button></span>'
         : '<button class="ghost small-btn" data-act="leaveask">Salir</button>'}</div>`;
@@ -115,6 +126,7 @@ function renderChrome() {
     <a class="brand" href="#/" aria-label="Playground, inicio">PLAY<b>GROUND</b></a>
     <nav class="topnav" aria-label="Principal">
       <a class="link" href="#/library"${cur('library')}>Quizzes</a>
+      <a class="link" href="#/taller"${cur('taller')}>Taller</a>
       <a class="link" href="#/stats"${cur('stats')}>Récords</a>
       <a class="link" href="${S.user ? '#/me' : '#/login'}"${cur('me')}>${S.user ? esc(S.user.username) : 'Entrar'}</a>
       ${musicHtml()}
@@ -129,11 +141,12 @@ function updateTabbar() {
     tabbar.innerHTML = `<i class="ink"></i>
       <a data-tab="home" href="#/">${ICON.home}<span>Inicio</span></a>
       <a data-tab="library" href="#/library">${ICON.library}<span>Quizzes</span></a>
+      <a data-tab="taller" href="#/taller">${ICON.taller}<span>Taller</span></a>
       <a data-tab="stats" href="#/stats">${ICON.stats}<span>Récords</span></a>
       <a data-tab="me" href="#/login">${ICON.me}<span>Entrar</span></a>`;
     tabbar.dataset.built = '1';
   }
-  const order = ['home', 'library', 'stats', 'me'];
+  const order = ['home', 'library', 'taller', 'stats', 'me'];
   const now = current();
   tabbar.style.setProperty('--i', Math.max(0, order.indexOf(now)));
   tabbar.querySelectorAll('a').forEach(a => { if (a.dataset.tab === now) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -147,6 +160,12 @@ let audioUnlocked = false;
 const unlock = () => { audioUnlocked = true; if (!audio.state.muted) audio.start(); window.removeEventListener('pointerdown', unlock); window.removeEventListener('keydown', unlock); };
 window.addEventListener('pointerdown', unlock);
 window.addEventListener('keydown', unlock);
+
+// Los elementos con role=button (planetas del mapa) también responden a Enter y espacio.
+document.addEventListener('keydown', ev => {
+  const el = ev.target.closest?.('[role=button][data-act]');
+  if (el && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); el.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+});
 
 // ---------- clics ----------
 document.addEventListener('click', async ev => {
@@ -182,10 +201,14 @@ const actions = {
   },
   async create() {
     const name = requireName(); if (!name) return;
-    const el = id => Number(document.querySelector(id).value);
+    // Cada modo muestra solo sus ajustes: los que no están se dejan al valor por defecto del servidor.
+    const el = id => { const f = document.querySelector(id); return f ? Number(f.value) : undefined; };
     const res = await ask('room:create', {
       quizId: S.hostQuiz, name, avatar: S.avatar, solo: S.hostSolo,
-      settings: { questions: el('#s-q'), seconds: el('#s-sec'), drawEvery: S.hostSolo ? 0 : el('#s-draw'), drawSeconds: el('#s-dsec') },
+      settings: {
+        mode: S.hostMode, questions: el('#s-q'), seconds: el('#s-sec'), drawEvery: S.hostSolo || S.hostMode !== 'classic' ? 0 : el('#s-draw'), drawSeconds: el('#s-dsec'),
+        duration: el('#s-min') * 60, goal: el('#s-goal'), drawRounds: el('#s-rounds'),
+      },
     });
     if (res.error) return toast(res.error, true);
     audio.sfx('go'); enter(res);
@@ -218,6 +241,11 @@ const actions = {
   async doLogin() { authSubmit('login'); },
   async doRegister() { authSubmit('register'); },
   tab(el) { S.tab = el.dataset.t; stats(); },
+  world(el) { selectWorld(el.dataset.mode); audio.sfx('join'); },
+  tomap(el, ev) { ev.preventDefault(); document.querySelector('#map')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+  pickmode(el) { S.hostMode = el.dataset.mode; hostSetup(S.hostQuiz, S.hostSolo, S.hostMode); },
+  async capsule() { openCapsule(); },
+  async wear(el) { S.avatar.skin = Number(el.dataset.s); saveProfile(); try { await api('/api/avatar', { method: 'PUT', body: S.avatar }); } catch {} toast(`Llevas el acabado ${SKIN_INFO[S.avatar.skin].name}`); taller(); },
   async saveAvatar() { try { await api('/api/avatar', { method: 'PUT', body: S.avatar }); toast('Robot guardado'); } catch (e) { toast(e.message, true); } },
 };
 
@@ -234,73 +262,116 @@ function robotCard() {
   return `<section class="card"><div class="row between"><h2>Tu robot</h2>${S.user ? '<button class="alt small-btn" data-act="saveAvatar">Guardar en mi cuenta</button>' : ''}</div><div id="avatar-editor"></div></section>`;
 }
 function mountRobot() {
-  avatarEditor(document.querySelector('#avatar-editor'), S.avatar, () => saveProfile(), () => { const a = randomAvatar(); return a; });
+  avatarEditor(document.querySelector('#avatar-editor'), S.avatar, () => saveProfile(), () => randomAvatar(), S.user?.skins || [0]);
 }
 
 function home() {
-  app.innerHTML = `
-    <div class="split">
-      <section class="hero" style="padding-top:28px">
-        <div class="small">Quiz + dibujo en directo</div>
-        <h1>Sabe. Dibuja. <span>Adivina.</span></h1>
-        <p>Crea una sala, pasa el código y juega con hasta 10 personas desde el móvil. Entre pregunta y pregunta, a alguien le toca dibujar.</p>
-        <div class="row"><a class="btn" href="#/library">Crear partida</a><a class="btn violet" href="#/library?solo=1">Jugar solo</a></div>
-        <div class="crew" aria-hidden="true">${Array.from({ length: 4 }, () => botSvg(randomAvatar())).join('')}<span class="more">+ hasta 10 jugadores</span></div>
-      </section>
-      <section class="card"><h2>Unirme con código</h2>${nameField()}
-        <label for="code">Código de sala</label><input id="code" maxlength="5" placeholder="ABCDE" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase;letter-spacing:.3em;font-family:var(--font-mono);font-weight:700">
-        <button class="wide" data-act="join">Entrar a la sala</button></section>
-    </div>
-    <div class="ticker" aria-hidden="true"><div>${[0, 1].map(() => ['Quiz en directo', 'Dibuja', 'Adivina', 'Doble apuesta', 'Escudo', 'Robo de tiempo', 'Hasta 10 jugadores', 'Sin instalar nada'].map(t => `<span>${t}</span>`).join('')).join('')}</div></div>
-    <div class="split">
-      <section class="card"><h2>Cómo se juega</h2>
-        <ol class="steps">
-          <li><span><b>Elige un quiz</b> de la biblioteca o crea el tuyo.</span></li>
-          <li><span><b>Comparte el código</b> de 5 letras. Entran hasta 10 jugadores.</span></li>
-          <li><span><b>Responde contra reloj.</b> Doble apuesta, Escudo y Robo de tiempo cambian la partida.</span></li>
-          <li><span><b>Cuando toca dibujar,</b> un jugador al azar pinta una palabra y los demás la adivinan.</span></li>
-        </ol></section>
-      ${robotCard()}
-    </div>`;
+  app.innerHTML = homeHtml({ nameField, robotCard });
+  mountHome();
   mountRobot();
 }
 
 async function library(query) {
   const solo = query.get('solo') === '1';
+  const mode = query.get('mode') || S.libMode || 'classic';
+  S.libMode = mode;
+  const world = worldOf(mode);
+  const hostQ = id => `#/host/${id}?mode=${mode}${solo ? '&solo=1' : ''}`;
   const mine = S.libMine && S.user;
   app.innerHTML = skeletonGrid();
   const [cats, list] = await Promise.all([api('/api/categories'), api(`/api/quizzes?${new URLSearchParams({ q: S.libQ || '', category: S.libCat || '', ...(mine ? { mine: '1' } : {}) })}`)]);
   app.innerHTML = `
     <a class="back" href="#/">‹ Inicio</a><section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Elige un quiz para jugar solo' : 'Elige un quiz'}</div><h1>Biblioteca</h1></section>
+    <div class="mode-strip" role="radiogroup" aria-label="Modo de juego">${WORLDS.filter(w => !solo || w.solo).map(w => `<a class="mode-chip ${w.mode === mode ? 'on' : ''}" role="radio" aria-checked="${w.mode === mode}" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}" style="--c:${w.color}"><span>${w.icon}</span>${esc(w.name)}</a>`).join('')}</div>
+    <p class="muted">${esc(world.icon)} <b>${esc(world.name)}</b>: ${esc(world.rules[0])} ${esc(world.rules[1] || '')}</p>
     <div class="tabs"><button class="${mine ? '' : 'on'}" data-act="libtab" data-m="0">Públicos</button>${S.user ? `<button class="${mine ? 'on' : ''}" data-act="libtab" data-m="1">Mis quizzes</button><a class="btn violet" href="#/create">+ Crear quiz</a>` : '<a class="btn ghost small-btn" href="#/login">Inicia sesión para crear quizzes</a>'}</div>
     <div class="row" style="align-items:flex-end"><div style="flex:2;min-width:180px"><label for="q">Buscar</label><input id="q" value="${esc(S.libQ || '')}" placeholder="Título o descripción"></div>
       <div style="flex:1;min-width:150px"><label for="cat">Categoría</label><select id="cat"><option value="">Todas</option>${cats.map(c => `<option ${S.libCat === c.name ? 'selected' : ''} value="${esc(c.name)}">${esc(c.name)} (${c.count})</option>`).join('')}</select></div></div>
     <div class="grid" style="margin-top:12px">${list.map(q => `<article class="card qcard" style="--accent:${accent(q.category)}"><div class="row between"><span class="pill">${esc(q.category)}</span>${q.isPublic ? '' : '<span class="pill">Privado</span>'}</div><h3>${esc(q.title)}</h3><div class="meta">${q.questionCount} preguntas · por ${esc(q.author)}</div>
-      <div class="row"><a class="btn small-btn" href="#/host/${q.id}${solo ? '?solo=1' : ''}">${solo ? 'Jugar solo' : 'En directo'}</a>${solo ? '' : `<a class="btn alt small-btn" href="#/host/${q.id}?solo=1">Solo</a>`}${q.mine ? `<a class="btn ghost small-btn" href="#/edit/${q.id}">Editar</a>` : `<button class="ghost small-btn" data-act="dup" data-id="${q.id}">Duplicar</button>`}</div></article>`).join('') || '<div class="card empty"><span class="big">∅</span>No hay quizzes con ese filtro. Prueba otra búsqueda o crea el tuyo.</div>'}</div>`;
+      <div class="row"><a class="btn small-btn" href="${hostQ(q.id)}">${solo ? 'Jugar solo' : 'En directo'}</a>${solo || !world.solo ? '' : `<a class="btn alt small-btn" href="#/host/${q.id}?mode=${mode}&solo=1">Solo</a>`}${q.mine ? `<a class="btn ghost small-btn" href="#/edit/${q.id}">Editar</a>` : `<button class="ghost small-btn" data-act="dup" data-id="${q.id}">Duplicar</button>`}</div></article>`).join('') || '<div class="card empty"><span class="big">∅</span>No hay quizzes con ese filtro. Prueba otra búsqueda o crea el tuyo.</div>'}</div>`;
   const apply = () => { S.libQ = val('#q'); S.libCat = val('#cat'); library(query); };
   let t; document.querySelector('#q').oninput = () => { clearTimeout(t); t = setTimeout(apply, 350); };
   document.querySelector('#cat').onchange = apply;
 }
-actions.libtab = el => { S.libMine = el.dataset.m === '1'; library(new URLSearchParams()); };
+actions.libtab = el => { S.libMine = el.dataset.m === '1'; library(parse().query); };
 
-async function hostSetup(id, solo) {
+async function hostSetup(id, solo, mode) {
   const quiz = await api(`/api/quizzes/${id}`);
   S.hostQuiz = id; S.hostSolo = solo;
+  S.hostMode = WORLDS.some(w => w.mode === mode && (!solo || w.solo)) ? mode : (S.hostMode && (!solo || worldOf(S.hostMode).solo) ? S.hostMode : 'classic');
+  const w = worldOf(S.hostMode);
   const n = quiz.questions.length;
+  const pace = ['chips', 'race', 'fish', 'hack'].includes(w.mode);
+  const range = (id, label, min, max, step, value, unit = '') => `<label for="${id}">${label}: <span id="o${id}"></span>${unit}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${value}">`;
   app.innerHTML = `
-    <a class="back" href="#/library${solo ? '?solo=1' : ''}">‹ Biblioteca</a><section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Partida individual' : 'Nueva partida en directo'}</div><h1>${esc(quiz.title)}</h1><p>${esc(quiz.description || '')}</p></section>
-    <section class="card stack">${nameField()}
-      <label for="s-q">Preguntas: <span id="o-q"></span></label><input type="range" id="s-q" min="1" max="${Math.min(30, n)}" value="${Math.min(10, n)}">
-      <label for="s-sec">Segundos por pregunta: <span id="o-sec"></span></label><input type="range" id="s-sec" min="10" max="60" step="5" value="20">
-      ${solo ? '<input type="hidden" id="s-draw" value="0"><input type="hidden" id="s-dsec" value="60">' : `
-      <label for="s-draw">Ronda de dibujo</label><select id="s-draw"><option value="0">Sin dibujo</option><option value="2">Cada 2 preguntas</option><option value="3">Cada 3 preguntas</option><option value="4" selected>Cada 4 preguntas</option><option value="5">Cada 5 preguntas</option></select>
-      <label for="s-dsec">Segundos por dibujo: <span id="o-dsec"></span></label><input type="range" id="s-dsec" min="30" max="120" step="10" value="60">`}
-      <button class="wide" data-act="create">${solo ? '▶ Jugar' : 'Crear sala y obtener código'}</button>
-    </section>
+    <a class="back" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}">‹ Biblioteca</a>
+    <section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Partida individual' : 'Nueva partida en directo'} · ${esc(quiz.title)}</div><h1 style="--c:${w.color}"><span class="mode-ico">${w.icon}</span> ${esc(w.name)}</h1><p>${esc(w.story)}</p></section>
+    <div class="mode-strip">${WORLDS.filter(x => !solo || x.solo).map(x => `<button class="mode-chip ${x.mode === w.mode ? 'on' : ''}" data-act="pickmode" data-mode="${x.mode}" style="--c:${x.color}"><span>${x.icon}</span>${esc(x.name)}</button>`).join('')}</div>
+    <div class="split">
+      <section class="card stack">${nameField()}
+        ${pace ? range('s-min', 'Duración', 2, 10, 1, 4, ' min') : ''}
+        ${w.mode === 'race' ? range('s-goal', 'Meta', 5, 40, 1, 15, ' aciertos') : ''}
+        ${w.mode === 'draw' ? range('s-rounds', 'Rondas de dibujo', 2, 12, 1, 4) + range('s-dsec', 'Segundos por dibujo', 30, 120, 10, 60) : ''}
+        ${!pace && w.mode !== 'draw' ? range('s-q', 'Preguntas', 1, Math.min(30, n), 1, Math.min(w.mode === 'battle' ? 15 : 10, n)) + range('s-sec', 'Segundos por pregunta', 10, 60, 5, 20) : ''}
+        ${w.mode === 'classic' && !solo ? `<label for="s-draw">Ronda de dibujo</label><select id="s-draw"><option value="0">Sin dibujo</option><option value="2">Cada 2 preguntas</option><option value="3">Cada 3 preguntas</option><option value="4" selected>Cada 4 preguntas</option><option value="5">Cada 5 preguntas</option></select>${range('s-dsec', 'Segundos por dibujo', 30, 120, 10, 60)}` : ''}
+        <button class="wide" data-act="create">${solo ? '▶ Jugar' : 'Crear sala y obtener código'}</button>
+      </section>
+      <section class="card"><h2>Reglas</h2><ul class="rules">${w.rules.map(r => `<li>${esc(r)}</li>`).join('')}</ul><p class="muted">${n} preguntas en este quiz.</p></section>
+    </div>
     ${robotCard()}`;
-  const bind = (inp, out) => { const i = document.querySelector(inp), o = document.querySelector(out); if (!i || !o) return; const f = () => { o.textContent = i.value; }; i.oninput = f; f(); };
-  bind('#s-q', '#o-q'); bind('#s-sec', '#o-sec'); bind('#s-dsec', '#o-dsec');
+  for (const id of ['s-q', 's-sec', 's-dsec', 's-min', 's-goal', 's-rounds']) {
+    const i = document.querySelector(`#${id}`), o = document.querySelector(`#o${id}`);
+    if (i && o) { const f = () => { o.textContent = i.value; }; i.oninput = f; f(); }
+  }
   mountRobot();
+}
+
+// ---------- Taller: cápsulas y colección ----------
+async function taller() {
+  if (!S.user) {
+    app.innerHTML = `<section class="hero center"><div class="small">Taller de Chispa</div><h1>Colecciona <span>bots</span></h1><p>Gana tuercas en cada partida y ábrelas en cápsulas para conseguir acabados: Neón, Cromo, Oro, Holograma, Lava, Galaxia o Glitch. Necesitas una cuenta para guardar tu colección.</p><div class="row"><a class="btn" href="#/login">Crear cuenta o entrar</a></div></section>
+      <div class="skin-grid">${SKIN_INFO.map((k, i) => `<div class="skin-card" style="--rc:${RARITY_COLOR[k.rarity]}">${botSvg({ ...S.avatar, skin: i })}<b>${esc(k.name)}</b><span class="small" style="color:var(--rc)">${k.rarity}</span></div>`).join('')}</div>`;
+    return;
+  }
+  app.innerHTML = skeletonGrid(3);
+  const col = await api('/api/collection');
+  S.user.tokens = col.tokens; S.user.skins = col.skins;
+  app.innerHTML = `
+    <section class="hero" style="padding:8px 0 0"><div class="small">Taller de Chispa</div><h1>Tu <span>colección</span></h1><p>Cada partida da tuercas (más si quedas en el podio). Una cápsula cuesta ${col.cost}; si sale repetido te devolvemos ${col.refund}.</p></section>
+    <div class="split">
+      <section class="card capsule-card">
+        <div class="tokens"><span class="nut">⚙</span><b class="num" id="tokens">${col.tokens}</b> tuercas</div>
+        <div class="capsule-stage" id="capsule-stage"><div class="capsule" id="capsule"><i></i><i></i></div></div>
+        <button class="wide" data-act="capsule" ${col.tokens < col.cost ? 'disabled' : ''}>Abrir cápsula · ${col.cost} ⚙</button>
+        <p class="muted" style="text-align:center;margin:8px 0 0">Probabilidades: común 55 % · raro 28 % · épico 12 % · legendario 4 % · mítico 1 %</p>
+      </section>
+      <section class="card"><h2>Acabados (${col.skins.length}/${SKIN_INFO.length})</h2>
+        <div class="skin-grid">${SKIN_INFO.map((k, i) => {
+          const own = col.skins.includes(i);
+          return `<div class="skin-card ${own ? '' : 'locked'} ${S.avatar.skin === i ? 'on' : ''}" style="--rc:${RARITY_COLOR[k.rarity]}">${own ? botSvg({ ...S.avatar, skin: i }) : '<div class="lockbox">?</div>'}<b>${esc(k.name)}</b><span class="small" style="color:var(--rc)">${k.rarity}</span>${own ? `<button class="small-btn ${S.avatar.skin === i ? 'alt' : ''}" data-act="wear" data-s="${i}">${S.avatar.skin === i ? 'Puesto' : 'Ponérselo'}</button>` : ''}</div>`;
+        }).join('')}</div></section>
+    </div>`;
+}
+
+async function openCapsule() {
+  const btn = document.querySelector('[data-act=capsule]');
+  const stage = document.querySelector('#capsule-stage');
+  btn.disabled = true;
+  stage.classList.add('shaking');
+  audio.sfx('riser');
+  let res;
+  try { res = await api('/api/capsule', { method: 'POST' }); } catch (e) { stage.classList.remove('shaking'); btn.disabled = false; return toast(e.message, true); }
+  await new Promise(r => setTimeout(r, 1600));
+  stage.classList.remove('shaking');
+  stage.classList.add('burst');
+  audio.sfx('win');
+  const skin = res.skin;
+  S.user.tokens = res.tokens; S.user.skins = res.skins;
+  stage.innerHTML = `<div class="reveal-bot" style="--rc:${RARITY_COLOR[skin.rarity]}"><div class="rays"></div><div id="reveal-live"></div><div class="small" style="color:var(--rc)">${skin.rarity}</div><h3>${esc(skin.name)}</h3><p class="muted">${res.duplicate ? `Repetido: +${30} tuercas` : '¡Nuevo acabado!'}</p></div>`;
+  const viewer = mountBot(document.querySelector('#reveal-live'), { ...S.avatar, skin: skin.id }, { size: 200 });
+  if (!viewer) document.querySelector('#reveal-live').innerHTML = botSvg({ ...S.avatar, skin: skin.id }, { size: 'lg' });
+  document.querySelector('#tokens').textContent = res.tokens;
+  setTimeout(() => { if (document.querySelector('#reveal-live')) taller(); }, 4200);
 }
 
 function joinView(code) {

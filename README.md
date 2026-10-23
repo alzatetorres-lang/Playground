@@ -2,6 +2,21 @@
 
 Quiz social en directo con rondas de dibujo. Se juega desde el móvil o el ordenador: un anfitrión crea la partida, comparte un código de 5 caracteres y entran hasta 10 jugadores. Entre pregunta y pregunta, un jugador al azar dibuja con el ratón una palabra secreta y los demás la adivinan contra reloj.
 
+## El universo Circuitia
+El Rey Glitch rompió el Núcleo en siete chips. Volt y su dron Chispa recorren siete mundos para recuperarlos, y cada mundo es un modo de juego (inspirados en Blooket y mejorados; ver `SPEC-v2.md`):
+
+| Mundo | Modo |
+|---|---|
+| ⚡ Arena Neón | Quiz a la vez para todos, con poderes y rondas de dibujo |
+| 💠 Mina de Chips | A tu ritmo: cápsulas que suman, duplican, roban o intercambian |
+| 🏁 Autopista Turbo | Carrera a la meta con turbo y pulso EMP |
+| 🐟 Mar de Datos | Pesca de peces-robot por rareza, cebo por racha y Frenesí |
+| 🔓 Fortaleza Firewall | Mina bits y hackea contraseñas ajenas |
+| 🎨 Taller de Grafitis | Solo rondas de dibujo |
+| 👑 Coliseo de Glitch | Eliminación con 3 vidas |
+
+Los robots son 3D y coleccionables: cada partida da tuercas que se abren en cápsulas del Taller (11 acabados, de común a mítico).
+
 ## Qué incluye
 - Quiz en vivo con puntuación por rapidez y tres poderes (Doble apuesta, Escudo, Robo de tiempo).
 - Rondas de dibujo con 1500 palabras del banco de preguntas del equipo.

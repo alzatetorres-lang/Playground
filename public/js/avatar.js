@@ -1,5 +1,6 @@
-// Robots amistosos en SVG por piezas. Animados con CSS (flotar, parpadear, antena, saludo).
-export const COLORS = ['#cbf231', '#cbbeff', '#ffb5a0', '#7fe0ff', '#ff8ad6', '#ffd166', '#7dffb2', '#ff7a7a'];
+// Robots amistosos. Con WebGL se muestran en 3D (bot3d.js); sin él, en SVG por piezas animado con CSS.
+import { botImage, has3D, COLORS as COLORS3D } from './bot3d.js';
+export const COLORS = COLORS3D;
 export const PARTS = {
   body: ['Cuadrado', 'Redondo', 'Alto', 'Hexágono', 'Cápsula'],
   eyes: ['Puntos', 'Grandes', 'Visor', 'Felices', 'LED'],
@@ -70,7 +71,11 @@ const accessory = (kind, c) => {
 
 // mood: 'happy' | 'sad' | undefined. size: 'sm' | 'lg' | undefined.
 export function botSvg(avatar, { mood, size } = {}) {
-  const a = { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0, ...(avatar || {}) };
+  const a = { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0, skin: 0, ...(avatar || {}) };
+  if (has3D) {
+    const src = botImage(a, mood);
+    if (src) return `<img class="${['bot', 'b3', size, mood, a.skin >= 7 ? 'rare' : ''].filter(Boolean).join(' ')}" src="${src}" alt="Robot" draggable="false">`;
+  }
   const c = COLORS[a.color] || COLORS[0];
   const bodyTop = topY(a.body);
   const cls = ['bot', size, mood].filter(Boolean).join(' ');
@@ -92,5 +97,5 @@ export function botSvg(avatar, { mood, size } = {}) {
 
 export function randomAvatar() {
   const r = n => Math.floor(Math.random() * n);
-  return { body: r(5), eyes: r(5), antenna: r(5), mouth: r(4), accessory: r(6), color: r(8) };
+  return { body: r(5), eyes: r(5), antenna: r(5), mouth: r(4), accessory: r(6), color: r(8), skin: 0 };
 }

@@ -85,6 +85,77 @@ function makeStars(count) {
   return new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xe8ecff, size: 0.6, transparent: true, opacity: 0.7, sizeAttenuation: true }));
 }
 
+function glowTexture(inner, outer = 'rgba(0,0,0,0)') {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const r = g.createRadialGradient(64, 64, 0, 64, 64, 64); r.addColorStop(0, inner); r.addColorStop(1, outer);
+  g.fillStyle = r; g.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+
+// Nebulosas: sprites aditivos enormes y lejanos.
+function makeNebula() {
+  const group = new THREE.Group();
+  const tones = ['rgba(39,243,255,.55)', 'rgba(255,46,147,.5)', 'rgba(120,80,255,.5)', 'rgba(200,255,46,.28)'];
+  for (let i = 0; i < 9; i++) {
+    const m = new THREE.SpriteMaterial({ map: glowTexture(tones[i % tones.length]), transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
+    const sp = new THREE.Sprite(m);
+    const scale = 60 + Math.random() * 90;
+    sp.scale.set(scale, scale * 0.6, 1);
+    sp.position.set((Math.random() - 0.5) * 260, 25 + Math.random() * 70, -160 - Math.random() * 60);
+    sp.userData.drift = (Math.random() - 0.5) * 0.02;
+    group.add(sp);
+  }
+  return group;
+}
+
+// Planeta Circuitia con anillo de neón y lunas lejanas.
+function makePlanets() {
+  const group = new THREE.Group();
+  const planetMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 } }, fog: false,
+    vertexShader: 'varying vec3 vN; varying vec2 vUv; void main(){ vN = normalize(normalMatrix * normal); vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: `varying vec3 vN; varying vec2 vUv; uniform float uTime;
+      void main(){
+        float bands = sin(vUv.y * 40.0 + sin(vUv.x * 12.0 + uTime * 0.2) * 1.5) * 0.5 + 0.5;
+        vec3 a = vec3(0.10, 0.06, 0.28); vec3 b = vec3(0.15, 0.85, 1.0); vec3 c = vec3(1.0, 0.18, 0.58);
+        vec3 col = mix(a, mix(b, c, vUv.y), bands * 0.55);
+        float rim = pow(1.0 - max(dot(vN, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
+        float light = max(dot(vN, normalize(vec3(-0.6, 0.5, 0.6))), 0.0);
+        gl_FragColor = vec4(col * (0.25 + light * 0.9) + rim * vec3(0.3, 0.9, 1.0), 1.0);
+      }`,
+  });
+  const planet = new THREE.Mesh(new THREE.SphereGeometry(18, 64, 48), planetMat);
+  planet.position.set(-95, 62, -165);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(24, 34, 96), new THREE.MeshBasicMaterial({ color: 0xc8ff2e, side: THREE.DoubleSide, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+  ring.rotation.set(Math.PI / 2.3, 0.2, 0.3);
+  planet.add(ring);
+  group.add(planet);
+  const moons = [[70, 55, -170, 5, 0xff2e93], [40, 70, -190, 3, 0x27f3ff], [-10, 80, -200, 2.2, 0xffc83d]];
+  for (const [x, y, z, r, col] of moons) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 24), new THREE.MeshBasicMaterial({ color: col, fog: false }));
+    m.position.set(x, y, z);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture('rgba(255,255,255,.6)'), color: col, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+    halo.scale.setScalar(r * 5);
+    m.add(halo);
+    group.add(m);
+  }
+  group.userData = { planet, ring, mat: planetMat };
+  return group;
+}
+
+// Estelas de velocidad para la cuenta atrás (efecto warp).
+function makeWarp(count) {
+  const pos = new Float32Array(count * 6);
+  const seeds = [];
+  for (let i = 0; i < count; i++) seeds.push({ x: (Math.random() - 0.5) * 80, y: Math.random() * 40, z: -Math.random() * 160 });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const lines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xbff6ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+  lines.userData.seeds = seeds;
+  return lines;
+}
+
 export function initScene() {
   let renderer;
   try {
@@ -105,7 +176,12 @@ export function initScene() {
 
   const sun = makeSun(), grid = makeGrid(), mountains = makeMountains();
   const shapes = makeShapes(mobile ? 9 : 16), stars = makeStars(mobile ? 500 : 1200);
-  scene.add(sun, grid, mountains, shapes, stars);
+  const nebula = makeNebula(), planets = makePlanets(), warp = makeWarp(mobile ? 140 : 260);
+  scene.add(nebula, planets, sun, grid, mountains, shapes, stars, warp);
+  // Estrellas fugaces ocasionales.
+  const shooting = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3(-6, -2, 0)]), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }));
+  scene.add(shooting);
+  let shootT = 0;
 
   const state = { ...MODES.menu, speed: MODES.menu.speed, dim: MODES.menu.dim, fov: MODES.menu.fov, pulse: 0 };
   let target = MODES.menu, last = performance.now(), running = true;
@@ -145,11 +221,36 @@ export function initScene() {
       if (m.position.z > -6) m.position.z = -100;
     }
     stars.rotation.y = Math.sin(now / 20000) * 0.05;
+    planets.userData.mat.uniforms.uTime.value = now / 1000;
+    planets.userData.planet.rotation.y += dt * 0.05;
+    planets.userData.ring.rotation.z += dt * 0.02;
+    for (const n of nebula.children) n.position.x += n.userData.drift;
+    // Warp: las estelas se alargan con la velocidad.
+    const warpK = Math.max(0, Math.min(1, (state.speed - 8) / 28));
+    warp.material.opacity = warpK * 0.9;
+    if (warpK > 0.01) {
+      const arr = warp.geometry.attributes.position.array;
+      warp.userData.seeds.forEach((p, i) => {
+        p.z += state.speed * dt * 3;
+        if (p.z > 10) { p.z = -160; p.x = (Math.random() - 0.5) * 80; p.y = Math.random() * 40; }
+        const len = 2 + warpK * 22;
+        arr.set([p.x, p.y, p.z, p.x, p.y, p.z - len], i * 6);
+      });
+      warp.geometry.attributes.position.needsUpdate = true;
+    }
+    shootT -= dt;
+    if (shootT <= 0) {
+      shootT = 3 + Math.random() * 5;
+      shooting.position.set(20 + Math.random() * 60, 40 + Math.random() * 30, -120);
+      shooting.userData.v = new THREE.Vector3(-60, -20, 0);
+      shooting.material.opacity = 1;
+    }
+    if (shooting.material.opacity > 0) { shooting.position.addScaledVector(shooting.userData.v, dt); shooting.material.opacity = Math.max(0, shooting.material.opacity - dt * 0.9); }
     camera.position.x = lerp(camera.position.x, pointer.x * 3, 0.04);
-    camera.position.y = lerp(camera.position.y, 4.2 - pointer.y * 1.5, 0.04);
+    camera.position.y = lerp(camera.position.y, 4.2 - pointer.y * 1.5 + (target === MODES.menu ? 1.5 : 0), 0.04);
     camera.fov = state.fov;
     camera.updateProjectionMatrix();
-    camera.lookAt(0, 4, -60);
+    camera.lookAt(0, target === MODES.menu ? 9 : 4, -60);
     renderer.domElement.style.opacity = String(0.25 + state.dim * 0.75);
     renderer.render(scene, camera);
     if (!reduce) requestAnimationFrame(frame);

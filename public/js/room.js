@@ -5,6 +5,8 @@ import { audio } from './audio.js';
 import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
 import { flash, confetti, buzz } from './fx.js';
+import { initPace, startPace, paceView, paceAct, paceState, stopPace, fmtScore } from './pace-ui.js';
+import { worldOf, freeWorld } from './world.js';
 
 // Fondo 3D y música siguen la fase de la partida.
 const mood = (sceneMode, music) => { window.__scene?.setMode(sceneMode); audio.setMood(music); };
@@ -19,6 +21,8 @@ const app = () => document.querySelector('#app');
 let tickTimer = null, canvas = null, lastTick = -1, nav = () => {}, chrome = () => {};
 const answered = new Set(), guessed = new Set();
 export const initRoom = (navigate, onChrome) => { nav = navigate; chrome = onChrome; };
+initPace(() => render());
+window.addEventListener('pg:side', () => renderSide());
 
 const me = () => S.room?.players.find(p => p.id === S.you);
 const isHost = () => S.room?.hostId === S.you;
@@ -50,6 +54,7 @@ export function leave() {
   stopTimer();
   canvas?.destroy(); canvas = null;
   sessionStorage.removeItem('pg_room');
+  stopPace();
   letSleep();
   mood('menu', 'menu');
   S.room = null; S.phase = null; S.you = null;
@@ -70,6 +75,9 @@ export function enter(snapshot) {
     syncClock(snapshot.question.now);
     setQuestion(snapshot.question);
     S.picked = snapshot.question.answered ? -1 : null;
+    return;
+  } else if (st === 'pace' && snapshot.pace) {
+    startPace(snapshot.pace, snapshot.pace);
     return;
   } else if (st === 'countdown' && snapshot.countdown) {
     setCountdown(snapshot.countdown);
@@ -119,7 +127,7 @@ export function render() {
   // Marcador lateral en todas las fases de juego; en la sala de espera no hace falta.
   const withSide = !['lobby', 'wait', 'finished'].includes(S.phase);
   host.innerHTML = `<div class="game-layout${withSide ? ' with-side' : ''}"><div id="stage"></div>${withSide ? '<aside id="side" class="card side" aria-label="Marcador en directo"></aside>' : ''}</div>`;
-  const views = { lobby, countdown, question, result, draw, drawresult, finished, wait };
+  const views = { lobby, countdown, question, result, draw, drawresult, finished, wait, pace: paceView };
   (views[S.phase] || wait)(host.querySelector('#stage'));
   renderSide();
   chrome();
@@ -128,11 +136,15 @@ export function render() {
 function renderSide() {
   const side = document.querySelector('#side');
   if (!side || !S.room) return;
-  const players = [...S.room.players].sort((a, b) => b.score - a.score);
+  const pace = S.phase === 'pace';
+  const mode = S.room.mode || S.room.settings?.mode;
+  const players = pace ? paceState().standings : [...S.room.players].sort((a, b) => (mode === 'battle' ? (b.lives ?? 0) - (a.lives ?? 0) : 0) || b.score - a.score);
   const top = players[0]?.score || 0;
   const gap = top - (players.find(p => p.id === S.you)?.score ?? top);
   const mark = p => {
-    if (S.phase === 'question') return answered.has(p.id) ? '<span class="mark ok" title="Ya respondió">✔</span>' : '';
+    const hearts = mode === 'battle' ? `<span class="mark hearts" title="${p.lives} vidas">${'❤'.repeat(p.lives ?? 0)}${'♡'.repeat(3 - (p.lives ?? 0))}</span>` : '';
+    if (S.phase === 'question') return hearts + (answered.has(p.id) ? '<span class="mark ok" title="Ya respondió">✔</span>' : '');
+    if (hearts) return hearts;
     if (S.phase === 'draw') return p.id === S.draw?.drawerId ? '<span class="mark" title="Dibuja">✏</span>' : guessed.has(p.id) ? '<span class="mark ok" title="Acertó">✔</span>' : '';
     return '';
   };
@@ -140,7 +152,7 @@ function renderSide() {
     ${top > 0 ? `<p class="leader">👑 Va ganando <b>${esc(players[0].name)}</b></p>` : '<p class="leader muted">Aún sin puntos</p>'}
     <ol class="side-list">${players.map((p, i) => `<li class="${p.id === S.you ? 'me' : ''}${p.connected ? '' : ' off'}${i === 0 && top > 0 ? ' lead' : ''}">
       <span class="pos">${i + 1}</span>${botSvg(p.avatar, { size: 'sm' })}
-      <span class="nm">${esc(p.name)}${p.id === S.you ? ' <span class="muted">(tú)</span>' : ''}</span>${mark(p)}<span class="pts">${p.score}</span>
+      <span class="nm">${esc(p.name)}${p.id === S.you ? ' <span class="muted">(tú)</span>' : ''}</span>${mark(p)}<span class="pts">${pace ? esc(fmtScore(mode, p, paceState().info?.goal)) : p.score}</span>
       <i class="fill" style="width:${top ? Math.round((p.score / top) * 100) : 0}%"></i></li>`).join('')}</ol>
     ${gap > 0 ? `<p class="small side-gap">Líder +${gap} sobre ti</p>` : ''}`;
 }
@@ -167,26 +179,29 @@ function lobby(root) {
 
 function countdown(root) {
   const c = S.cd || {};
-  const what = c.type === 'draw' ? 'Ronda de dibujo' : `Pregunta ${c.number} de ${c.total}`;
+  const w = worldOf(c.mode);
+  const what = c.type === 'pace' ? `${w.icon} ${w.name}` : c.type === 'draw' ? 'Ronda de dibujo' : `Pregunta ${c.number} de ${c.total}`;
   root.innerHTML = `
     <section class="countdown card" role="timer" aria-label="Cuenta atrás">
       <div class="small">${esc(what)}</div>
       <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="arc" id="arc" cx="60" cy="60" r="54" pathLength="100"/></svg><div class="cd-num" id="timer">--</div></div>
-      <p class="muted">${c.type === 'draw' ? 'Prepárate: a alguien le toca dibujar.' : 'Prepárate. La pregunta aparece al llegar a cero.'}</p>
+      <p class="muted">${c.type === 'pace' ? esc(w.rules[0]) + ' ' + esc(w.rules[1] || '') : c.type === 'draw' ? 'Prepárate: a alguien le toca dibujar.' : 'Prepárate. La pregunta aparece al llegar a cero.'}</p>
     </section>`;
 }
 
 function question(root) {
   const q = S.q, m = me();
   const powers = m ? m.powers : {};
-  const lock = S.picked != null;
+  const out = m?.eliminated;
+  const lock = S.picked != null || out;
+  const battle = S.room.mode === 'battle';
   root.innerHTML = `
-    <div class="hud"><div><div class="small">Pregunta ${q.number} de ${q.total}</div></div><div class="timer" id="timer">--</div></div>
+    <div class="hud"><div><div class="small">${battle ? '👑 Coliseo · ' : ''}Pregunta ${q.number} de ${q.total}</div>${battle && m ? `<div class="hearts big">${'❤'.repeat(m.lives)}${'♡'.repeat(3 - m.lives)}</div>` : ''}</div><div class="timer" id="timer">--</div></div>
     <div class="bar"><i id="bar"></i></div>
     <section class="card q3d">${q.image ? `<img class="qimg" src="${esc(q.image)}" alt="Imagen de la pregunta">` : ''}<h1 class="question">${esc(q.text)}</h1>
       <div class="options">${q.options.map((o, i) => `<button class="option ${S.picked === i ? 'picked' : ''}" data-act="answer" data-i="${i}" ${lock ? 'disabled' : ''}><b>${'ABCD'[i]}</b>&nbsp;${esc(o)}</button>`).join('')}</div>
-      ${lock ? '<p class="muted" style="margin-top:12px">Respuesta enviada. Esperando al resto…</p>' : ''}
-      <div class="powers" id="powers">${powersHtml(powers, lock)}</div>
+      ${out ? '<p class="announce">Estás eliminado. Mira quién sobrevive al Coliseo.</p>' : lock ? '<p class="muted" style="margin-top:12px">Respuesta enviada. Esperando al resto…</p>' : ''}
+      ${battle ? '' : `<div class="powers" id="powers">${powersHtml(powers, lock)}</div>`}
       <div id="announce">${S.announce.map(a => `<div class="announce">${esc(a)}</div>`).join('')}</div>
     </section>`;
   runTimer();
@@ -208,6 +223,7 @@ function result(root) {
     <section class="card" style="text-align:center">
       ${botSvg(m?.avatar, { size: 'lg', mood: ok ? 'happy' : 'sad' })}
       <h2>${mine?.answer == null ? '⏱ Sin respuesta' : ok ? '¡Correcto!' : 'Fallaste'}</h2>
+      ${r.battle && mine ? `<p class="hearts big">${'❤'.repeat(mine.lives)}${'♡'.repeat(3 - mine.lives)}</p><p class="muted">${mine.eliminated ? 'Has quedado eliminado.' : r.battle.lost.length ? (r.battle.lost.includes(mine.id) ? 'Pierdes una vida.' : 'Sigues con todas tus fuerzas.') : 'Han fallado todos: nadie pierde vida.'}</p>` : ''}
       ${mine ? `<p class="muted">${ok ? `+${mine.points} puntos (base ${mine.breakdown.base} + rapidez ${mine.breakdown.speed}${mine.breakdown.multiplier > 1 ? ` × ${mine.breakdown.multiplier} doble apuesta` : ''})` : 'Sin puntos esta ronda'}</p>` : ''}
     </section>
     <section class="card"><div class="small">Respuesta correcta</div>
@@ -282,15 +298,16 @@ function drawresult(root) {
 }
 
 function finished(root) {
+  const paceMode = ['chips', 'race', 'fish', 'hack'].includes(S.room.mode);
   const rank = S.result.ranking;
   const top = rank.slice(0, 3);
   const order = [top[1], top[0], top[2]].filter(Boolean);
   const cls = p => ['p1', 'p2', 'p3'][p.place - 1];
   root.innerHTML = `
     <section class="hero center"><div class="small">Fin de la partida</div><h1>¡Ganó <span>${esc(top[0].name)}</span>!</h1></section>
-    <div class="podium">${order.map(p => `<div class="${cls(p)}">${botSvg(p.avatar, { mood: p.place === 1 ? 'happy' : undefined })}<b>${medal(p.place - 1)} ${esc(p.name)}</b><div class="muted">${p.score}</div></div>`).join('')}</div>
+    <div class="podium">${order.map(p => `<div class="${cls(p)}">${botSvg(p.avatar, { mood: p.place === 1 ? 'happy' : undefined })}<b>${medal(p.place - 1)} ${esc(p.name)}</b><div class="muted">${paceMode ? esc(fmtScore(S.room.mode, p, S.room.settings.goal)) : p.score}</div></div>`).join('')}</div>
     <section class="card"><h2>Resultado final</h2>
-      <ul class="board">${rank.map(p => `<li><span class="pos">${p.place}</span>${botSvg(p.avatar, { size: 'sm' })}<span class="nm">${esc(p.name)}${p.id === S.you ? ' (tú)' : ''}<br><span class="muted" style="font-size:.78rem">${p.quizCorrect} aciertos de quiz · ${p.drawGuesses} dibujos adivinados</span></span><span class="pts">${p.score}</span></li>`).join('')}</ul></section>
+      <ul class="board">${rank.map(p => `<li><span class="pos">${p.place}</span>${botSvg(p.avatar, { size: 'sm' })}<span class="nm">${esc(p.name)}${p.id === S.you ? ' (tú)' : ''}<br><span class="muted" style="font-size:.78rem">${paceMode ? `${p.quizCorrect} aciertos` : `${p.quizCorrect} aciertos de quiz · ${p.drawGuesses} dibujos adivinados`}</span></span><span class="pts">${paceMode ? esc(fmtScore(S.room.mode, p, S.room.settings.goal)) : p.score}</span></li>`).join('')}</ul></section>
     <div class="row center">
       ${isHost() && !S.room.settings.solo ? '<button data-act="rematch">🔁 Revancha</button>' : S.room.settings.solo ? '<button data-act="again">🔁 Jugar otra vez</button>' : '<p class="muted">El anfitrión puede proponer revancha.</p>'}
       <button class="alt" data-act="stats">🏆 Récords</button>
@@ -306,6 +323,7 @@ function wait(root) {
 // ---------- acciones ----------
 
 export async function handleAct(act, el) {
+  if (act[0] === 'p' && await paceAct(act, el)) return true;
   if (act === 'leave') return leave();
   if (act === 'share') { try { await navigator.share({ title: 'Playground', text: `Únete a mi partida en Playground con el código ${S.room.code}`, url: shareLink() }); } catch {} return true; }
   if (act === 'copy') { try { await navigator.clipboard.writeText(shareLink()); toast('Enlace copiado'); } catch { toast(shareLink()); } return true; }
@@ -387,6 +405,9 @@ socket.on('game:finished', ({ ranking }) => {
   S.result = { ranking };
   S.phase = 'finished';
   audio.sfx('win');
+  stopPace();
+  const w = worldOf(S.room.mode);
+  if (freeWorld(w.mode)) setTimeout(() => toast(`${w.icon} ¡Mundo liberado: ${w.name}! Chip del Núcleo recuperado.`), 1200);
   sessionStorage.removeItem('pg_room');
   render();
   confetti();
@@ -424,3 +445,8 @@ export async function tryResume() {
   enter(res);
   return true;
 }
+
+socket.on('game:reward', ({ tokens, total }) => {
+  setTimeout(() => toast(`⚙ +${tokens} tuercas (tienes ${total}). Ábrelas en el Taller.`), 2600);
+  window.dispatchEvent(new CustomEvent('pg:tokens', { detail: total }));
+});

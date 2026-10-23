@@ -1,0 +1,5 @@
+# Antigravity & Agent configs
+.agents/mcp_config.json
+.agents/
+scratch_stitch.json
+*.log

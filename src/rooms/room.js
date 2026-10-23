@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const rules = require('./rules');
 
-const DEFAULT_LIMITS = { minSeconds: 10, maxSeconds: 60, minDrawSeconds: 30, maxDrawSeconds: 120 };
+const DEFAULT_LIMITS = { minSeconds: 10, maxSeconds: 60, minDrawSeconds: 30, maxDrawSeconds: 120, countdownMs: 5000 };
 const NEXT_TIMEOUT_MS = 45_000;
 const SOLO_NEXT_MS = 3500;
 const MAX_STROKE_EVENTS = 4000;
@@ -184,9 +184,24 @@ class Room {
     clearTimeout(this.nextTimer);
     this.planIndex++;
     if (this.planIndex >= this.plan.length) return this.finishGame();
+    this.startCountdown();
+  }
+
+  // Cuenta atrás antes de cada ronda: nadie ve la pregunta ni la palabra hasta que termina.
+  startCountdown() {
     const step = this.plan[this.planIndex];
-    if (step.type === 'draw') return this.startDraw();
-    this.startQuiz();
+    const ms = this.limits.countdownMs;
+    this.status = 'countdown';
+    this.endsAt = Date.now() + ms;
+    this.emitRoom();
+    this.emitter.toRoom(this.code, 'game:countdown', this.countdownInfo());
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => (step.type === 'draw' ? this.startDraw() : this.startQuiz()), ms);
+  }
+
+  countdownInfo() {
+    const step = this.plan[this.planIndex];
+    return { type: step.type, seconds: this.limits.countdownMs / 1000, endsAt: this.endsAt, now: Date.now(), number: step.type === 'quiz' ? this.quizNumber() : null, total: this.questions.length };
   }
 
   quizNumber() { return this.plan.slice(0, this.planIndex + 1).filter(s => s.type === 'quiz').length; }
@@ -341,6 +356,8 @@ class Room {
       this.maybeFinishDraw();
       return { ok: true, correct: true };
     }
+    // Casi: se avisa solo a quien lo intentó, sin mostrarlo en el chat ni dar pistas a los demás.
+    if (rules.isCloseGuess(guess, this.word.word)) return { ok: true, correct: false, close: true };
     this.emitter.toRoom(this.code, 'draw:chat', { id: p.id, name: p.name, text: guess });
     return { ok: true, correct: false };
   }
@@ -389,6 +406,7 @@ class Room {
   // Estado completo para quien se reconecta a mitad de partida.
   snapshotFor(player) {
     const out = { room: this.view(), you: player.id };
+    if (this.status === 'countdown') out.countdown = this.countdownInfo();
     if (this.status === 'question') {
       const q = this.questions[this.plan[this.planIndex].index];
       out.question = { number: this.quizNumber(), total: this.questions.length, text: q.text, options: q.options, image: q.image || null, endsAt: player.deadline || this.endsAt, seconds: this.settings.seconds, now: Date.now(), answered: this.answers.has(player.id) };

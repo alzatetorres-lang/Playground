@@ -13,7 +13,9 @@ test('el banco se importa sin repetir conceptos y con imágenes', () => {
   assert.equal(bank, concepts.size, 'una pregunta por concepto');
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM questions q JOIN quizzes z ON z.id = q.quiz_id WHERE z.source = 'trivia'").get().n, 60);
   assert.equal(db.prepare('SELECT COUNT(*) AS n FROM questions WHERE image IS NOT NULL').get().n, 8);
-  assert.equal(db.prepare('SELECT COUNT(*) AS n FROM words').get().n, concepts.size);
+  const words = db.prepare('SELECT word FROM words').all().map(w => w.word);
+  assert.ok(words.length >= 80, 'quedan palabras suficientes');
+  assert.ok(words.every(w => /^[\p{L}]{4,14}$/u.test(w)), 'todas son una sola palabra');
   for (const { image } of db.prepare('SELECT image FROM questions WHERE image IS NOT NULL').all()) {
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'public', image)), `existe ${image}`);
   }

@@ -241,3 +241,34 @@ main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animati
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Cuenta atrás entre rondas */
+.countdown { text-align: center; padding: 36px 20px; }
+.cd-num { font-family: var(--font-mono); font-weight: 700; font-size: clamp(6rem, 28vw, 11rem); line-height: 1; color: var(--lime); text-shadow: var(--glow-lime), 0 0 40px rgba(200, 255, 46, .35); font-variant-numeric: tabular-nums; animation: beat 1s infinite; }
+.cd-num.low { color: var(--magenta); text-shadow: var(--glow-mag); }
+@keyframes beat { 0% { transform: scale(1.08); } 30% { transform: scale(1); } }
+
+/* Marcador lateral */
+.game-layout.with-side { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr) 270px; align-items: start; }
+.game-layout .side { position: sticky; top: 12px; margin: 16px 0; padding: 16px; }
+.side h2 { font-size: 1rem; margin-bottom: 6px; }
+.leader { margin: 0 0 10px; font-size: .9rem; color: var(--amber); }
+.side-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.side-list li { position: relative; display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--panel-2); overflow: hidden; }
+.side-list li.me { box-shadow: inset 0 0 0 1px var(--cyan); }
+.side-list li.lead { background: rgba(200, 255, 46, .12); box-shadow: inset 3px 0 0 var(--lime); }
+.side-list li.off { opacity: .4; }
+.side-list .pos { font-family: var(--font-mono); font-weight: 700; color: var(--lime); width: 1.6ch; }
+.side-list .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; font-size: .92rem; }
+.side-list .pts { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+.side-list .mark { font-size: .85rem; } .side-list .mark.ok { color: var(--lime); }
+.side-list .fill { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--cyan); box-shadow: var(--glow-cyan); transition: width .5s; }
+.side-gap { margin: 10px 0 0; }
+@media (max-width: 860px) {
+  .game-layout.with-side { grid-template-columns: 1fr; }
+  .game-layout .side { position: static; order: -1; margin: 8px 0 0; padding: 10px; }
+  .side h2, .side .side-gap { display: none; }
+  .leader { margin-bottom: 8px; }
+  .side-list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .side-list li { flex: 0 0 auto; min-width: 120px; }
+}

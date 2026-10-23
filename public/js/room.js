@@ -7,6 +7,7 @@ import { createCanvas, PALETTE } from './draw.js';
 
 const app = () => document.querySelector('#app');
 let tickTimer = null, canvas = null, lastTick = -1, nav = () => {}, chrome = () => {};
+const answered = new Set(), guessed = new Set();
 export const initRoom = (navigate, onChrome) => { nav = navigate; chrome = onChrome; };
 
 const me = () => S.room?.players.find(p => p.id === S.you);
@@ -23,7 +24,7 @@ function runTimer() {
     const left = Math.max(0, S.endsAt - serverTime());
     const el = document.querySelector('#timer');
     const bar = document.querySelector('#bar');
-    if (el) { const s = Math.ceil(left / 1000); el.textContent = s; el.classList.toggle('low', s <= 5); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw')) { audio.sfx('tick'); } lastTick = s; }
+    if (el) { const s = Math.ceil(left / 1000); el.textContent = s; el.classList.toggle('low', s <= (S.phase === 'countdown' ? 2 : 5)); if (s <= 5 && s !== lastTick && s > 0 && (S.phase === 'question' || S.phase === 'draw' || S.phase === 'countdown')) { audio.sfx('tick'); } lastTick = s; }
     if (bar) bar.style.width = `${Math.min(100, (left / (S.seconds * 1000)) * 100)}%`;
     if (left <= 0) stopTimer();
   };
@@ -54,6 +55,9 @@ export function enter(snapshot) {
     setQuestion(snapshot.question);
     S.picked = snapshot.question.answered ? -1 : null;
     return;
+  } else if (st === 'countdown' && snapshot.countdown) {
+    setCountdown(snapshot.countdown);
+    return;
   } else if (st === 'draw' && snapshot.draw) {
     syncClock(snapshot.draw.now);
     setDraw(snapshot.draw);
@@ -63,8 +67,17 @@ export function enter(snapshot) {
   render();
 }
 
+function setCountdown(c) {
+  syncClock(c.now);
+  S.phase = 'countdown'; S.cd = c; S.endsAt = c.endsAt; S.seconds = c.seconds; S.announce = [];
+  answered.clear(); guessed.clear();
+  canvas?.destroy(); canvas = null;
+  render(); runTimer();
+}
+
 function setQuestion(q) {
   syncClock(q.now);
+  answered.clear();
   S.phase = 'question'; S.q = q; S.endsAt = q.endsAt; S.seconds = q.seconds; S.picked = null; S.announce = [];
   canvas?.destroy(); canvas = null;
   render(); runTimer();
@@ -72,17 +85,42 @@ function setQuestion(q) {
 
 function setDraw(d) {
   syncClock(d.now);
+  guessed.clear();
   S.phase = 'draw'; S.draw = d; S.endsAt = d.endsAt; S.seconds = d.seconds; S.chat = []; S.announce = [];
   render(); runTimer();
   if (d.strokes?.length) canvas?.load(d.strokes);
 }
 
 export function render() {
-  const root = app();
+  const host = app();
   if (!S.room) return;
-  const views = { lobby, question, result, draw, drawresult, finished, wait };
-  (views[S.phase] || wait)(root);
+  // Marcador lateral en todas las fases de juego; en la sala de espera no hace falta.
+  const withSide = !['lobby', 'wait'].includes(S.phase);
+  host.innerHTML = `<div class="game-layout${withSide ? ' with-side' : ''}"><div id="stage"></div>${withSide ? '<aside id="side" class="card side" aria-label="Marcador en directo"></aside>' : ''}</div>`;
+  const views = { lobby, countdown, question, result, draw, drawresult, finished, wait };
+  (views[S.phase] || wait)(host.querySelector('#stage'));
+  renderSide();
   chrome();
+}
+
+function renderSide() {
+  const side = document.querySelector('#side');
+  if (!side || !S.room) return;
+  const players = [...S.room.players].sort((a, b) => b.score - a.score);
+  const top = players[0]?.score || 0;
+  const gap = top - (players.find(p => p.id === S.you)?.score ?? top);
+  const mark = p => {
+    if (S.phase === 'question') return answered.has(p.id) ? '<span class="mark ok" title="Ya respondió">✔</span>' : '';
+    if (S.phase === 'draw') return p.id === S.draw?.drawerId ? '<span class="mark" title="Dibuja">✏</span>' : guessed.has(p.id) ? '<span class="mark ok" title="Acertó">✔</span>' : '';
+    return '';
+  };
+  side.innerHTML = `<h2>Marcador</h2>
+    ${top > 0 ? `<p class="leader">👑 Va ganando <b>${esc(players[0].name)}</b></p>` : '<p class="leader muted">Aún sin puntos</p>'}
+    <ol class="side-list">${players.map((p, i) => `<li class="${p.id === S.you ? 'me' : ''}${p.connected ? '' : ' off'}${i === 0 && top > 0 ? ' lead' : ''}">
+      <span class="pos">${i + 1}</span>${botSvg(p.avatar, { size: 'sm' })}
+      <span class="nm">${esc(p.name)}${p.id === S.you ? ' <span class="muted">(tú)</span>' : ''}</span>${mark(p)}<span class="pts">${p.score}</span>
+      <i class="fill" style="width:${top ? Math.round((p.score / top) * 100) : 0}%"></i></li>`).join('')}</ol>
+    ${gap > 0 ? `<p class="small side-gap">Líder +${gap} sobre ti</p>` : ''}`;
 }
 
 // ---------- vistas ----------
@@ -103,6 +141,18 @@ function lobby(root) {
       ${host ? `<button data-act="start" ${!r.settings.solo && r.players.length < 2 ? 'disabled' : ''}>${!r.settings.solo && r.players.length < 2 ? 'Esperando jugadores…' : '▶ Empezar partida'}</button>` : '<p class="muted">Esperando a que el anfitrión empiece…</p>'}
       <button class="ghost" data-act="leave">Salir</button>
     </div>`;
+}
+
+function countdown(root) {
+  const c = S.cd || {};
+  const what = c.type === 'draw' ? 'Ronda de dibujo' : `Pregunta ${c.number} de ${c.total}`;
+  root.innerHTML = `
+    <section class="countdown card" role="timer" aria-label="Cuenta atrás">
+      <div class="small">${esc(what)}</div>
+      <div class="cd-num" id="timer">--</div>
+      <p class="muted">${c.type === 'draw' ? 'Prepárate: a alguien le toca dibujar.' : 'Prepárate. La pregunta aparece al llegar a cero.'}</p>
+      <div class="bar"><i id="bar"></i></div>
+    </section>`;
 }
 
 function question(root) {
@@ -147,7 +197,7 @@ function result(root) {
 
 function nextBar(hasNext) {
   if (S.room.settings.solo) return '<p class="muted" style="text-align:center">Siguiente pregunta en unos segundos…</p>';
-  return `<div class="row center">${isHost() ? `<button data-act="next">${hasNext ? 'Siguiente ▶' : 'Ver resultado final 🏁'}</button>` : '<p class="muted">Esperando al anfitrión…</p>'}</div>`;
+  return `<div class="row center">${isHost() ? `<button data-act="next">${hasNext ? 'Siguiente ▶' : 'Ver resultado final 🏁'}</button>` : '<p class="muted">Esperando al anfitrión…</p>'}</div>${hasNext ? '<p class="muted" style="text-align:center">La siguiente ronda empieza con una cuenta atrás de 5 s.</p>' : ''}`;
 }
 
 function draw(root) {
@@ -158,7 +208,7 @@ function draw(root) {
     <div class="hud"><div><div class="small">${drawer ? 'Te toca dibujar' : `Dibuja ${esc(drawerName)}`}${d.theme ? ` · ${esc(d.theme)}` : ''}</div></div><div class="timer" id="timer">--</div></div>
     <div class="bar"><i id="bar"></i></div>
     <section class="card">
-      ${drawer ? `<div class="small" style="text-align:center">Dibuja esto (sin letras ni números)</div><div class="secret">${esc(d.word)}</div>` : `<div class="mask" aria-label="Palabra de ${d.length} letras">${esc(mask)}</div>`}
+      ${drawer ? `<div class="small" style="text-align:center">Dibuja esta palabra (sin letras ni números)</div><div class="secret">${esc(d.word)}</div>` : `<div class="mask" aria-label="Palabra de ${d.length} letras">${esc(mask)}</div>`}
       <div id="cv"></div>
       ${drawer ? `<div class="tools">${PALETTE.map((c, i) => `<button class="swatch ${i === 0 ? 'on' : ''}" style="background:${c};${c === '#ffffff' ? 'border:2px solid #888' : ''}" data-act="color" data-c="${c}" aria-label="Color ${i + 1}"></button>`).join('')}
         <input type="range" min="2" max="30" value="6" id="size" aria-label="Grosor"><button class="alt small-btn" data-act="clear">🗑 Borrar</button></div>` : ''}
@@ -181,6 +231,7 @@ function draw(root) {
     input.value = '';
     const res = await ask('draw:guess', { text });
     if (res.error) toast(res.error, true);
+    if (res.close) { toast('¡Casi! Revisa la palabra y prueba otra vez.'); input.focus(); }
     if (res.correct) {
       S.draw.guessed = true;
       audio.sfx('correct');
@@ -272,10 +323,12 @@ socket.on('room:update', room => {
   if (S.phase === 'lobby' || S.phase === 'wait') { if (room.players.length > prev && prev) audio.sfx('join'); render(); }
   else if (S.phase === 'question') { const el = document.querySelector('#powers'); if (el) el.innerHTML = powersHtml(me()?.powers, S.picked != null); }
   else if (S.phase === 'finished') render();
+  renderSide();
 });
 
+socket.on('game:countdown', c => { if (S.you) { audio.sfx('go'); setCountdown(c); } });
 socket.on('game:question', q => { if (S.you) { audio.sfx('go'); setQuestion(q); } });
-socket.on('game:answered', () => {});
+socket.on('game:answered', ({ id }) => { answered.add(id); renderSide(); });
 socket.on('game:deadline', ({ deadline, now }) => { syncClock(now); S.endsAt = deadline; });
 socket.on('game:power', p => {
   if (!S.you || S.phase !== 'question') return;
@@ -316,7 +369,7 @@ socket.on('draw:start', d => { if (S.you) setDraw(d); });
 socket.on('draw:stroke', e => canvas?.remote(e));
 socket.on('draw:clear', () => canvas?.clear());
 socket.on('draw:chat', c => { S.chat.push(c); refreshChat(); });
-socket.on('draw:correct', c => { S.chat.push({ ok: true, ...c }); refreshChat(); if (c.id !== S.you) audio.sfx('join'); });
+socket.on('draw:correct', c => { guessed.add(c.id); renderSide(); S.chat.push({ ok: true, ...c }); refreshChat(); if (c.id !== S.you) audio.sfx('join'); });
 
 function refreshChat() {
   const el = document.querySelector('#chat');

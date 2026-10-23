@@ -3,7 +3,9 @@ const path = require('path');
 
 const root = path.join(__dirname, '..', '..');
 // Sube este número cuando cambie el banco de preguntas: se reimporta sin tocar los quizzes de usuarios.
-const SEED_VERSION = 2;
+const SEED_VERSION = 3;
+// Palabras para dibujar: una sola palabra, de 4 a 14 letras.
+const isDrawableWord = w => /^[\p{L}]{4,14}$/u.test(w);
 
 // Baraja las opciones para que la correcta no caiga siempre en la misma posición.
 function shuffle(list, rand = Math.random) {
@@ -72,7 +74,7 @@ function seed(db, { rand = Math.random } = {}) {
         if (seenConcepts.has(key)) continue;
         seenConcepts.add(key);
         const w = item.pictionary.solucion.trim();
-        if (!seenWords.has(w.toLowerCase())) {
+        if (isDrawableWord(w) && !seenWords.has(w.toLowerCase())) {
           seenWords.add(w.toLowerCase());
           insWord.run(w, item.pictionary.pista_referencia, item.tema, item.dificultad);
         }

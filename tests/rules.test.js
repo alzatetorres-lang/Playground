@@ -10,6 +10,15 @@ test('normalizeWord ignora tildes, mayúsculas y signos', () => {
   assert.ok(!r.isCorrectGuess('torre', 'Torre Eiffel'));
 });
 
+test('isCloseGuess avisa de errores de una letra, no de acierto ni de lejos', () => {
+  assert.ok(r.isCloseGuess('elefanta', 'Elefante'));
+  assert.ok(r.isCloseGuess('pinguino', 'Pingüino') === false, 'sin tilde es acierto, no casi');
+  assert.ok(r.isCorrectGuess('pinguino', 'Pingüino'));
+  assert.ok(r.isCorrectGuess('CAMALEON', 'Camaleón'));
+  assert.ok(!r.isCloseGuess('perro', 'Elefante'));
+  assert.ok(!r.isCloseGuess('sol', 'sal'), 'palabras cortas no avisan');
+});
+
 test('scoreAnswer: base + rapidez, doble apuesta y fallo', () => {
   assert.deepEqual(r.scoreAnswer({ correct: true, remainingMs: 10000, totalMs: 10000, doubled: false }), { total: 200, base: 100, speed: 100, multiplier: 1 });
   assert.equal(r.scoreAnswer({ correct: true, remainingMs: 0, totalMs: 10000, doubled: false }).total, 100);

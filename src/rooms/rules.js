@@ -16,6 +16,29 @@ function normalizeWord(text) {
     .trim();
 }
 
+// Distancia de edición con tope: nos basta saber si es 0, 1 o más.
+function editDistance(a, b) {
+  if (Math.abs(a.length - b.length) > 1) return 2;
+  const prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    let diag = prev[0];
+    prev[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = prev[j];
+      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diag = tmp;
+    }
+  }
+  return prev[b.length];
+}
+
+// "Casi": a una letra de distancia (palabras de 4 letras o más). No cuenta como acierto.
+function isCloseGuess(guess, word) {
+  const g = normalizeWord(guess);
+  const w = normalizeWord(word);
+  return w.length >= 4 && g !== w && editDistance(g, w) === 1;
+}
+
 function isCorrectGuess(guess, word) {
   const g = normalizeWord(guess);
   return g.length > 0 && g === normalizeWord(word);
@@ -104,5 +127,5 @@ function randomAvatar(rand = Math.random) {
 
 module.exports = {
   MAX_PLAYERS, BASE_POINTS, TIME_STEAL_MS, DRAWER_POINTS_PER_GUESS,
-  normalizeWord, isCorrectGuess, scoreAnswer, scoreGuess, pickDrawer, buildPlan, usePower, sanitizeAvatar, randomAvatar,
+  normalizeWord, isCorrectGuess, isCloseGuess, scoreAnswer, scoreGuess, pickDrawer, buildPlan, usePower, sanitizeAvatar, randomAvatar,
 };

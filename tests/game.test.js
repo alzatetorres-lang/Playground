@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { io: connect } = require('socket.io-client');
 const { createApp } = require('../src/app');
 
-const LIMITS = { minSeconds: 1, maxSeconds: 60, minDrawSeconds: 1, maxDrawSeconds: 120 };
+const LIMITS = { minSeconds: 1, maxSeconds: 60, minDrawSeconds: 1, maxDrawSeconds: 120, countdownMs: 40 };
 
 async function boot(t) {
   const instance = createApp({ dbFile: ':memory:', limits: LIMITS });

@@ -1,0 +1,39 @@
+<template>
+  <style>
+    @font-face { font-family: 'Chakra Petch'; src: url('assets/fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #ti-eyebrow { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-family: 'JetBrains Mono'; font-size: 32px; letter-spacing: .34em; color: #27f3ff; }
+    #ti-a, #ti-b { position: absolute; left: 0; right: 0; text-align: center; font-family: 'Chakra Petch'; font-weight: 700; text-transform: uppercase; line-height: 1; }
+    #ti-a { top: 300px; font-size: 150px; color: #e8ecff; text-shadow: 8px 0 rgba(255, 46, 147, .6), -8px 0 rgba(39, 243, 255, .45); }
+    #ti-b { top: 450px; font-size: 210px; background: linear-gradient(90deg, #27f3ff, #c8ff2e 50%, #ff2e93); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 30px rgba(39, 243, 255, .5)); }
+    #ti-tag { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-family: 'JetBrains Mono'; font-size: 34px; letter-spacing: .12em; color: #c4cdf0; text-transform: uppercase; }
+    #ti-worlds { position: absolute; left: 0; right: 0; top: 770px; display: flex; justify-content: center; gap: 22px; }
+    .ti-w { width: 88px; height: 100px; display: grid; place-items: center; font-size: 46px; background: rgba(14, 17, 32, .9); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); box-shadow: inset 0 0 0 4px var(--c); }
+    #ti-cta { position: absolute; left: 760px; top: 905px; width: 400px; height: 84px; display: grid; place-items: center; background: #c8ff2e; color: #101800; font-family: 'Chakra Petch'; font-weight: 700; font-size: 40px; letter-spacing: .08em; text-transform: uppercase; clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)); }
+    #ti-sweep { position: absolute; top: 0; bottom: 0; width: 260px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .35), transparent); mix-blend-mode: overlay; }
+  </style>
+  <div data-hf-id="hf-8zqe" id="root" data-composition-id="title" data-width="1920" data-height="1080" data-layout-allow-overflow>
+    <div data-hf-id="hf-mom2" id="ti-eyebrow" data-layout-allow-occlusion>EPISODIO 1 · EL NÚCLEO ROTO</div>
+    <div data-hf-id="hf-04dh" id="ti-a" data-layout-allow-occlusion>Salva</div>
+    <div data-hf-id="hf-vqew" id="ti-b" data-layout-allow-occlusion>Circuitia</div>
+    <div data-hf-id="hf-4rec" id="ti-tag" data-layout-allow-occlusion data-var-text="tagline">Quiz · Dibujo · 7 modos · Hasta 10 jugadores</div>
+    <div data-hf-id="hf-1ilo" id="ti-worlds" data-layout-allow-occlusion>
+      <div data-hf-id="hf-uonq" class="ti-w" data-layout-allow-occlusion id="ti-w1" style="--c:#c8ff2e">⚡</div><div data-hf-id="hf-nabj" class="ti-w" data-layout-allow-occlusion id="ti-w2" style="--c:#27f3ff">💠</div><div data-hf-id="hf-zxw4" class="ti-w" data-layout-allow-occlusion id="ti-w3" style="--c:#ffc83d">🏁</div><div data-hf-id="hf-08qq" class="ti-w" data-layout-allow-occlusion id="ti-w4" style="--c:#5ee7ff">🐟</div><div data-hf-id="hf-m7mi" class="ti-w" data-layout-allow-occlusion id="ti-w5" style="--c:#ff2e93">🔓</div><div data-hf-id="hf-yq94" class="ti-w" data-layout-allow-occlusion id="ti-w6" style="--c:#b06bff">🎨</div><div data-hf-id="hf-1kw5" class="ti-w" data-layout-allow-occlusion id="ti-w7" style="--c:#ff5e5e">👑</div>
+    </div>
+    <div data-hf-id="hf-bk1s" id="ti-cta" data-var-text="cta">Juega gratis</div>
+    <div data-hf-id="hf-20fv" id="ti-sweep"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo('#ti-eyebrow', { opacity: 0, scaleX: 1.5 }, { opacity: 1, scaleX: 1, duration: .6, ease: 'power3.out' }, 0);
+    tl.fromTo('#ti-a', { opacity: 0, scale: 1.6, filter: 'blur(16px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .55, ease: 'expo.out' }, 0.1);
+    tl.fromTo('#ti-b', { opacity: 0, scale: .6, y: 40, filter: 'blur(20px)' }, { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: .7, ease: 'expo.out' }, 0.3);
+    tl.to('#ti-b', { x: 12, duration: .04, ease: 'steps(1)', yoyo: true, repeat: 3 }, 1.2);
+    tl.fromTo('#ti-tag', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .5, ease: 'power3.out' }, 0.8);
+    for (let i = 1; i <= 7; i++) tl.fromTo(`#ti-w${i}`, { opacity: 0, y: 80, rotate: -90, scale: .4 }, { opacity: 1, y: 0, rotate: 0, scale: 1, duration: .55, ease: 'back.out(1.8)' }, 1 + i * 0.07);
+    tl.fromTo('#ti-cta', { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2)' }, 1.7);
+    tl.to('#ti-cta', { scale: 1.06, duration: .4, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 2.3);
+    tl.fromTo('#ti-sweep', { x: -300 }, { x: 2200, duration: .9, ease: 'power2.inOut' }, 1.1);
+    window.__timelines["title"] = tl;
+  </script>
+</template>

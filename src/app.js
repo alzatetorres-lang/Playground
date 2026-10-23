@@ -11,7 +11,7 @@ const { attachSockets } = require('./sockets');
 const rules = require('./rooms/rules');
 const M = require('./rooms/modes');
 
-function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) {
+function createApp({ dbFile, secureCookie = false, limits, publicOrigin = process.env.PUBLIC_ORIGIN } = {}) {
   const db = open(dbFile);
   seed(db);
   const auth = createAuth(db, { secureCookie });
@@ -43,6 +43,36 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
     next();
   };
   const publicUser = u => u && { id: u.id, username: u.username, avatar: u.avatar ? JSON.parse(u.avatar) : null };
+
+  // index.html con etiquetas Open Graph absolutas (WhatsApp y otras apps no aceptan rutas relativas).
+  const indexFile = path.join(__dirname, '..', 'public', 'index.html');
+  let indexTpl = null;
+  const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function sendIndex(req, res, { title, desc, url, extra = '' } = {}) {
+    if (!indexTpl || process.env.NODE_ENV !== 'production') indexTpl = require('fs').readFileSync(indexFile, 'utf8');
+    const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
+    const t = title || 'Playground · Salva Circuitia';
+    const d = desc || 'Quiz y dibujo en directo para jugar en grupo: 7 mundos, 7 modos de juego y hasta 10 jugadores desde el móvil. Gratis y sin instalar nada.';
+    const html = indexTpl.replaceAll('%ORIGIN%', escAttr(origin)).replaceAll('%URL%', escAttr(url || origin + '/'))
+      .replaceAll('%TITLE%', escAttr(t)).replaceAll('%PAGETITLE%', escAttr(t)).replaceAll('%DESC%', escAttr(d)).replace('%EXTRA%', extra);
+    res.set('Cache-Control', 'no-cache').type('html').send(html);
+  }
+  app.get(['/', '/index.html'], (req, res) => sendIndex(req, res));
+
+  // Enlace de invitación: la vista previa lleva el código y abre la sala al entrar.
+  app.get('/j/:code', (req, res) => {
+    const code = String(req.params.code || '').toUpperCase();
+    if (!/^[A-Z2-9]{5}$/.test(code)) return res.redirect('/');
+    const room = manager.get(code);
+    const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
+    const mode = room ? M.MODES[room.settings.mode]?.name : null;
+    sendIndex(req, res, {
+      title: `Únete a mi sala ${code} en Playground`,
+      desc: room ? `${mode} · ${room.quizSource.title}. ${room.players.size}/10 jugadores. Entra con el código ${code} y elige tu robot.` : `Entra con el código ${code}, elige tu robot y salva Circuitia con tus amigos.`,
+      url: `${origin}/j/${code}`,
+      extra: `<meta http-equiv="refresh" content="0;url=/#/join/${code}">`,
+    });
+  });
 
   app.get('/healthz', (_req, res) => res.json({ ok: true, rooms: manager.size() }));
 
@@ -158,7 +188,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin } = {}) 
   app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], setHeaders: res => res.setHeader('Cache-Control', 'no-cache') }));
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'No encontrado.' });
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+    sendIndex(req, res);
   });
   app.use((err, _req, res, _next) => {
     console.error(err);

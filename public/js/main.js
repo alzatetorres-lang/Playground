@@ -3,7 +3,7 @@ import { esc, toast, avatarEditor } from './ui.js';
 import { botSvg, randomAvatar } from './avatar.js';
 import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
-import { initTouchFx } from './fx.js';
+import { initTouchFx, decodeAll } from './fx.js';
 import { initScene } from './scene3d.js';
 import { homeHtml, mountHome, selectWorld, WORLDS, worldOf } from './world.js';
 import { sweepViewers, mountBot, SKIN_INFO, RARITY_COLOR } from './bot3d.js';
@@ -65,6 +65,8 @@ function route() {
 async function renderRoute() {
   const { parts, query } = parse();
   setTimeout(sweepViewers, 0);
+  // Los titulares de cada pantalla se descifran al aparecer.
+  setTimeout(() => { document.querySelectorAll('#app .hero h1, #app h1.question').forEach(h => h.setAttribute('data-decode', '')); decodeAll(); }, 60);
   const [a, b] = parts;
   renderChrome();
   window.scrollTo(0, 0);
@@ -242,6 +244,8 @@ const actions = {
   async doRegister() { authSubmit('register'); },
   tab(el) { S.tab = el.dataset.t; stats(); },
   world(el) { selectWorld(el.dataset.mode); audio.sfx('join'); },
+  trailer() { const d = document.querySelector('#trailer-dialog'); d.showModal(); const v = d.querySelector('video'); v.currentTime = 0; v.muted = false; v.play().catch(() => {}); audio.duck?.(true); },
+  closetrailer() { const d = document.querySelector('#trailer-dialog'); d.querySelector('video').pause(); d.close(); },
   tomap(el, ev) { ev.preventDefault(); document.querySelector('#map')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
   pickmode(el) { S.hostMode = el.dataset.mode; hostSetup(S.hostQuiz, S.hostSolo, S.hostMode); },
   async capsule() { openCapsule(); },

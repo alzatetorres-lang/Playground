@@ -8,3 +8,7 @@ data/*.sqlite*
 .agents/
 scratch_stitch.json
 *.log
+
+# HyperFrames: artefactos locales
+trailer/.hyperframes/
+trailer/renders/

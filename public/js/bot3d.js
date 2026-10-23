@@ -59,7 +59,7 @@ function materials(color, skin) {
     case 7: { const holo = new THREE.MeshStandardMaterial({ color: '#5ee7ff', emissive: '#27f3ff', emissiveIntensity: 0.9, transparent: true, opacity: 0.55, roughness: 0.2, depthWrite: false }); return { body: holo, trim: glow('#e8ffff', 1.8), ink: glow('#27f3ff', 2), glow, holo: true }; }
     case 8: return { body: std({ color: '#2a0d06', roughness: 0.9, emissive: '#ff3d00', emissiveIntensity: 0.55 }), trim: glow('#ff7a1a', 2), ink, glow };
     case 9: return { body: std({ map: starsTexture(), emissive: '#ffffff', emissiveMap: starsTexture(), emissiveIntensity: 0.7, roughness: 0.3, metalness: 0.3 }), trim: glow('#ff2e93', 1.8), ink, glow };
-    case 10: return { body: std({ color: '#ff2e93', emissive: '#ff2e93', emissiveIntensity: 0.3, roughness: 0.3 }), trim: glow('#27f3ff', 2.2), ink: glow('#c8ff2e', 1.6), glow, glitch: true };
+    case 10: return { body: std({ color: '#ff2e93', emissive: '#ff2e93', emissiveIntensity: 0.3, roughness: 0.3 }), trim: glow('#27f3ff', 2.2), ink: std({ color: '#12061a', emissive: '#7a0f4a', emissiveIntensity: 0.6, roughness: 0.3 }), glow, glitch: true };
     default: return { body: std({ color: c, roughness: 0.42, metalness: 0.12 }), trim: std({ color: '#f1f4ff', roughness: 0.5, metalness: 0.2 }), ink, glow };
   }
 }
@@ -175,8 +175,8 @@ export function botImage(cfg, mood) {
     scene.environment = environment(renderer);
     lights(scene);
     const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
-    camera.position.set(1.1, 0.7, 4.6);
-    camera.lookAt(0, 0.12, 0);
+    camera.position.set(1.2, 0.85, 5.5);
+    camera.lookAt(0, 0.34, 0);
     shared = { renderer, scene, camera };
   }
   const { renderer, scene, camera } = shared;
@@ -207,8 +207,8 @@ export function mountBot(container, cfg, { size = 240, drag = true } = {}) {
   scene.environment = environment(renderer);
   lights(scene);
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
-  camera.position.set(0, 0.5, 4.8);
-  camera.lookAt(0, 0.1, 0);
+  camera.position.set(0, 0.6, 5.4);
+  camera.lookAt(0, 0.32, 0);
   let bot = buildBot(cfg);
   scene.add(bot.root);
   let spin = -0.4, vel = 0.004, dragging = false, lastX = 0, raf = 0, alive = true, wave = 0;
@@ -249,4 +249,24 @@ export function mountBot(container, cfg, { size = 240, drag = true } = {}) {
 // Libera los visores que ya no están en pantalla (cada uno es un contexto WebGL).
 export function sweepViewers() {
   for (const v of [...viewers]) if (!document.body.contains(v.canvas)) v.destroy();
+}
+
+// Foto grande y transparente de un robot (para la imagen al compartir y el tráiler).
+export function renderBotPNG(cfg, size = 768, mood) {
+  if (!has3D) return null;
+  const renderer = makeRenderer(size, true);
+  const scene = new THREE.Scene();
+  scene.environment = environment(renderer);
+  lights(scene);
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+  camera.position.set(1.2, 0.85, 5.5);
+  camera.lookAt(0, 0.34, 0);
+  const { root, parts } = buildBot(cfg);
+  root.rotation.y = -0.35;
+  if (mood === 'happy') { parts.armR.rotation.z = 2.3; parts.headG.rotation.z = 0.12; }
+  scene.add(root);
+  renderer.render(scene, camera);
+  const url = renderer.domElement.toDataURL('image/png');
+  renderer.dispose();
+  return url;
 }

@@ -73,3 +73,40 @@ export function initTouchFx() {
     }
   }, { passive: true });
 }
+
+// Texto que se descifra: los caracteres giran entre símbolos y se asientan de izquierda a derecha.
+const GLYPHS = '!<>-_\\/[]{}=+*^?#░▒▓01';
+export function decode(el, { duration = 650 } = {}) {
+  if (!el || el.dataset.decoded || reduce()) return;
+  el.dataset.decoded = '1';
+  const nodes = [];
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push({ node: walker.currentNode, text: walker.currentNode.nodeValue });
+  const total = nodes.reduce((n, x) => n + x.text.length, 0);
+  const start = performance.now();
+  (function frame(now) {
+    const p = Math.min(1, (now - start) / duration);
+    let budget = Math.floor(p * total);
+    for (const x of nodes) {
+      const keep = Math.min(x.text.length, budget);
+      budget -= keep;
+      x.node.nodeValue = x.text.slice(0, keep) + [...x.text.slice(keep)].map(c => (c === ' ' ? ' ' : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join('');
+    }
+    if (p < 1) requestAnimationFrame(frame); else nodes.forEach(x => { x.node.nodeValue = x.text; });
+  })(start);
+}
+export const decodeAll = (root = document) => root.querySelectorAll('[data-decode]').forEach(el => decode(el));
+
+// "+N" que sube y se desvanece desde un elemento.
+export function floatScore(anchor, text, color = 'var(--lime)') {
+  if (!anchor || reduce()) return;
+  const r = anchor.getBoundingClientRect();
+  const el = document.createElement('div');
+  el.className = 'float-score';
+  el.textContent = text;
+  el.style.left = `${r.left + r.width / 2}px`;
+  el.style.top = `${r.top}px`;
+  el.style.color = color;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}

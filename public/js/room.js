@@ -4,7 +4,7 @@ import { botSvg } from './avatar.js';
 import { audio } from './audio.js';
 import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
-import { flash, confetti, buzz } from './fx.js';
+import { flash, confetti, buzz, decodeAll, floatScore } from './fx.js';
 import { initPace, startPace, paceView, paceAct, paceState, stopPace, fmtScore } from './pace-ui.js';
 import { worldOf, freeWorld } from './world.js';
 
@@ -28,7 +28,7 @@ const me = () => S.room?.players.find(p => p.id === S.you);
 const isHost = () => S.room?.hostId === S.you;
 const medal = i => ['🥇', '🥈', '🥉'][i] || `${i + 1}`;
 const board = (list, deltas = {}) => `<ul class="board">${list.map((p, i) => `<li><span class="pos">${i + 1}</span>${botSvg(p.avatar, { size: 'sm' })}<span class="nm">${esc(p.name)}${p.id === S.you ? ' (tú)' : ''}</span>${deltas[p.id] ? `<span class="delta">+${deltas[p.id]}</span>` : ''}<span class="pts">${p.score}</span></li>`).join('')}</ul>`;
-const shareLink = () => `${location.origin}/#/join/${S.room.code}`;
+const shareLink = () => `${location.origin}/j/${S.room.code}`;
 
 function stopTimer() { clearInterval(tickTimer); tickTimer = null; lastTick = -1; }
 
@@ -131,6 +131,7 @@ export function render() {
   (views[S.phase] || wait)(host.querySelector('#stage'));
   renderSide();
   chrome();
+  decodeAll(host);
 }
 
 function renderSide() {
@@ -164,7 +165,7 @@ function lobby(root) {
   const r = S.room, host = isHost();
   root.innerHTML = `
     <section class="hero center"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
-    ${r.settings.solo ? '' : `<section class="card"><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code" aria-label="${esc(r.code)}">${[...r.code].map((ch, i) => `<span style="--d:${i * 70}ms">${esc(ch)}</span>`).join('')}</div>
+    ${r.settings.solo ? '' : `<section class="card radar-card"><div class="radar" aria-hidden="true"><i></i><i></i><i></i><b></b></div><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code" aria-label="${esc(r.code)}">${[...r.code].map((ch, i) => `<span style="--d:${i * 70}ms">${esc(ch)}</span>`).join('')}</div>
       <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button>${navigator.share ? '<button class="alt" data-act="share">📤 Compartir</button>' : ''}</div>
       <p class="muted" style="text-align:center;margin-top:10px">Comparte el código o el enlace. Máximo 10 jugadores.</p></section>`}
     <section class="card"><h2>Jugadores (${r.players.length}/10)</h2>
@@ -181,7 +182,9 @@ function countdown(root) {
   const c = S.cd || {};
   const w = worldOf(c.mode);
   const what = c.type === 'pace' ? `${w.icon} ${w.name}` : c.type === 'draw' ? 'Ronda de dibujo' : `Pregunta ${c.number} de ${c.total}`;
+  const stinger = c.type === 'pace' || c.number === 1 || (c.type === 'draw' && S.room.mode === 'draw');
   root.innerHTML = `
+    ${stinger ? `<div class="stinger" style="--c:${w.color}" aria-hidden="true"><div class="st-rings"><i></i><i></i><i></i></div><div class="st-ico">${w.icon}</div><div class="st-lines"><i></i><i></i><i></i><i></i></div><div class="st-kicker">Mundo ${w.n}</div><div class="st-name" data-decode>${esc(w.name)}</div></div>` : ''}
     <section class="countdown card" role="timer" aria-label="Cuenta atrás">
       <div class="small">${esc(what)}</div>
       <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="arc" id="arc" cx="60" cy="60" r="54" pathLength="100"/></svg><div class="cd-num" id="timer">--</div></div>
@@ -224,6 +227,7 @@ function result(root) {
       ${botSvg(m?.avatar, { size: 'lg', mood: ok ? 'happy' : 'sad' })}
       <h2>${mine?.answer == null ? '⏱ Sin respuesta' : ok ? '¡Correcto!' : 'Fallaste'}</h2>
       ${r.battle && mine ? `<p class="hearts big">${'❤'.repeat(mine.lives)}${'♡'.repeat(3 - mine.lives)}</p><p class="muted">${mine.eliminated ? 'Has quedado eliminado.' : r.battle.lost.length ? (r.battle.lost.includes(mine.id) ? 'Pierdes una vida.' : 'Sigues con todas tus fuerzas.') : 'Han fallado todos: nadie pierde vida.'}</p>` : ''}
+      ${ok ? `<div class="big-points" data-decode>+${mine.points}</div>` : ''}
       ${mine ? `<p class="muted">${ok ? `+${mine.points} puntos (base ${mine.breakdown.base} + rapidez ${mine.breakdown.speed}${mine.breakdown.multiplier > 1 ? ` × ${mine.breakdown.multiplier} doble apuesta` : ''})` : 'Sin puntos esta ronda'}</p>` : ''}
     </section>
     <section class="card"><div class="small">Respuesta correcta</div>

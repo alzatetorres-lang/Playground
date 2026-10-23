@@ -4,7 +4,7 @@ import { esc, toast } from './ui.js';
 import { botSvg } from './avatar.js';
 import { audio } from './audio.js';
 import { S } from './state.js';
-import { flash, buzz, confetti } from './fx.js';
+import { flash, buzz, confetti, floatScore } from './fx.js';
 import { worldOf } from './world.js';
 import { RARITY_COLOR } from './bot3d.js';
 
@@ -132,6 +132,9 @@ export async function paceAct(act, el) {
     const res = await ask('pace:answer', { answer: choice });
     if (res.error) { P.view = 'question'; toast(res.error, true); rerender(); return true; }
     P.answered = { ...res, choice };
+    const gain = res.score != null ? Math.round(res.score - (P.lastScore ?? 0)) : 0;
+    if (res.score != null) P.lastScore = res.score;
+    if (gain > 0) setTimeout(() => floatScore(document.querySelector('.pscore'), `+${gain}`), 300);
     P.streak = res.streak ?? P.streak;
     flash(res.correct ? 'ok' : 'bad'); buzz(res.correct ? 25 : 70); audio.sfx(res.correct ? 'correct' : 'wrong');
     rerender();
@@ -155,6 +158,7 @@ export async function paceAct(act, el) {
     const o = res.outcomes[res.picked];
     P.result = res.needsTarget ? (o.type === 'steal' ? 'Has sacado un robo' : 'Has sacado un intercambio') : resultText(o, res.result);
     P.view = 'reveal';
+    if (res.result?.delta) { setTimeout(() => floatScore(document.querySelector('.pscore'), `${res.result.delta > 0 ? '+' : ''}${res.result.delta}`, res.result.delta > 0 ? 'var(--lime)' : 'var(--magenta)'), 500); P.lastScore = res.score; }
     audio.sfx(['lose', 'nothing'].includes(o.type) ? 'wrong' : 'power');
     if (o.type === 'lose') flash('bad');
     rerender();

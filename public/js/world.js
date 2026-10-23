@@ -65,7 +65,7 @@ export function homeHtml({ nameField, robotCard }) {
   <section class="intro">
     <div class="intro-copy">
       <div class="small">Episodio 1 · El Núcleo roto</div>
-      <h1 class="title-glitch" data-text="Salva Circuitia">Salva <span>Circuitia</span></h1>
+      <h1 class="title-glitch" data-text="Salva Circuitia" data-decode>Salva <span>Circuitia</span></h1>
       <p>Un videojuego de preguntas y dibujo para jugar en grupo. Siete mundos, siete modos de juego y un rey virus al que vencer. Hasta 10 jugadores desde el móvil.</p>
       <div class="row"><a class="btn" href="#/" data-act="tomap">Ver el mapa</a><a class="btn violet" href="#/library">Crear partida</a></div>
       <div class="progress-chips" aria-label="Chips recuperados">${WORLDS.map(w => `<i class="${freed.includes(w.mode) ? 'on' : ''}" style="--c:${w.color}" title="${esc(w.name)}"></i>`).join('')}<span class="small">${freed.length}/7 chips</span></div>
@@ -76,6 +76,12 @@ export function homeHtml({ nameField, robotCard }) {
     </div>
   </section>
 
+  <section class="cinema reveal" aria-label="Tráiler">
+    <video class="cinema-video" src="/video/trailer.mp4" poster="/video/trailer-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <div class="cinema-ui"><div class="small">Tráiler · Episodio 1</div><button class="violet" data-act="trailer">▶ Ver tráiler</button></div>
+  </section>
+  <dialog class="trailer-dialog" id="trailer-dialog"><video src="/video/trailer.mp4" controls playsinline preload="none"></video><button class="ghost" data-act="closetrailer" aria-label="Cerrar tráiler">✕ Cerrar</button></dialog>
+
   <section class="prologue" aria-label="Prólogo">
     ${PROLOGUE.map((p, i) => `<article class="panel reveal" style="--i:${i}">
       <div class="panel-art">${p.who === 'you' ? '<div class="you-crew">' + [0, 1, 2].map(() => botSvg({ body: Math.floor(Math.random() * 5), eyes: Math.floor(Math.random() * 5), antenna: Math.floor(Math.random() * 5), mouth: Math.floor(Math.random() * 4), accessory: Math.floor(Math.random() * 6), color: Math.floor(Math.random() * 8) })).join('') + '</div>' : botSvg(CHARACTERS[p.who].avatar, { mood: p.who === 'glitch' ? undefined : 'happy' })}</div>
@@ -84,7 +90,7 @@ export function homeHtml({ nameField, robotCard }) {
   </section>
 
   <section class="card map-card" id="map">
-    <div class="row between"><h2>Mapa de Circuitia</h2><span class="small">${freed.length === 7 ? 'Núcleo reparado' : `${7 - freed.length} mundos por liberar`}</span></div>
+    <div class="row between"><h2 data-decode>Mapa de Circuitia</h2><span class="small">${freed.length === 7 ? 'Núcleo reparado' : `${7 - freed.length} mundos por liberar`}</span></div>
     <div class="map-wrap">
       <svg class="map" viewBox="0 0 1000 560" role="group" aria-label="Mapa de mundos">
         <defs>
@@ -134,6 +140,9 @@ export function worldDetailHtml(mode) {
 // Animaciones de la portada: Volt habla, camina por el mapa y los capítulos aparecen al hacer scroll.
 let voltViewer = null, sayTimer = null;
 export function mountHome() {
+  // Sin reproducción automática si el usuario ahorra datos o prefiere menos movimiento.
+  const cine = document.querySelector('.cinema-video');
+  if (cine && (navigator.connection?.saveData || window.matchMedia('(prefers-reduced-motion: reduce)').matches)) { cine.removeAttribute('autoplay'); cine.pause(); }
   // La foto de Volt para el mapa se toma antes de sustituirla por el visor 3D.
   const voltSrc = document.querySelector('#volt-live img')?.src || '';
   const live = document.querySelector('#volt-live');

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape"
+  data-composition-variables='[{"id":"tagline","type":"string","label":"Lema final","default":"Quiz · Dibujo · 7 modos · Hasta 10 jugadores"},{"id":"cta","type":"string","label":"Llamada a la acción","default":"Juega gratis"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root { --ground: #06070d; --ink: #e8ecff; --lime: #c8ff2e; --cyan: #27f3ff; --magenta: #ff2e93; --amber: #ffc83d; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; }
+      #fx-scan { position: absolute; inset: 0; z-index: 50; pointer-events: none; background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, .22) 2px 4px); }
+      #fx-vig { position: absolute; inset: 0; z-index: 51; pointer-events: none; background: radial-gradient(closest-side at 50% 50%, transparent 60%, rgba(0, 0, 0, .7)); }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-9hlr" id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-4x6g" id="bg" data-composition-id="bg" data-composition-src="compositions/bg.html" data-start="0" data-duration="12" data-track-index="0" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:1"></div>
+      <div data-hf-id="hf-kn3w" id="core" data-composition-id="core" data-composition-src="compositions/core.html" data-start="0" data-duration="3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:2"></div>
+      <div data-hf-id="hf-dt33" id="glitch" data-composition-id="glitch" data-composition-src="compositions/glitch.html" data-start="3" data-duration="2.8" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:3"></div>
+      <div data-hf-id="hf-1e9d" id="volt" data-composition-id="volt" data-composition-src="compositions/volt.html" data-start="5.8" data-duration="3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div data-hf-id="hf-b556" id="title" data-composition-id="title" data-composition-src="compositions/title.html" data-start="8.8" data-duration="3.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:5"></div>
+      <div data-hf-id="hf-ddkc" id="fx-scan" data-layout-ignore></div>
+      <div data-hf-id="hf-g2bv" id="fx-vig" data-layout-ignore></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

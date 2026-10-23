@@ -1,0 +1,1586 @@
+{
+ "Torre Eiffel": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/500px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Torre Eiffel",
+  "lang": "es",
+  "file": "Torre%20Eiffel.jpg",
+  "w": 108,
+  "h": 180
+ },
+ "Sagrada Familia": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/Julius_Frank_Maria_und_Josef_mit_dem_Jesusknaben.jpg/500px-Julius_Frank_Maria_und_Josef_mit_dem_Jesusknaben.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sagrada Familia",
+  "lang": "es",
+  "file": "Sagrada%20Familia.jpg",
+  "w": 127,
+  "h": 180
+ },
+ "Alhambra": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg/500px-Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Alhambra",
+  "lang": "es",
+  "file": "Alhambra.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Gran Muralla China": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/500px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Gran Muralla china",
+  "lang": "es",
+  "file": "Gran%20Muralla%20China.jpg",
+  "w": 271,
+  "h": 180
+ },
+ "Monte Everest": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Mt._Everest_from_Gokyo_Ri_November_5%2C_2012.jpg/500px-Mt._Everest_from_Gokyo_Ri_November_5%2C_2012.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Monte Everest",
+  "lang": "es",
+  "file": "Monte%20Everest.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Río Nilo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/River-Nile-near-Aswan.jpg/500px-River-Nile-near-Aswan.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Nilo",
+  "lang": "es",
+  "file": "R%C3%ADo%20Nilo.jpg",
+  "w": 267,
+  "h": 180
+ },
+ "Amazonas": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Ponte_Almir_Gabriel_3.jpg/500px-Ponte_Almir_Gabriel_3.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Río Amazonas",
+  "lang": "es",
+  "file": "Amazonas.jpg",
+  "w": 300,
+  "h": 133
+ },
+ "Desierto del Sáhara": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Sahara_satellite_hires.jpg/500px-Sahara_satellite_hires.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sahara",
+  "lang": "es",
+  "file": "Desierto%20del%20S%C3%A1hara.jpg",
+  "w": 300,
+  "h": 168
+ },
+ "Torre de Pisa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/The_Leaning_Tower_of_Pisa_2026.jpg/500px-The_Leaning_Tower_of_Pisa_2026.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Torre de Pisa",
+  "lang": "es",
+  "file": "Torre%20de%20Pisa.jpg",
+  "w": 120,
+  "h": 180
+ },
+ "Estatua de la Libertad": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Statue_of_Liberty_7.jpg/500px-Statue_of_Liberty_7.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Estatua de la Libertad",
+  "lang": "es",
+  "file": "Estatua%20de%20la%20Libertad.jpg",
+  "w": 130,
+  "h": 180
+ },
+ "Aurora boreal": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Aurora_borealis_over_Eielson_Air_Force_Base%2C_Alaska.jpg/500px-Aurora_borealis_over_Eielson_Air_Force_Base%2C_Alaska.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Aurora",
+  "lang": "en",
+  "file": "Aurora%20boreal.jpg",
+  "w": 276,
+  "h": 180
+ },
+ "Volcán": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Volcano_scheme.svg/500px-Volcano_scheme.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Volcán",
+  "lang": "es",
+  "file": "Volc%C3%A1n.jpg",
+  "w": 172,
+  "h": 180
+ },
+ "Isla desierta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Desertisland.jpg/500px-Desertisland.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Isla desierta",
+  "lang": "es",
+  "file": "Isla%20desierta.jpg",
+  "w": 282,
+  "h": 180
+ },
+ "Sistema solar": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Solar_System_True_Color_ES.png/500px-Solar_System_True_Color_ES.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sistema solar",
+  "lang": "es",
+  "file": "Sistema%20solar.jpg",
+  "w": 300,
+  "h": 169
+ },
+ "ADN": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Chromosome-es.svg/500px-Chromosome-es.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Ácido desoxirribonucleico",
+  "lang": "es",
+  "file": "ADN.jpg",
+  "w": 157,
+  "h": 180
+ },
+ "Gravedad": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Sir_Isaac_Newton_1702.jpg/500px-Sir_Isaac_Newton_1702.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Gravedad",
+  "lang": "es",
+  "file": "Gravedad.jpg",
+  "w": 144,
+  "h": 180
+ },
+ "Átomo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Helium_atom_QM.svg/500px-Helium_atom_QM.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Átomo",
+  "lang": "es",
+  "file": "%C3%81tomo.jpg",
+  "w": 179,
+  "h": 180
+ },
+ "Microscopio": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Snow_crystals_2b.jpg/500px-Snow_crystals_2b.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Microscopio",
+  "lang": "es",
+  "file": "Microscopio.jpg",
+  "w": 120,
+  "h": 180
+ },
+ "Telescopio": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Telescope.jpg/500px-Telescope.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Telescopio",
+  "lang": "es",
+  "file": "Telescopio.jpg",
+  "w": 117,
+  "h": 180
+ },
+ "Eclipse solar": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Eclipses_solares.svg/500px-Eclipses_solares.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Eclipse solar",
+  "lang": "es",
+  "file": "Eclipse%20solar.jpg",
+  "w": 163,
+  "h": 180
+ },
+ "Corazón": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Heart_numlabels.svg/500px-Heart_numlabels.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Corazón",
+  "lang": "es",
+  "file": "Coraz%C3%B3n.jpg",
+  "w": 168,
+  "h": 180
+ },
+ "Esqueleto": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Skeletons.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Esqueleto",
+  "lang": "es",
+  "file": "Esqueleto.jpg",
+  "w": 116,
+  "h": 180
+ },
+ "Célula": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/E._coli_Bacteria_%287316101966%29.jpg/500px-E._coli_Bacteria_%287316101966%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Célula",
+  "lang": "es",
+  "file": "C%C3%A9lula.jpg",
+  "w": 214,
+  "h": 180
+ },
+ "Imán": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/0/08/MagnetEZ.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Imán",
+  "lang": "es",
+  "file": "Im%C3%A1n.jpg",
+  "w": 176,
+  "h": 180
+ },
+ "Cohete espacial": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Surveyor_1_launch.jpg/500px-Surveyor_1_launch.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Lanzadera espacial",
+  "lang": "es",
+  "file": "Cohete%20espacial.jpg",
+  "w": 144,
+  "h": 180
+ },
+ "Pirámides de Egipto": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/All_Gizah_Pyramids.jpg/500px-All_Gizah_Pyramids.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Pirámides de Egipto",
+  "lang": "es",
+  "file": "Pir%C3%A1mides%20de%20Egipto.jpg",
+  "w": 271,
+  "h": 180
+ },
+ "Cleopatra": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Kleopatra-VII.-Altes-Museum-Berlin1.jpg/500px-Kleopatra-VII.-Altes-Museum-Berlin1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cleopatra",
+  "lang": "es",
+  "file": "Cleopatra.jpg",
+  "w": 136,
+  "h": 180
+ },
+ "Julio César": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/500px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Julio César",
+  "lang": "es",
+  "file": "Julio%20C%C3%A9sar.jpg",
+  "w": 133,
+  "h": 180
+ },
+ "Edad Media": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Hagia_Sophia_Mars_2013.jpg/500px-Hagia_Sophia_Mars_2013.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Edad Media",
+  "lang": "es",
+  "file": "Edad%20Media.jpg",
+  "w": 269,
+  "h": 180
+ },
+ "Revolución francesa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Prise_de_la_Bastille.jpg/500px-Prise_de_la_Bastille.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Revolución francesa",
+  "lang": "es",
+  "file": "Revoluci%C3%B3n%20francesa.jpg",
+  "w": 237,
+  "h": 180
+ },
+ "Castillo medieval": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/0/02/Castelomontebello.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Castillo Montebello Medieval",
+  "lang": "es",
+  "file": "Castillo%20medieval.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Imprenta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Buchdruck-15-jahrhundert_1.jpg/500px-Buchdruck-15-jahrhundert_1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Imprenta",
+  "lang": "es",
+  "file": "Imprenta.jpg",
+  "w": 115,
+  "h": 180
+ },
+ "Don Quijote": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Title_page_first_edition_Don_Quijote.jpg/500px-Title_page_first_edition_Don_Quijote.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Don Quijote de la Mancha",
+  "lang": "es",
+  "file": "Don%20Quijote.jpg",
+  "w": 112,
+  "h": 180
+ },
+ "Guernica": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_Ruinen.jpg/500px-Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_Ruinen.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Bombardeo de Guernica",
+  "lang": "es",
+  "file": "Guernica.jpg",
+  "w": 246,
+  "h": 180
+ },
+ "La noche estrellada": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "La noche estrellada",
+  "lang": "es",
+  "file": "La%20noche%20estrellada.jpg",
+  "w": 227,
+  "h": 180
+ },
+ "Mona Lisa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Leonardo_da_Vinci_-_Mona_Lisa_%28Louvre%2C_Paris%29.jpg/500px-Leonardo_da_Vinci_-_Mona_Lisa_%28Louvre%2C_Paris%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "La Gioconda",
+  "lang": "es",
+  "file": "Mona%20Lisa.jpg",
+  "w": 121,
+  "h": 180
+ },
+ "Frida Kahlo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/500px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Frida Kahlo",
+  "lang": "es",
+  "file": "Frida%20Kahlo.jpg",
+  "w": 120,
+  "h": 180
+ },
+ "Romeo y Julieta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Frank_Bernard_Dicksee_-_Romeo_and_Juliet%2C_1884.jpg/500px-Frank_Bernard_Dicksee_-_Romeo_and_Juliet%2C_1884.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Romeo y Julieta",
+  "lang": "es",
+  "file": "Romeo%20y%20Julieta.jpg",
+  "w": 124,
+  "h": 180
+ },
+ "Sherlock Holmes": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Sherlock_Holmes_Portrait_Paget.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Sherlock Holmes",
+  "lang": "es",
+  "file": "Sherlock%20Holmes.jpg",
+  "w": 138,
+  "h": 180
+ },
+ "El Principito": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/El_Princip%C3%ADn_01_%28cropped%29.jpg/500px-El_Princip%C3%ADn_01_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "El principito",
+  "lang": "es",
+  "file": "El%20Principito.jpg",
+  "w": 275,
+  "h": 180
+ },
+ "Star Wars": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Star_wars2.svg/500px-Star_wars2.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Star Wars",
+  "lang": "es",
+  "file": "Star%20Wars.jpg",
+  "w": 300,
+  "h": 143
+ },
+ "Toy Story": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Toy_Story.svg/500px-Toy_Story.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Toy Story",
+  "lang": "es",
+  "file": "Toy%20Story.jpg",
+  "w": 246,
+  "h": 180
+ },
+ "Los Simpson": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/500px-The_Simpsons_yellow_logo.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Los Simpson",
+  "lang": "es",
+  "file": "Los%20Simpson.jpg",
+  "w": 300,
+  "h": 169
+ },
+ "Frozen": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Frozen_Logo_Black.svg/500px-Frozen_Logo_Black.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Frozen (película de 2013)",
+  "lang": "es",
+  "file": "Frozen.jpg",
+  "w": 300,
+  "h": 108
+ },
+ "Batman": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Batman_in_Justice_League_TV_series.png/500px-Batman_in_Justice_League_TV_series.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Batman",
+  "lang": "es",
+  "file": "Batman.jpg",
+  "w": 166,
+  "h": 180
+ },
+ "Spider-Man": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Spider-Man.jpg/500px-Spider-Man.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Spider-Man",
+  "lang": "es",
+  "file": "Spider-Man.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Titanic": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/RMS_Titanic_3.jpg/500px-RMS_Titanic_3.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "RMS Titanic",
+  "lang": "es",
+  "file": "Titanic.jpg",
+  "w": 245,
+  "h": 180
+ },
+ "Jurassic Park": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Jurassic_Park_Ride.jpg/500px-Jurassic_Park_Ride.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Jurassic Park: The Ride",
+  "lang": "es",
+  "file": "Jurassic%20Park.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "La casa de papel": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Wandgem%C3%A4lde_Alba_Flores_-_Nairobi_-_Venloer_Stra%C3%9Fe_274%2C_K%C3%B6ln-Ehrenfeld-7360.jpg/500px-Wandgem%C3%A4lde_Alba_Flores_-_Nairobi_-_Venloer_Stra%C3%9Fe_274%2C_K%C3%B6ln-Ehrenfeld-7360.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Nairobi (La casa de papel)",
+  "lang": "es",
+  "file": "La%20casa%20de%20papel.jpg",
+  "w": 117,
+  "h": 180
+ },
+ "Guitarra": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Sonic_Vista_Stduios_%28Guitar_Wall%29.jpg/500px-Sonic_Vista_Stduios_%28Guitar_Wall%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Guitarra",
+  "lang": "es",
+  "file": "Guitarra.jpg",
+  "w": 271,
+  "h": 180
+ },
+ "Flamenco": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Belen_maya.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Flamenco",
+  "lang": "es",
+  "file": "Flamenco.jpg",
+  "w": 169,
+  "h": 180
+ },
+ "Karaoke": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/%E5%8D%A1%E6%8B%89OK.jpg/500px-%E5%8D%A1%E6%8B%89OK.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Karaoke",
+  "lang": "en",
+  "file": "Karaoke.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Disco de vinilo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Disco_de_Vinilo.jpg/500px-Disco_de_Vinilo.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Disco de vinilo",
+  "lang": "es",
+  "file": "Disco%20de%20vinilo.jpg",
+  "w": 184,
+  "h": 180
+ },
+ "Batería musical": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Drum_kit_parts.png/500px-Drum_kit_parts.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Batería (instrumento musical)",
+  "lang": "es",
+  "file": "Bater%C3%ADa%20musical.jpg",
+  "w": 211,
+  "h": 180
+ },
+ "Ópera": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Giovanni_Paolo_Pannini_-_F%C3%AAte_musicale_-_1747.jpg/500px-Giovanni_Paolo_Pannini_-_F%C3%AAte_musicale_-_1747.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Ópera",
+  "lang": "es",
+  "file": "%C3%93pera.jpg",
+  "w": 219,
+  "h": 180
+ },
+ "Festival de música": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/PLNT2018_0420_175038-8769_JMM.jpg/500px-PLNT2018_0420_175038-8769_JMM.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Festival de música",
+  "lang": "es",
+  "file": "Festival%20de%20m%C3%BAsica.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Balón de fútbol": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/%D0%A4%D0%9A_%22%D0%9A%D0%BE%D0%BB%D0%BE%D1%81%22_%28%D0%97%D0%B0%D1%87%D0%B5%D0%BF%D0%B8%D0%BB%D0%BE%D0%B2%D0%BA%D0%B0%2C_%D0%A5%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%29_-_%D0%A4%D0%9A_%22%D0%91%D0%B0%D0%BB%D0%BA%D0%B0%D0%BD%D1%8B%22_%28%D0%97%D0%B0%D1%80%D1%8F%2C_%D0%9E%D0%B4%D0%B5%D1%81%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%29_%2818790931100%29.jpg/500px-thumbnail.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Balón de fútbol",
+  "lang": "es",
+  "file": "Bal%C3%B3n%20de%20f%C3%BAtbol.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Raqueta de tenis": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Real-tennis-rackets-balls.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Raqueta",
+  "lang": "es",
+  "file": "Raqueta%20de%20tenis.jpg",
+  "w": 163,
+  "h": 180
+ },
+ "Juegos Olímpicos": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/500px-Olympic_rings_without_rims.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Juegos Olímpicos",
+  "lang": "es",
+  "file": "Juegos%20Ol%C3%ADmpicos.jpg",
+  "w": 300,
+  "h": 139
+ },
+ "Surf": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Lone_Alaia_board_surfer.jpg/500px-Lone_Alaia_board_surfer.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Surf",
+  "lang": "es",
+  "file": "Surf.jpg",
+  "w": 233,
+  "h": 180
+ },
+ "Trofeo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/2015_Punta_del_Este_ePrix_Podium_089.JPG/500px-2015_Punta_del_Este_ePrix_Podium_089.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Trofeo",
+  "lang": "es",
+  "file": "Trofeo.jpg",
+  "w": 300,
+  "h": 179
+ },
+ "Carrera de sacos": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Carrera_de_sacos_infantiles.jpg/500px-Carrera_de_sacos_infantiles.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Carrera de sacos",
+  "lang": "es",
+  "file": "Carrera%20de%20sacos.jpg",
+  "w": 276,
+  "h": 180
+ },
+ "Tarjeta roja": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Matt_Reis_Carlos_Ruiz_yellow_card.jpg/500px-Matt_Reis_Carlos_Ruiz_yellow_card.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tarjeta penal",
+  "lang": "es",
+  "file": "Tarjeta%20roja.jpg",
+  "w": 144,
+  "h": 180
+ },
+ "Elefante": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Elephant.pair.750pix.jpg/500px-Elephant.pair.750pix.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Elephantidae",
+  "lang": "es",
+  "file": "Elefante.jpg",
+  "w": 237,
+  "h": 180
+ },
+ "Jirafa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Giraffa_camelopardalis_angolensis.jpg/500px-Giraffa_camelopardalis_angolensis.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Giraffa camelopardalis",
+  "lang": "es",
+  "file": "Jirafa.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Pingüino": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Penguins_collage.png/500px-Penguins_collage.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Spheniscidae",
+  "lang": "es",
+  "file": "Ping%C3%BCino.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Camaleón": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Bradypodion_pumilum_Cape_chameleon_female_IMG_1767_%28cropped%29.jpg/500px-Bradypodion_pumilum_Cape_chameleon_female_IMG_1767_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Chamaeleonidae",
+  "lang": "es",
+  "file": "Camale%C3%B3n.jpg",
+  "w": 160,
+  "h": 180
+ },
+ "Pulpo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/500px-Octopus2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Octopoda",
+  "lang": "es",
+  "file": "Pulpo.jpg",
+  "w": 236,
+  "h": 180
+ },
+ "Ornitorrinco": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Platypus.jpg/500px-Platypus.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Ornithorhynchus anatinus",
+  "lang": "es",
+  "file": "Ornitorrinco.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Caballito de mar": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Seahorse.jpg/500px-Seahorse.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Hippocampus",
+  "lang": "es",
+  "file": "Caballito%20de%20mar.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Paella": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/01_Paella_Valenciana_original.jpg/500px-01_Paella_Valenciana_original.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Paella",
+  "lang": "es",
+  "file": "Paella.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Tortilla de patatas": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Tortilla_de_Patatas_%28Corte_transversal%29.jpg/500px-Tortilla_de_Patatas_%28Corte_transversal%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tortilla de patatas",
+  "lang": "es",
+  "file": "Tortilla%20de%20patatas.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Pizza": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Eataly_Las_Vegas_-_Feb_2019_-_Sarah_Stierch_12.jpg/500px-Eataly_Las_Vegas_-_Feb_2019_-_Sarah_Stierch_12.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Pizza",
+  "lang": "es",
+  "file": "Pizza.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Sushi": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Sushi_bandeja.jpg/500px-Sushi_bandeja.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sushi",
+  "lang": "es",
+  "file": "Sushi.jpg",
+  "w": 241,
+  "h": 180
+ },
+ "Churros con chocolate": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Chocolate_con_churros_de_lazo.jpg/500px-Chocolate_con_churros_de_lazo.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Chocolate con churros",
+  "lang": "es",
+  "file": "Churros%20con%20chocolate.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Guacamole": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Lindo_Mexico_II_-_November_3_2023_-_Sarah_Stierch_02.jpg/500px-Lindo_Mexico_II_-_November_3_2023_-_Sarah_Stierch_02.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Guacamole",
+  "lang": "es",
+  "file": "Guacamole.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Croissant": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/2018_01_Croissant_IMG_0685.JPG/500px-2018_01_Croissant_IMG_0685.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cruasán",
+  "lang": "es",
+  "file": "Croissant.jpg",
+  "w": 250,
+  "h": 180
+ },
+ "Gazpacho": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Gazpacho_Cazuela_Barro.jpg/500px-Gazpacho_Cazuela_Barro.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Gazpacho",
+  "lang": "es",
+  "file": "Gazpacho.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Hummus": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Houmous.jpg/500px-Houmous.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Hummus",
+  "lang": "es",
+  "file": "Hummus.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "San Fermín": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Sanfermin.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Fermín de Amiens",
+  "lang": "es",
+  "file": "San%20Ferm%C3%ADn.jpg",
+  "w": 134,
+  "h": 180
+ },
+ "Castellers": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/3d10_fm_de_vilafranca.jpg/500px-3d10_fm_de_vilafranca.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Castell",
+  "lang": "es",
+  "file": "Castellers.jpg",
+  "w": 120,
+  "h": 180
+ },
+ "Abanico": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Mai-ohgi1.jpg/500px-Mai-ohgi1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Abanico",
+  "lang": "es",
+  "file": "Abanico.jpg",
+  "w": 300,
+  "h": 180
+ },
+ "Botijo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/William-Adolphe_Bouguereau_%281825-1905%29_-_Thirst_%281886%29.jpg/500px-William-Adolphe_Bouguereau_%281825-1905%29_-_Thirst_%281886%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Botijo",
+  "lang": "es",
+  "file": "Botijo.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Castañuelas": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Daguerrotipo_de_una_bailarina_de_la_escuela_bolera%2C_hacia_1850%2C_SB-0001_P.jpg/500px-Daguerrotipo_de_una_bailarina_de_la_escuela_bolera%2C_hacia_1850%2C_SB-0001_P.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Castañuelas",
+  "lang": "es",
+  "file": "Casta%C3%B1uelas.jpg",
+  "w": 131,
+  "h": 180
+ },
+ "Fallas de Valencia": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Falla_del_ayuntamiento_2026.jpg/500px-Falla_del_ayuntamiento_2026.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Fallas de Valencia",
+  "lang": "es",
+  "file": "Fallas%20de%20Valencia.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Siesta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Die_H%C3%A4ngematte.jpg/500px-Die_H%C3%A4ngematte.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Siesta",
+  "lang": "es",
+  "file": "Siesta.jpg",
+  "w": 249,
+  "h": 180
+ },
+ "Guitarra española": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Spanish_guitar.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Historia de la guitarra",
+  "lang": "es",
+  "file": "Guitarra%20espa%C3%B1ola.jpg",
+  "w": 82,
+  "h": 180
+ },
+ "Teléfono móvil": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Mobile_Phone_Evolution_1992_-_2014.jpg/500px-Mobile_Phone_Evolution_1992_-_2014.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Teléfono móvil",
+  "lang": "es",
+  "file": "Tel%C3%A9fono%20m%C3%B3vil.jpg",
+  "w": 165,
+  "h": 180
+ },
+ "Robot": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Toyota_Robot_at_Toyota_Kaikan.jpg/500px-Toyota_Robot_at_Toyota_Kaikan.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Robot",
+  "lang": "es",
+  "file": "Robot.jpg",
+  "w": 129,
+  "h": 180
+ },
+ "Dron": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Autumn_Drone_%28cropped%29.jpg/500px-Autumn_Drone_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Vehículo aéreo no tripulado",
+  "lang": "es",
+  "file": "Dron.jpg",
+  "w": 269,
+  "h": 180
+ },
+ "Realidad virtual": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/THE_VIEW_%28Virtual_Reality%29.jpg/500px-THE_VIEW_%28Virtual_Reality%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Realidad virtual",
+  "lang": "es",
+  "file": "Realidad%20virtual.jpg",
+  "w": 180,
+  "h": 180
+ },
+ "Inteligencia artificial": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Dall-e_3_%28jan_%2724%29_artificial_intelligence_icon.png/500px-Dall-e_3_%28jan_%2724%29_artificial_intelligence_icon.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Inteligencia artificial",
+  "lang": "es",
+  "file": "Inteligencia%20artificial.jpg",
+  "w": 180,
+  "h": 180
+ },
+ "Auriculares": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Earphones_BW_2011-12-10_15-49-08.JPG/500px-Earphones_BW_2011-12-10_15-49-08.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Auricular",
+  "lang": "es",
+  "file": "Auriculares.jpg",
+  "w": 269,
+  "h": 180
+ },
+ "Consola de videojuegos": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Gaming_Section_1_-_Retrosystems_2010.jpg/500px-Gaming_Section_1_-_Retrosystems_2010.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Videoconsola",
+  "lang": "es",
+  "file": "Consola%20de%20videojuegos.jpg",
+  "w": 271,
+  "h": 180
+ },
+ "Cubo de Rubik": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Rubik%27s_cube.svg/500px-Rubik%27s_cube.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cubo de Rubik",
+  "lang": "es",
+  "file": "Cubo%20de%20Rubik.jpg",
+  "w": 173,
+  "h": 180
+ },
+ "Triángulo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Four_Triangles.svg/500px-Four_Triangles.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Triángulo",
+  "lang": "es",
+  "file": "Tri%C3%A1ngulo.jpg",
+  "w": 180,
+  "h": 180
+ },
+ "Reloj de arena": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Wooden_hourglass_3.jpg/500px-Wooden_hourglass_3.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Reloj de arena",
+  "lang": "es",
+  "file": "Reloj%20de%20arena.jpg",
+  "w": 89,
+  "h": 180
+ },
+ "Balanza": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Weegschaal_%28unster%29_met_2_gewichten_in_brons%2C_50_tot_200_NC%2C_vindplaats-_Onbekend%2C_collectie_Gallo-Romeins_Museum_Tongeren%2C_GRM_48.jpg/500px-Weegschaal_%28unster%29_met_2_gewichten_in_brons%2C_50_tot_200_NC%2C_vindplaats-_Onbekend%2C_collectie_Gallo-Romeins_Museum_Tongeren%2C_GRM_48.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Balanza",
+  "lang": "es",
+  "file": "Balanza.jpg",
+  "w": 288,
+  "h": 180
+ },
+ "Laberinto": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Map_of_Jericho_in_14c_Farhi_Bible_by_Elisha_ben_Avraham_Crescas.jpg/500px-Map_of_Jericho_in_14c_Farhi_Bible_by_Elisha_ben_Avraham_Crescas.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Laberinto",
+  "lang": "es",
+  "file": "Laberinto.jpg",
+  "w": 168,
+  "h": 180
+ },
+ "Tangram": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Tangram_set_00.jpg/500px-Tangram_set_00.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tangram",
+  "lang": "es",
+  "file": "Tangram.jpg",
+  "w": 181,
+  "h": 180
+ },
+ "Código secreto": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Public_key_encryption_keys.svg/500px-Public_key_encryption_keys.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cifrado (criptografía)",
+  "lang": "es",
+  "file": "C%C3%B3digo%20secreto.jpg",
+  "w": 300,
+  "h": 127
+ },
+ "Dragón": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Neun-Drachen-Mauer-Beihai-Park-Peking.jpg/500px-Neun-Drachen-Mauer-Beihai-Park-Peking.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Dragón",
+  "lang": "es",
+  "file": "Drag%C3%B3n.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Unicornio": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/%28Toulouse%29_Le_Vue_%28La_Dame_%C3%A0_la_licorne%29_-_La_Dame_-_Mus%C3%A9e_de_Cluny_Paris.jpg/500px-%28Toulouse%29_Le_Vue_%28La_Dame_%C3%A0_la_licorne%29_-_La_Dame_-_Mus%C3%A9e_de_Cluny_Paris.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Unicornio",
+  "lang": "es",
+  "file": "Unicornio.jpg",
+  "w": 133,
+  "h": 180
+ },
+ "Centauro": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Centaure_Malmaison.jpg/500px-Centaure_Malmaison.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Centauro",
+  "lang": "es",
+  "file": "Centauro.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Medusa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/WonderCon_2011_-_Medusa_%26_Black_Bolt_cosplays_%285594664660%29.jpg/500px-WonderCon_2011_-_Medusa_%26_Black_Bolt_cosplays_%285594664660%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Medusa (personaje)",
+  "lang": "es",
+  "file": "Medusa.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Sirena": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/John_William_Waterhouse_A_Mermaid.jpg/500px-John_William_Waterhouse_A_Mermaid.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sirena",
+  "lang": "es",
+  "file": "Sirena.jpg",
+  "w": 124,
+  "h": 180
+ },
+ "Fénix": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Phoenix_rising_from_its_ashes.jpg/500px-Phoenix_rising_from_its_ashes.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Fénix",
+  "lang": "es",
+  "file": "F%C3%A9nix.jpg",
+  "w": 159,
+  "h": 180
+ },
+ "Martillo de Thor": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Thor_by_Johannes_Gehrts.jpg/500px-Thor_by_Johannes_Gehrts.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Mjölnir",
+  "lang": "es",
+  "file": "Martillo%20de%20Thor.jpg",
+  "w": 138,
+  "h": 180
+ },
+ "Caja de Pandora": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Pandora_opening_her_box_by_James_Gillray.jpg/500px-Pandora_opening_her_box_by_James_Gillray.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Caja de Pandora",
+  "lang": "es",
+  "file": "Caja%20de%20Pandora.jpg",
+  "w": 129,
+  "h": 180
+ },
+ "Astronauta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Bruce_McCandless_II_during_EVA_in_1984.jpg/500px-Bruce_McCandless_II_during_EVA_in_1984.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Astronauta",
+  "lang": "es",
+  "file": "Astronauta.jpg",
+  "w": 180,
+  "h": 180
+ },
+ "Detective": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Allan_Pinkerton-retouch.jpg/500px-Allan_Pinkerton-retouch.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Detective (investigador)",
+  "lang": "es",
+  "file": "Detective.jpg",
+  "w": 155,
+  "h": 180
+ },
+ "Paleontólogo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Eolambia.png/500px-Eolambia.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Paleontología",
+  "lang": "es",
+  "file": "Paleont%C3%B3logo.jpg",
+  "w": 181,
+  "h": 180
+ },
+ "Arquitecto": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Architect.png/500px-Architect.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Arquitecto",
+  "lang": "es",
+  "file": "Arquitecto.jpg",
+  "w": 146,
+  "h": 180
+ },
+ "Veterinario": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Veterinary_symbol.svg/500px-Veterinary_symbol.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Medicina veterinaria",
+  "lang": "es",
+  "file": "Veterinario.jpg",
+  "w": 205,
+  "h": 180
+ },
+ "Panadero": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/USS_John_C._Stennis_baker.jpg/500px-USS_John_C._Stennis_baker.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Panadero",
+  "lang": "es",
+  "file": "Panadero.jpg",
+  "w": 120,
+  "h": 180
+ },
+ "Mago": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/%C3%89pinal_-_L%E2%80%99Oiseau_bleu_09.jpg/500px-%C3%89pinal_-_L%E2%80%99Oiseau_bleu_09.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Mago",
+  "lang": "es",
+  "file": "Mago.jpg",
+  "w": 134,
+  "h": 180
+ },
+ "Jardinero": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Gardening.jpg/500px-Gardening.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Jardinero",
+  "lang": "es",
+  "file": "Jardinero.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Mecánico": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Lewis_Hine_Power_house_mechanic_working_on_steam_pump.jpg/500px-Lewis_Hine_Power_house_mechanic_working_on_steam_pump.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Mecánico",
+  "lang": "es",
+  "file": "Mec%C3%A1nico.jpg",
+  "w": 129,
+  "h": 180
+ },
+ "Paraguas al revés": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Pierre-Auguste_Renoir_122.jpg/500px-Pierre-Auguste_Renoir_122.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Paraguas",
+  "lang": "es",
+  "file": "Paraguas%20al%20rev%C3%A9s.jpg",
+  "w": 114,
+  "h": 180
+ },
+ "Soplar velas": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/Trick_candles.jpg/500px-Trick_candles.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Velas de broma",
+  "lang": "es",
+  "file": "Soplar%20velas.jpg",
+  "w": 244,
+  "h": 180
+ },
+ "Hacerse un selfie": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Leoncia_G%C3%B3mez.jpg/500px-Leoncia_G%C3%B3mez.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Leoncia Gómez Galán",
+  "lang": "es",
+  "file": "Hacerse%20un%20selfie.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Montar una tienda de campaña": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/0/01/CampingNearTheBeach.jpeg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Tienda de campaña",
+  "lang": "es",
+  "file": "Montar%20una%20tienda%20de%20campa%C3%B1a.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Caminar sobre hielo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Friedrich%2C_Caspar_David_-_Eismeer.jpg/500px-Friedrich%2C_Caspar_David_-_Eismeer.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "El mar de hielo",
+  "lang": "es",
+  "file": "Caminar%20sobre%20hielo.jpg",
+  "w": 237,
+  "h": 180
+ },
+ "Abrir un tarro difícil": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Beugelfles.jpg/500px-Beugelfles.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tapón de palanca",
+  "lang": "es",
+  "file": "Abrir%20un%20tarro%20dif%C3%ADcil.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Quedarse dormido en clase": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Nacho_Cerd%C3%A0.jpg/500px-Nacho_Cerd%C3%A0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Nacho Cerdà",
+  "lang": "es",
+  "file": "Quedarse%20dormido%20en%20clase.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Estar en las nubes": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Tren_a_las_nubes_crossing_viaduct2.jpg/500px-Tren_a_las_nubes_crossing_viaduct2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tren a las Nubes",
+  "lang": "es",
+  "file": "Estar%20en%20las%20nubes.jpg",
+  "w": 274,
+  "h": 180
+ },
+ "Llover a cántaros": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/C%C3%A1ntaro_de_La_Rambla_%28C%C3%B3rdoba%29.JPG/500px-C%C3%A1ntaro_de_La_Rambla_%28C%C3%B3rdoba%29.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cántaro (recipiente)",
+  "lang": "es",
+  "file": "Llover%20a%20c%C3%A1ntaros.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Meter la pata": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Boobmcnutt22225.jpg/500px-Boobmcnutt22225.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Boob McNutt",
+  "lang": "es",
+  "file": "Meter%20la%20pata.jpg",
+  "w": 134,
+  "h": 180
+ },
+ "Costar un ojo de la cara": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/DOF-ShallowDepthofField.jpg/500px-DOF-ShallowDepthofField.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Foco (óptica)",
+  "lang": "es",
+  "file": "Costar%20un%20ojo%20de%20la%20cara.jpg",
+  "w": 250,
+  "h": 180
+ },
+ "Ser pan comido": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Assorted_bread.jpg/500px-Assorted_bread.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Pan",
+  "lang": "es",
+  "file": "Ser%20pan%20comido.jpg",
+  "w": 167,
+  "h": 180
+ },
+ "Ahogarse en un vaso de agua": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Max_Liebermann_Bildnis_Richard_Strauss.jpg/500px-Max_Liebermann_Bildnis_Richard_Strauss.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Arabella",
+  "lang": "es",
+  "file": "Ahogarse%20en%20un%20vaso%20de%20agua.jpg",
+  "w": 141,
+  "h": 180
+ },
+ "Echar una mano": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Arm_wrestling_-_break_arm_position.jpg/500px-Arm_wrestling_-_break_arm_position.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Pulsear",
+  "lang": "es",
+  "file": "Echar%20una%20mano.jpg",
+  "w": 274,
+  "h": 180
+ },
+ "Alegría": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Iglesia_de_San_Blas%2C_en_Alegr%C3%ADa_de_%C3%81lava_%28%C3%81lava%2C_Espa%C3%B1a%29.jpg/500px-Iglesia_de_San_Blas%2C_en_Alegr%C3%ADa_de_%C3%81lava_%28%C3%81lava%2C_Espa%C3%B1a%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Alegría (Álava)",
+  "lang": "es",
+  "file": "Alegr%C3%ADa.jpg",
+  "w": 300,
+  "h": 169
+ },
+ "Miedo": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/COS_09.JPG/500px-COS_09.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Miedo",
+  "lang": "es",
+  "file": "Miedo.jpg",
+  "w": 247,
+  "h": 180
+ },
+ "Vergüenza": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Monasterio_viejo_de_San_Juan_de_la_Pe%C3%B1a_%28RPS_19-04-2019%29_capitel_representando_la_verg%C3%BCenza.png/500px-Monasterio_viejo_de_San_Juan_de_la_Pe%C3%B1a_%28RPS_19-04-2019%29_capitel_representando_la_verg%C3%BCenza.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Vergüenza (sentimiento)",
+  "lang": "es",
+  "file": "Verg%C3%BCenza.jpg",
+  "w": 185,
+  "h": 180
+ },
+ "Orgullo": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Pride_-_Jacob_Matham.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Soberbia",
+  "lang": "es",
+  "file": "Orgullo.jpg",
+  "w": 118,
+  "h": 180
+ },
+ "Impaciencia": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Solidus-Leo_III_and_Constantine_V-sb1504.jpg/500px-Solidus-Leo_III_and_Constantine_V-sb1504.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Batalla de Anquíalo (763)",
+  "lang": "es",
+  "file": "Impaciencia.jpg",
+  "w": 300,
+  "h": 150
+ },
+ "Confusión": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Comparison_confounder_mediator.svg/500px-Comparison_confounder_mediator.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Factor de confusión",
+  "lang": "es",
+  "file": "Confusi%C3%B3n.jpg",
+  "w": 300,
+  "h": 160
+ },
+ "Enamoramiento": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Frank_Bernard_Dicksee_-_Romeo_and_Juliet%2C_1884.jpg/500px-Frank_Bernard_Dicksee_-_Romeo_and_Juliet%2C_1884.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Enamoramiento",
+  "lang": "es",
+  "file": "Enamoramiento.jpg",
+  "w": 124,
+  "h": 180
+ },
+ "Arcoíris": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/TakakkawFalls2.jpg/500px-TakakkawFalls2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Arcoíris",
+  "lang": "es",
+  "file": "Arco%C3%ADris.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Cascada": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Salto_del_Angel-Canaima-Venezuela19.JPG/500px-Salto_del_Angel-Canaima-Venezuela19.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Cascada",
+  "lang": "es",
+  "file": "Cascada.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Telaraña": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Spider_web_Luc_Viatour.jpg/500px-Spider_web_Luc_Viatour.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Telaraña",
+  "lang": "es",
+  "file": "Telara%C3%B1a.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Girasol": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Helianthus_annuus_001.JPG/500px-Helianthus_annuus_001.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Helianthus annuus",
+  "lang": "es",
+  "file": "Girasol.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Nube de tormenta": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/February_wiki.jpg/500px-February_wiki.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Nube mastodóntica",
+  "lang": "es",
+  "file": "Nube%20de%20tormenta.jpg",
+  "w": 260,
+  "h": 180
+ },
+ "Cactus con flor": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Hawn%2C_Matthau%2C_Weston_and_Bergman_in_Cactus_Flower.jpg/500px-Hawn%2C_Matthau%2C_Weston_and_Bergman_in_Cactus_Flower.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Flor de cactus",
+  "lang": "es",
+  "file": "Cactus%20con%20flor.jpg",
+  "w": 255,
+  "h": 180
+ },
+ "Bosque encantado": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Carl_Offterdinger_-_Peter_Munk_und_das_Glasmaennchen.jpg/500px-Carl_Offterdinger_-_Peter_Munk_und_das_Glasmaennchen.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Bosque encantado",
+  "lang": "es",
+  "file": "Bosque%20encantado.jpg",
+  "w": 123,
+  "h": 180
+ },
+ "Huella en el barro": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Barros_Motegi2004.jpg/500px-Barros_Motegi2004.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Alex Barros",
+  "lang": "es",
+  "file": "Huella%20en%20el%20barro.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Semilla germinando": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/APOCYNACEAE_Couma_guianensis_Aubl.%2C_MPEG_%28MG036646%29.pdf/page1-500px-APOCYNACEAE_Couma_guianensis_Aubl.%2C_MPEG_%28MG036646%29.pdf.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Couma guianensis",
+  "lang": "es",
+  "file": "Semilla%20germinando.jpg",
+  "w": 127,
+  "h": 180
+ },
+ "Ola gigante": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Hovhannes_Aivazovsky_-_The_Ninth_Wave_-_Google_Art_Project.jpg/500px-Hovhannes_Aivazovsky_-_The_Ninth_Wave_-_Google_Art_Project.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Ola gigante",
+  "lang": "es",
+  "file": "Ola%20gigante.jpg",
+  "w": 268,
+  "h": 180
+ },
+ "Coliseo romano": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Europe_Day_2024_-_53718129954.jpg/500px-Europe_Day_2024_-_53718129954.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Coliseo",
+  "lang": "es",
+  "file": "Coliseo%20romano.jpg",
+  "w": 234,
+  "h": 180
+ },
+ "Machu Picchu": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Machu_Picchu%2C_Peru_%282018%29.jpg/500px-Machu_Picchu%2C_Peru_%282018%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Machu Picchu",
+  "lang": "es",
+  "file": "Machu%20Picchu.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Dinosaurio": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Triceratops_Specimen_at_the_Houston_Museum_of_Natural_Science_v01.jpg/500px-Triceratops_Specimen_at_the_Houston_Museum_of_Natural_Science_v01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Dinosauria",
+  "lang": "es",
+  "file": "Dinosaurio.jpg",
+  "w": 263,
+  "h": 180
+ },
+ "Electricidad": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Lightning3.jpg/500px-Lightning3.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Electricidad",
+  "lang": "es",
+  "file": "Electricidad.jpg",
+  "w": 213,
+  "h": 180
+ },
+ "Fotosíntesis": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Photosynthesis-es.png/500px-Photosynthesis-es.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Fotosíntesis",
+  "lang": "es",
+  "file": "Fotos%C3%ADntesis.jpg",
+  "w": 130,
+  "h": 180
+ },
+ "Muro de Berlín": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Berlinermauer.jpg/500px-Berlinermauer.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Muro de Berlín",
+  "lang": "es",
+  "file": "Muro%20de%20Berl%C3%ADn.jpg",
+  "w": 237,
+  "h": 180
+ },
+ "Llegada a la Luna": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Full_Moon_Luc_Viatour.jpg/500px-Full_Moon_Luc_Viatour.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Luna",
+  "lang": "es",
+  "file": "Llegada%20a%20la%20Luna.jpg",
+  "w": 178,
+  "h": 180
+ },
+ "Vikingos": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Wikinger.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Vikingo",
+  "lang": "es",
+  "file": "Vikingos.jpg",
+  "w": 119,
+  "h": 180
+ },
+ "Máscara teatral": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Verona_-_maschera_veneziana2.jpg/500px-Verona_-_maschera_veneziana2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Máscara",
+  "lang": "es",
+  "file": "M%C3%A1scara%20teatral.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Pincel y paleta": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/0/04/Oil_painting_palette.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Paleta (pintura)",
+  "lang": "es",
+  "file": "Pincel%20y%20paleta.jpg",
+  "w": 140,
+  "h": 180
+ },
+ "Harry Potter": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Harry_Potter_wordmark.svg/500px-Harry_Potter_wordmark.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Harry Potter",
+  "lang": "es",
+  "file": "Harry%20Potter.jpg",
+  "w": 300,
+  "h": 103
+ },
+ "Piano": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Steinway_%26_Sons_concert_grand_piano%2C_model_D-274%2C_manufactured_at_Steinway%27s_factory_in_Hamburg%2C_Germany.png/500px-Steinway_%26_Sons_concert_grand_piano%2C_model_D-274%2C_manufactured_at_Steinway%27s_factory_in_Hamburg%2C_Germany.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Piano",
+  "lang": "es",
+  "file": "Piano.jpg",
+  "w": 187,
+  "h": 180
+ },
+ "Michael Jackson": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Michael_Jackson_in_1988_%28enhanced%29.jpg/500px-Michael_Jackson_in_1988_%28enhanced%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Michael Jackson",
+  "lang": "es",
+  "file": "Michael%20Jackson.jpg",
+  "w": 101,
+  "h": 180
+ },
+ "ABBA": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/ABBA_-_TopPop_1974_5.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "ABBA",
+  "lang": "es",
+  "file": "ABBA.jpg",
+  "w": 211,
+  "h": 180
+ },
+ "Tour de Francia": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Tour_de_France_logo_%28black_background%29.svg/500px-Tour_de_France_logo_%28black_background%29.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tour de Francia",
+  "lang": "es",
+  "file": "Tour%20de%20Francia.jpg",
+  "w": 231,
+  "h": 180
+ },
+ "Baloncesto": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Stephen_Curry_%2833140701266%29.jpg/500px-Stephen_Curry_%2833140701266%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Baloncesto",
+  "lang": "es",
+  "file": "Baloncesto.jpg",
+  "w": 298,
+  "h": 180
+ },
+ "Bádminton": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Badminton_at_2023_National_Games_of_Taiwan_-_42.jpg/500px-Badminton_at_2023_National_Games_of_Taiwan_-_42.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Bádminton",
+  "lang": "es",
+  "file": "B%C3%A1dminton.jpg",
+  "w": 215,
+  "h": 180
+ },
+ "Mariposa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Lepidoptera_Diversity_smaller.jpg/500px-Lepidoptera_Diversity_smaller.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Lepidoptera",
+  "lang": "es",
+  "file": "Mariposa.jpg",
+  "w": 119,
+  "h": 180
+ },
+ "Ballena azul": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg/500px-Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Balaenoptera musculus",
+  "lang": "es",
+  "file": "Ballena%20azul.jpg",
+  "w": 260,
+  "h": 180
+ },
+ "Abeja": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Honey_bee_on_flower_with_pollen_collected_on_rear_leg.jpg/500px-Honey_bee_on_flower_with_pollen_collected_on_rear_leg.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Anthophila",
+  "lang": "es",
+  "file": "Abeja.jpg",
+  "w": 139,
+  "h": 180
+ },
+ "Roscón de Reyes": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Roscon_de_Reyes.jpg/500px-Roscon_de_Reyes.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Roscón de Reyes",
+  "lang": "es",
+  "file": "Rosc%C3%B3n%20de%20Reyes.jpg",
+  "w": 218,
+  "h": 180
+ },
+ "Camino de Santiago": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Caminos_Santiago_actuales_-_01_Camino_Franc%C3%A9s.svg/500px-Caminos_Santiago_actuales_-_01_Camino_Franc%C3%A9s.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Camino de Santiago",
+  "lang": "es",
+  "file": "Camino%20de%20Santiago.jpg",
+  "w": 300,
+  "h": 145
+ },
+ "La Tomatina": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Tomatina_2006.jpg/500px-Tomatina_2006.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Tomatina",
+  "lang": "es",
+  "file": "La%20Tomatina.jpg",
+  "w": 271,
+  "h": 180
+ },
+ "Código QR": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Japan-qr-code-billboard.jpg/500px-Japan-qr-code-billboard.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Código QR",
+  "lang": "es",
+  "file": "C%C3%B3digo%20QR.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "GPS": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/1/17/Navstar.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "GPS",
+  "lang": "es",
+  "file": "GPS.jpg",
+  "w": 273,
+  "h": 180
+ },
+ "Impresora 3D": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Airwolf_3d_Printer.jpg/500px-Airwolf_3d_Printer.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Impresora 3D",
+  "lang": "es",
+  "file": "Impresora%203D.jpg",
+  "w": 166,
+  "h": 180
+ },
+ "Dominó": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/Dominospiel.JPG/500px-Dominospiel.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Dominó",
+  "lang": "es",
+  "file": "Domin%C3%B3.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Ajedrez": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Opening_chess_position_from_black_side.jpg/500px-Opening_chess_position_from_black_side.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Ajedrez",
+  "lang": "es",
+  "file": "Ajedrez.jpg",
+  "w": 262,
+  "h": 180
+ },
+ "Dados": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Dados.jpg/500px-Dados.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Dado",
+  "lang": "es",
+  "file": "Dados.jpg",
+  "w": 300,
+  "h": 169
+ },
+ "Excalibur": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/a/ab/ExcalaburCaledfwlchTranslucent.gif?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Excálibur",
+  "lang": "es",
+  "file": "Excalibur.jpg",
+  "w": 150,
+  "h": 180
+ },
+ "Genio de la lámpara": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Aladdin_-_11884162153.jpg/500px-Aladdin_-_11884162153.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Genio (Disney)",
+  "lang": "es",
+  "file": "Genio%20de%20la%20l%C3%A1mpara.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Bombero": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Aircraft_Rescue_Firefighting_training.jpg/500px-Aircraft_Rescue_Firefighting_training.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Bombero",
+  "lang": "es",
+  "file": "Bombero.jpg",
+  "w": 270,
+  "h": 180
+ },
+ "Maleta que no cierra": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Suitcase_750x500.jpg/500px-Suitcase_750x500.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Maleta",
+  "lang": "es",
+  "file": "Maleta%20que%20no%20cierra.jpg",
+  "w": 274,
+  "h": 180
+ },
+ "Persona haciendo yoga": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Bikram_Yoga_-_with_Bikram_Choudhury_-_Flickr_-_tiarescott.jpg/500px-Bikram_Yoga_-_with_Bikram_Choudhury_-_Flickr_-_tiarescott.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Abusos sexuales por gurús del yoga",
+  "lang": "es",
+  "file": "Persona%20haciendo%20yoga.jpg",
+  "w": 135,
+  "h": 180
+ },
+ "Buscar las llaves": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Helene_Demuth.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Ama de llaves",
+  "lang": "es",
+  "file": "Buscar%20las%20llaves.jpg",
+  "w": 128,
+  "h": 180
+ },
+ "Ponerse las pilas": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Area-metro-bquilla-text.svg/500px-Area-metro-bquilla-text.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Español barranquillero",
+  "lang": "es",
+  "file": "Ponerse%20las%20pilas.jpg",
+  "w": 160,
+  "h": 180
+ },
+ "Quedarse de piedra": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/MNH_-_Zanata-Stein.jpg/500px-MNH_-_Zanata-Stein.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Piedra Zanata",
+  "lang": "es",
+  "file": "Quedarse%20de%20piedra.jpg",
+  "w": 73,
+  "h": 180
+ },
+ "Tener mariposas en el estómago": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Salix_mucronata_-_Cape_Silver_Willow_-_South_Africa.jpg/500px-Salix_mucronata_-_Cape_Silver_Willow_-_South_Africa.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Salix mucronata",
+  "lang": "es",
+  "file": "Tener%20mariposas%20en%20el%20est%C3%B3mago.jpg",
+  "w": 136,
+  "h": 180
+ },
+ "Alivio": {
+  "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/ValvulaAlivioDiagrama.gif?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "page_title": "Válvula de alivio de presión",
+  "lang": "es",
+  "file": "Alivio.jpg",
+  "w": 90,
+  "h": 180
+ },
+ "Frustración": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Frustrated_man_at_a_desk.jpg/500px-Frustrated_man_at_a_desk.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Frustración",
+  "lang": "es",
+  "file": "Frustraci%C3%B3n.jpg",
+  "w": 240,
+  "h": 180
+ },
+ "Sorpresa": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Face-surprise.svg/500px-Face-surprise.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Sorpresa",
+  "lang": "es",
+  "file": "Sorpresa.jpg",
+  "w": 180,
+  "h": 180
+ },
+ "trivia:q6": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Helianthus_annuus_001.JPG/500px-Helianthus_annuus_001.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Helianthus annuus",
+  "lang": "es",
+  "file": "trivia_q6.jpg",
+  "w": 360,
+  "h": 480
+ },
+ "trivia:q12": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Stephen_Curry_%2833140701266%29.jpg/500px-Stephen_Curry_%2833140701266%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Baloncesto",
+  "lang": "es",
+  "file": "trivia_q12.jpg",
+  "w": 480,
+  "h": 290
+ },
+ "trivia:q20": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Europe_Day_2024_-_53718129954.jpg/500px-Europe_Day_2024_-_53718129954.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Coliseo",
+  "lang": "es",
+  "file": "trivia_q20.jpg",
+  "w": 480,
+  "h": 369
+ },
+ "trivia:q28": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/500px-Apple_logo_black.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Apple",
+  "lang": "es",
+  "file": "trivia_q28.jpg",
+  "w": 390,
+  "h": 480
+ },
+ "trivia:q34": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Minecraft-creeper-face.jpg/500px-Minecraft-creeper-face.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Minecraft",
+  "lang": "es",
+  "file": "trivia_q34.jpg",
+  "w": 480,
+  "h": 480
+ },
+ "trivia:q43": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Dal%C3%AD%2C_Perfil_del_tiempo%2C_Vroclavo%2C_7.jpeg/500px-Dal%C3%AD%2C_Perfil_del_tiempo%2C_Vroclavo%2C_7.jpeg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "La persistencia de la memoria",
+  "lang": "es",
+  "file": "trivia_q43.jpg",
+  "w": 389,
+  "h": 480
+ },
+ "trivia:q51": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg/500px-Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Alhambra",
+  "lang": "es",
+  "file": "trivia_q51.jpg",
+  "w": 480,
+  "h": 320
+ },
+ "trivia:q57": {
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Star_Wars_Identities_%288348847356%29.jpg/500px-Star_Wars_Identities_%288348847356%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "page_title": "Halcón Milenario",
+  "lang": "es",
+  "file": "trivia_q57.jpg",
+  "w": 480,
+  "h": 360
+ }
+}

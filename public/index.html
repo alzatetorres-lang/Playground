@@ -1,1 +1,50 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quiz Party</title><link rel="stylesheet" href="/styles.css"></head><body><main id="app"></main><script src="/socket.io/socket.io.js"></script><script src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06070d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Playground">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<meta name="description" content="%DESC%">
+<link rel="canonical" href="%URL%">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Playground · Salva Circuitia">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="%TITLE%">
+<meta property="og:description" content="%DESC%">
+<meta property="og:url" content="%URL%">
+<meta property="og:image" content="%ORIGIN%/og/cover.jpg">
+<meta property="og:image:secure_url" content="%ORIGIN%/og/cover.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Volt, Chispa y el Rey Glitch sobre el horizonte neón de Circuitia">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="%TITLE%">
+<meta name="twitter:description" content="%DESC%">
+<meta name="twitter:image" content="%ORIGIN%/og/cover.jpg">
+%EXTRA%<title>%PAGETITLE%</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2306070d'/%3E%3Cpath d='M14 14h30l8 8v28H14z' fill='none' stroke='%2327f3ff' stroke-width='4'/%3E%3Ccircle cx='28' cy='34' r='4' fill='%23c8ff2e'/%3E%3Ccircle cx='40' cy='34' r='4' fill='%23c8ff2e'/%3E%3C/svg%3E">
+<link rel="preload" href="/fonts/chakra-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/video/trailer-poster-960.webp" as="image" fetchpriority="high">
+<link rel="stylesheet" href="%APPCSS%">
+%PRELOAD%
+</head>
+<body>
+<div class="orbs" aria-hidden="true"><i></i><i></i></div>
+<a class="skip" href="#app">Saltar al contenido</a>
+<header id="topbar"></header>
+<div id="roombar" hidden></div>
+<main id="app" tabindex="-1" aria-live="polite"></main>
+<nav id="tabbar" aria-label="Navegación principal"></nav>
+<div id="toast" role="status"></div>
+<noscript><p style="padding:24px">Playground necesita JavaScript para funcionar.</p></noscript>
+<script type="module" src="%APPJS%"></script>
+</body>
+</html>

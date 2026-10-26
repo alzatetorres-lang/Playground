@@ -1,0 +1,41 @@
+<template>
+  <style>
+    @font-face { font-family: 'Chakra Petch'; src: url('assets/fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; }
+    #root { position: absolute; inset: 0; }
+    #core-gem { position: absolute; left: 860px; top: 300px; width: 200px; height: 230px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(160deg, #ffffff, #27f3ff 35%, #b06bff 70%, #ff2e93); filter: drop-shadow(0 0 40px #27f3ff); }
+    #core-glow { position: absolute; left: 760px; top: 215px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(closest-side, rgba(39, 243, 255, .55), transparent); }
+    .core-ring { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .core-ring circle { fill: none; stroke-linecap: round; }
+    #core-eyebrow { position: absolute; left: 0; right: 0; top: 650px; text-align: center; font-family: 'JetBrains Mono'; font-size: 30px; letter-spacing: .32em; color: #27f3ff; }
+    #core-line { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-family: 'Chakra Petch'; font-weight: 700; font-size: 76px; letter-spacing: .02em; color: #e8ecff; text-transform: uppercase; }
+    #core-line span { display: inline-block; }
+  </style>
+  <div data-hf-id="hf-qmkw" id="root" data-composition-id="core" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-qo1u" id="core-glow"></div>
+    <svg data-hf-id="hf-uuop" class="core-ring" viewBox="0 0 1920 1080">
+      <circle data-hf-id="hf-2k9q" id="core-r1" cx="960" cy="415" r="170" stroke="#27f3ff" stroke-width="3" stroke-dasharray="40 24" />
+      <circle data-hf-id="hf-riah" id="core-r2" cx="960" cy="415" r="215" stroke="#c8ff2e" stroke-width="2" stroke-dasharray="6 18" />
+      <circle data-hf-id="hf-lruc" id="core-r3" cx="960" cy="415" r="260" stroke="#ff2e93" stroke-width="2" stroke-dasharray="120 40" opacity=".7" />
+    </svg>
+    <div data-hf-id="hf-1jjq" id="core-gem"></div>
+    <div data-hf-id="hf-43o5" id="core-eyebrow" data-layout-allow-occlusion>EN EL SISTEMA CIRCUITIA</div>
+    <div data-hf-id="hf-uzo5" id="core-line" data-layout-allow-occlusion>Todo brilla gracias al Núcleo</div>
+  </div>
+  <script>
+    // Cada letra del lema entra por separado, como un texto que se descifra.
+    const line = document.querySelector('#core-line');
+    line.innerHTML = line.textContent.split(' ').map(w => `<span>${w}</span>`).join(' ');
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo('#core-gem', { scale: .2, opacity: 0, rotate: -40 }, { scale: 1, opacity: 1, rotate: 0, duration: .9, ease: 'back.out(1.6)' }, 0.1);
+    tl.fromTo('#core-glow', { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: 'power3.out' }, 0.1);
+    ['#core-r1', '#core-r2', '#core-r3'].forEach((id, i) => {
+      tl.fromTo(id, { opacity: 0, scale: .6, rotate: 0, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: .6, ease: 'power3.out' }, 0.25 + i * 0.12);
+      tl.to(id, { rotate: i % 2 ? -120 : 140, duration: 2.7, ease: 'none' }, 0.25);
+    });
+    tl.to('#core-gem', { y: -14, duration: 1.2, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 1);
+    tl.fromTo('#core-eyebrow', { opacity: 0, scaleX: 1.4 }, { opacity: 1, scaleX: 1, duration: .7, ease: 'power3.out' }, 0.5);
+    tl.fromTo('#core-line span', { opacity: 0, y: 30, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .35, ease: 'power3.out', stagger: .08 }, 0.7);
+    tl.to('#root', { opacity: 0, duration: .2, ease: 'power2.in' }, 2.75);
+    window.__timelines["core"] = tl;
+  </script>
+</template>

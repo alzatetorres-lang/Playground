@@ -1,4 +1,6 @@
-export const socket = window.io({ autoConnect: true });
+import { io } from '/socket.io/socket.io.esm.min.js';
+
+export const socket = io({ autoConnect: true });
 
 export async function api(path, { method = 'GET', body } = {}) {
   const res = await fetch(path, { method, headers: body ? { 'content-type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined, credentials: 'same-origin' });

@@ -1,6 +1,38 @@
-// Robots amistosos. Con WebGL se muestran en 3D (bot3d.js); sin él, en SVG por piezas animado con CSS.
-import { botImage, has3D, COLORS as COLORS3D } from './bot3d.js';
-export const COLORS = COLORS3D;
+// Robots amistosos. Primero se pintan en SVG (instantáneo); cuando llega el motor 3D (bot3d.js, en diferido),
+// cada SVG se sustituye por su foto 3D sin recargar la pantalla.
+import { COLORS as SKIN_COLORS } from './skins.js';
+export const COLORS = SKIN_COLORS;
+
+let B = null;
+const waiters = [];
+export const bot3d = () => B;
+export function onBot3D(fn) { if (B) fn(B); else waiters.push(fn); }
+export function loadBot3D() {
+  return import('./bot3d.js').then(m => {
+    if (!m.has3D) return null;
+    B = m;
+    waiters.splice(0).forEach(f => { try { f(m); } catch (e) { console.error(e); } });
+    upgradeBots();
+    return m;
+  }).catch(() => null);
+}
+// Sustituye los SVG por fotos 3D de una en una, en los ratos libres, para no bloquear la página.
+function upgradeBots(root = document) {
+  const queue = [...root.querySelectorAll('svg.bot[data-av]')];
+  const idle = fn => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 500 }) : setTimeout(fn, 16));
+  const step = deadline => {
+    while (queue.length && (!deadline || deadline.timeRemaining() > 6)) {
+      const el = queue.shift();
+      if (!el.isConnected) continue;
+      const tmp = document.createElement('div');
+      tmp.innerHTML = botSvg(JSON.parse(el.dataset.av), { mood: el.dataset.mood || undefined, size: el.dataset.size || undefined });
+      el.replaceWith(tmp.firstElementChild);
+      if (!deadline) break;
+    }
+    if (queue.length) idle(step);
+  };
+  idle(step);
+}
 export const PARTS = {
   body: ['Cuadrado', 'Redondo', 'Alto', 'Hexágono', 'Cápsula'],
   eyes: ['Puntos', 'Grandes', 'Visor', 'Felices', 'LED'],
@@ -72,14 +104,14 @@ const accessory = (kind, c) => {
 // mood: 'happy' | 'sad' | undefined. size: 'sm' | 'lg' | undefined.
 export function botSvg(avatar, { mood, size } = {}) {
   const a = { body: 0, eyes: 0, antenna: 0, mouth: 0, accessory: 0, color: 0, skin: 0, ...(avatar || {}) };
-  if (has3D) {
-    const src = botImage(a, mood);
+  if (B) {
+    const src = B.botImage(a, mood, size === 'sm' ? 96 : size === 'lg' ? 288 : 160);
     if (src) return `<img class="${['bot', 'b3', size, mood, a.skin >= 7 ? 'rare' : ''].filter(Boolean).join(' ')}" src="${src}" alt="Robot" draggable="false">`;
   }
   const c = COLORS[a.color] || COLORS[0];
   const bodyTop = topY(a.body);
   const cls = ['bot', size, mood].filter(Boolean).join(' ');
-  return `<svg class="${cls}" viewBox="0 0 100 100" role="img" aria-label="Robot">
+  return `<svg class="${cls}" viewBox="0 0 100 100" role="img" aria-label="Robot" data-av='${JSON.stringify(a)}' data-mood="${mood || ''}" data-size="${size || ''}">
     <polygon points="50,4 91,27 91,77 50,100 9,77 9,27" fill="#d6f6ff" stroke="#27f3ff" stroke-width="2.5" stroke-linejoin="round"/>
     <g class="float">
       <rect x="38" y="76" width="24" height="14" rx="5" fill="${c}" stroke="${INK}" stroke-width="3"/>

@@ -5,13 +5,8 @@ import * as THREE from '/vendor/three/three.module.js';
 import { RoundedBoxGeometry } from '/vendor/three-addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from '/vendor/three-addons/environments/RoomEnvironment.js';
 
-export const COLORS = ['#c8ff2e', '#b9a8ff', '#ffb5a0', '#5ee7ff', '#ff6fd0', '#ffd166', '#5dffb0', '#ff6b6b'];
-export const SKIN_INFO = [
-  { name: 'Estándar', rarity: 'común' }, { name: 'Pastel', rarity: 'común' }, { name: 'Mate', rarity: 'común' },
-  { name: 'Neón', rarity: 'raro' }, { name: 'Carbono', rarity: 'raro' }, { name: 'Cromo', rarity: 'épico' }, { name: 'Oro', rarity: 'épico' },
-  { name: 'Holograma', rarity: 'legendario' }, { name: 'Lava', rarity: 'legendario' }, { name: 'Galaxia', rarity: 'mítico' }, { name: 'Glitch', rarity: 'mítico' },
-];
-export const RARITY_COLOR = { común: '#9aa6cf', raro: '#27f3ff', épico: '#b06bff', legendario: '#ffc83d', mítico: '#ff2e93' };
+import { COLORS, SKIN_INFO, RARITY_COLOR } from './skins.js';
+export { COLORS, SKIN_INFO, RARITY_COLOR };
 
 let shared = null; // renderer de fotos compartido
 let envTexture = null;
@@ -162,15 +157,16 @@ function makeRenderer(size, preserve) {
   return r;
 }
 
-const keyOf = (cfg, mood) => JSON.stringify([cfg?.body, cfg?.eyes, cfg?.antenna, cfg?.mouth, cfg?.accessory, cfg?.color, cfg?.skin, mood || '']);
+const keyOf = (cfg, mood, px) => JSON.stringify([cfg?.body, cfg?.eyes, cfg?.antenna, cfg?.mouth, cfg?.accessory, cfg?.color, cfg?.skin, mood || '', px]);
 
 // Foto del robot. Se renderiza una vez por configuración y se guarda.
-export function botImage(cfg, mood) {
+// px: tamaño en píxeles de la foto (se pide según dónde se muestra).
+export function botImage(cfg, mood, px = 160) {
   if (!has3D) return null;
-  const key = keyOf(cfg, mood);
+  const key = keyOf(cfg, mood, px);
   if (cache.has(key)) return cache.get(key);
   if (!shared) {
-    const renderer = makeRenderer(256, true);
+    const renderer = makeRenderer(288, true);
     const scene = new THREE.Scene();
     scene.environment = environment(renderer);
     lights(scene);
@@ -180,13 +176,14 @@ export function botImage(cfg, mood) {
     shared = { renderer, scene, camera };
   }
   const { renderer, scene, camera } = shared;
+  renderer.setSize(px, px, false);
   const { root, parts } = buildBot(cfg);
   root.rotation.y = -0.35;
   if (mood === 'happy') { parts.armR.rotation.z = 2.3; parts.headG.rotation.z = 0.12; }
   if (mood === 'sad') { parts.headG.rotation.x = 0.35; parts.headG.position.y -= 0.05; parts.armR.rotation.z = 0.1; }
   scene.add(root);
   renderer.render(scene, camera);
-  const url = renderer.domElement.toDataURL('image/png');
+  const url = renderer.domElement.toDataURL('image/webp', 0.86);
   scene.remove(root);
   root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); } });
   cache.set(key, url);

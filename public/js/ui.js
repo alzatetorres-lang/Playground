@@ -1,5 +1,6 @@
 import { botSvg, PARTS, COLORS } from './avatar.js';
-import { mountBot, SKIN_INFO, RARITY_COLOR } from './bot3d.js';
+import { SKIN_INFO, RARITY_COLOR } from './skins.js';
+import { onBot3D } from './avatar.js';
 
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
 
@@ -24,8 +25,9 @@ export function avatarEditor(host, avatar, onChange, randomize, owned = [0]) {
   host.innerHTML = '<div class="bot-stage"><div class="bot-view"></div><div class="bot-floor"></div></div><div class="bot-controls stack" style="margin-top:12px"></div>';
   const view = host.querySelector('.bot-view');
   const controls = host.querySelector('.bot-controls');
-  const live = mountBot(view, avatar, { size: 220 });
-  if (!live) view.innerHTML = botSvg(avatar, { size: 'lg' });
+  let live = null;
+  view.innerHTML = botSvg(avatar, { size: 'lg' });
+  onBot3D(m => { if (document.body.contains(view)) live = m.mountBot(view, avatar, { size: 220 }); });
   function draw() {
     const skin = SKIN_INFO[avatar.skin || 0];
     controls.innerHTML = `

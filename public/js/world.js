@@ -1,6 +1,6 @@
 // El universo de Circuitia: mundos (modos de juego), personajes, prólogo y mapa.
 import { botSvg } from './avatar.js';
-import { mountBot } from './bot3d.js';
+import { onBot3D } from './avatar.js';
 import { esc, store } from './ui.js';
 
 export const CHARACTERS = {
@@ -32,7 +32,9 @@ export const WORLDS = [
     story: 'El trono del Rey Glitch. Tres vidas, ni una más. Quien quede en pie recupera el último chip y repara el Núcleo.',
     rules: ['Preguntas a la vez para todos.', 'Fallar o no responder quita una vida (si fallan todos, nadie pierde).', 'Gana el último robot en pie.'] },
 ];
-export const worldArt = mode => `/img/worlds/${mode}.jpg`;
+// Ilustraciones en WebP: 'sm' (400 px) para miniaturas, completa (1280 px) para banners.
+export const worldArt = (mode, size = '') => `/img/worlds/${mode || 'classic'}${size === 'sm' ? '-sm' : ''}.webp`;
+export const worldSrcset = mode => `${worldArt(mode, 'sm')} 400w, /img/worlds/${mode || 'classic'}-md.webp 720w, ${worldArt(mode)} 1280w`;
 export const worldOf = mode => WORLDS.find(w => w.mode === mode) || WORLDS[0];
 
 export const freedWorlds = () => store.get('pg_worlds', []);
@@ -78,7 +80,7 @@ export function homeHtml({ nameField, robotCard }) {
   </section>
 
   <section class="cinema reveal" aria-label="Tráiler">
-    <video class="cinema-video" src="/video/trailer.mp4" poster="/video/trailer-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <video class="cinema-video" data-src="/video/trailer.mp4" poster="/video/trailer-poster-960.webp" muted loop playsinline preload="none" aria-hidden="true"></video>
     <div class="cinema-ui"><div class="small">Tráiler · Episodio 1</div><button class="violet" data-act="trailer">▶ Ver tráiler</button></div>
   </section>
   <dialog class="trailer-dialog" id="trailer-dialog"><video src="/video/trailer.mp4" controls playsinline preload="none"></video><button class="ghost" data-act="closetrailer" aria-label="Cerrar tráiler">✕ Cerrar</button></dialog>
@@ -86,7 +88,7 @@ export function homeHtml({ nameField, robotCard }) {
   <section class="prologue" aria-label="Prólogo">
     ${PROLOGUE.map((p, i) => `<article class="panel reveal" style="--i:${i}">
       <div class="panel-art">${p.who === 'you' ? '<div class="you-crew">' + [0, 1, 2].map(() => botSvg({ body: Math.floor(Math.random() * 5), eyes: Math.floor(Math.random() * 5), antenna: Math.floor(Math.random() * 5), mouth: Math.floor(Math.random() * 4), accessory: Math.floor(Math.random() * 6), color: Math.floor(Math.random() * 8) })).join('') + '</div>' : botSvg(CHARACTERS[p.who].avatar, { mood: p.who === 'glitch' ? undefined : 'happy' })}</div>
-      <div><div class="small">Capítulo ${i + 1}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></div>
+      <div><div class="small">Capítulo ${i + 1}</div><h2 class="panel-title">${esc(p.title)}</h2><p>${esc(p.text)}</p></div>
     </article>`).join('')}
   </section>
 
@@ -103,7 +105,7 @@ export function homeHtml({ nameField, robotCard }) {
         <path d="${pathD()}" class="road-dash"/>
         ${WORLDS.map(w => `<g class="node ${freed.includes(w.mode) ? 'freed' : ''}" data-act="world" data-mode="${w.mode}" tabindex="0" role="button" aria-label="Mundo ${w.n}: ${esc(w.name)}" transform="translate(${w.x} ${w.y})" style="--c:${w.color}">
           <circle r="46" class="halo"/><clipPath id="cp-${w.mode}"><circle r="34"/></clipPath><circle r="34" class="planet"/>
-          <image href="${worldArt(w.mode)}" x="-60" y="-34" width="121" height="68" clip-path="url(#cp-${w.mode})" preserveAspectRatio="xMidYMid slice" class="planet-art"/>
+          <image href="${worldArt(w.mode, 'sm')}" x="-60" y="-34" width="121" height="68" clip-path="url(#cp-${w.mode})" preserveAspectRatio="xMidYMid slice" class="planet-art"/>
           <ellipse rx="54" ry="12" class="ring"/>
           <text class="ico" x="26" y="34" text-anchor="middle">${w.icon}</text>
           <text class="lbl" y="72" text-anchor="middle">${w.n}. ${esc(w.name)}</text>
@@ -129,7 +131,7 @@ export function worldDetailHtml(mode) {
   const w = worldOf(mode);
   const freed = freedWorlds().includes(w.mode);
   return `<div class="world-detail" style="--c:${w.color}">
-    <div class="wd-art"><img src="${worldArt(w.mode)}" alt="Ilustración de ${esc(w.name)}" loading="lazy"><span class="wd-icon">${w.icon}</span></div>
+    <div class="wd-art"><img src="${worldArt(w.mode, 'sm')}" srcset="${worldSrcset(w.mode)}" sizes="(max-width: 720px) 92vw, 340px" width="400" height="225" alt="Ilustración de ${esc(w.name)}" loading="lazy" decoding="async"><span class="wd-icon">${w.icon}</span></div>
     <div class="wd-body">
       <div class="small">Mundo ${w.n}${freed ? ' · liberado' : ''}</div>
       <h3>${esc(w.name)}</h3>
@@ -143,13 +145,26 @@ export function worldDetailHtml(mode) {
 // Animaciones de la portada: Volt habla, camina por el mapa y los capítulos aparecen al hacer scroll.
 let voltViewer = null, sayTimer = null;
 export function mountHome() {
-  // Sin reproducción automática si el usuario ahorra datos o prefiere menos movimiento.
+  // El tráiler solo se descarga y reproduce cuando entra en pantalla (y nunca si el usuario ahorra datos o prefiere menos movimiento).
   const cine = document.querySelector('.cinema-video');
-  if (cine && (navigator.connection?.saveData || window.matchMedia('(prefers-reduced-motion: reduce)').matches)) { cine.removeAttribute('autoplay'); cine.pause(); }
-  // La foto de Volt para el mapa se toma antes de sustituirla por el visor 3D.
-  const voltSrc = document.querySelector('#volt-live img')?.src || '';
+  if (cine && !navigator.connection?.saveData && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(entries => {
+      for (const e of entries) {
+        if (e.isIntersecting) { if (!cine.src) cine.src = cine.dataset.src; cine.play().catch(() => {}); } else if (cine.src) cine.pause();
+      }
+    }, { threshold: 0.5 });
+    // Se empieza a vigilar cuando la página ya terminó de cargar, para no robarle ancho de banda.
+    // El tráiler también espera a la primera interacción.
+    window.addEventListener('pg:enhance', () => io.observe(cine), { once: true });
+  }
   const live = document.querySelector('#volt-live');
-  voltViewer = live ? mountBot(live, CHARACTERS.volt.avatar, { size: Math.min(300, window.innerWidth * 0.62) }) : null;
+  voltViewer = null;
+  onBot3D(m => {
+    if (!live || !document.body.contains(live)) return;
+    const img = document.querySelector('#map-volt image');
+    if (img) img.setAttribute('href', m.botImage(CHARACTERS.volt.avatar, 'happy'));
+    voltViewer = m.mountBot(live, CHARACTERS.volt.avatar, { size: Math.min(300, window.innerWidth * 0.62) });
+  });
   const lines = ['¡Hola! Soy Volt.', 'El Rey Glitch rompió el Núcleo en siete chips.', '¿Me ayudas a recuperarlos?', 'Crea una sala y trae a tus amigos.', 'Tócame si quieres que salude.'];
   const say = document.querySelector('#volt-say');
   let li = 0;
@@ -166,8 +181,6 @@ export function mountHome() {
   const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.2 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  const img = document.querySelector('#map-volt image');
-  if (img) { if (voltSrc) img.setAttribute('href', voltSrc); else img.remove(); }
   const firstOpen = WORLDS.find(w => !freedWorlds().includes(w.mode)) || WORLDS[0];
   selectWorld(firstOpen.mode, false);
 }

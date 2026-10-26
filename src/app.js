@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
@@ -11,7 +12,8 @@ const { attachSockets } = require('./sockets');
 const rules = require('./rooms/rules');
 const M = require('./rooms/modes');
 
-function createApp({ dbFile, secureCookie = false, limits, publicOrigin = process.env.PUBLIC_ORIGIN } = {}) {
+// assets: rutas del JS y CSS empaquetados (producción). Sin ellas se sirven los fuentes sin empaquetar.
+function createApp({ dbFile, secureCookie = false, limits, publicOrigin = process.env.PUBLIC_ORIGIN, assets = null } = {}) {
   const db = open(dbFile);
   seed(db);
   const auth = createAuth(db, { secureCookie });
@@ -26,11 +28,13 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
   const io = new Server(server, { cors: publicOrigin ? { origin: publicOrigin, credentials: true } : undefined, maxHttpBufferSize: 50_000 });
   const manager = attachSockets(io, { auth, quizzes, stats, db, limits });
 
+  // Comprime HTML, JS, CSS, JSON y SVG (los vídeos y JPEG ya van comprimidos).
+  app.use(compression());
   app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Referrer-Policy', 'same-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' ws: wss:; script-src 'self'; media-src 'self' blob:; frame-ancestors 'none'");
+    res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' ws: wss:; script-src 'self'; media-src 'self' blob:; frame-ancestors 'none'");
     next();
   });
   app.use(express.json({ limit: '200kb' }));
@@ -49,7 +53,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
   let indexTpl = null;
   const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function sendIndex(req, res, { title, desc, url, image = null, extra = '' } = {}) {
-    if (!indexTpl || process.env.NODE_ENV !== 'production') indexTpl = require('fs').readFileSync(indexFile, 'utf8');
+    if (!indexTpl || !assets) indexTpl = require('fs').readFileSync(indexFile, 'utf8');
     const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
     const t = title || 'Playground · Salva Circuitia';
     const d = desc || 'Quiz y dibujo en directo para jugar en grupo: 7 mundos, 7 modos de juego y hasta 10 jugadores desde el móvil. Gratis y sin instalar nada.';
@@ -57,6 +61,8 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
     let tpl = indexTpl.replaceAll('%ORIGIN%/og/cover.jpg', escAttr(origin + (image || '/og/cover.jpg')));
     if (image) tpl = tpl.replace('og:image:width" content="1200"', 'og:image:width" content="1280"').replace('og:image:height" content="630"', 'og:image:height" content="720"');
     const html = tpl.replaceAll('%ORIGIN%', escAttr(origin)).replaceAll('%URL%', escAttr(url || origin + '/'))
+      .replace('%PRELOAD%', (assets?.preload || []).map(p => `<link rel="modulepreload" href="${p}">`).join('\n'))
+      .replaceAll('%APPJS%', assets?.js || '/js/main.js').replaceAll('%APPCSS%', assets?.css || '/css/app.css')
       .replaceAll('%TITLE%', escAttr(t)).replaceAll('%PAGETITLE%', escAttr(t)).replaceAll('%DESC%', escAttr(d)).replace('%EXTRA%', extra);
     res.set('Cache-Control', 'no-cache').type('html').send(html);
   }
@@ -76,6 +82,24 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
       image: room ? `/img/worlds/${room.settings.mode}.jpg` : null,
       extra: `<meta http-equiv="refresh" content="0;url=/#/join/${code}">`,
     });
+  });
+
+  // Caché: lo que lleva hash en el nombre, un año; imágenes, fuentes y vídeo, una semana; el resto se revalida.
+  const cacheFor = file => {
+    const f = file.split(path.sep).join('/');
+    if (f.includes('/public/dist/')) return 'public, max-age=31536000, immutable';
+    if (f.includes('/public/fonts/')) return 'public, max-age=31536000, immutable';
+    if (/\/public\/(img|icons|video|og)\//.test(f)) return 'public, max-age=2592000';
+    return 'no-cache';
+  };
+
+  app.get('/robots.txt', (req, res) => {
+    const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
+    res.type('text/plain').set('Cache-Control', 'public, max-age=86400').send(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /j/\n\nSitemap: ${origin}/sitemap.xml\n`);
+  });
+  app.get('/sitemap.xml', (req, res) => {
+    const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
+    res.type('application/xml').set('Cache-Control', 'public, max-age=86400').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${origin}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url></urlset>\n`);
   });
 
   app.get('/healthz', (_req, res) => res.json({ ok: true, rooms: manager.size() }));
@@ -189,7 +213,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
     res.type('application/javascript').set('Cache-Control', 'public, max-age=2592000').send(addonCache.get(key));
   });
   app.use('/vendor/three', express.static(path.join(__dirname, '..', 'node_modules', 'three', 'build'), { maxAge: '30d', immutable: true }));
-  app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], setHeaders: res => res.setHeader('Cache-Control', 'no-cache') }));
+  app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], setHeaders: (res, file) => res.setHeader('Cache-Control', cacheFor(file)) }));
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'No encontrado.' });
     sendIndex(req, res);

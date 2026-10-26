@@ -1,12 +1,11 @@
 import { api, ask, socket } from './net.js';
 import { esc, toast, avatarEditor } from './ui.js';
-import { botSvg, randomAvatar } from './avatar.js';
+import { botSvg, randomAvatar, bot3d, loadBot3D } from './avatar.js';
 import { audio } from './audio.js';
 import { S, saveProfile } from './state.js';
-import { initTouchFx, decodeAll } from './fx.js';
-import { initScene } from './scene3d.js';
-import { homeHtml, mountHome, selectWorld, WORLDS, worldOf, worldArt } from './world.js';
-import { sweepViewers, mountBot, SKIN_INFO, RARITY_COLOR } from './bot3d.js';
+import { initTouchFx, decodeAll, canUse3D } from './fx.js';
+import { homeHtml, mountHome, selectWorld, WORLDS, worldOf, worldArt, worldSrcset } from './world.js';
+import { SKIN_INFO, RARITY_COLOR } from './skins.js';
 import { initRoom, enter, handleAct, tryResume, leave, render as renderRoom } from './room.js';
 
 const app = document.querySelector('#app');
@@ -48,7 +47,7 @@ function direction(parts) {
 
 function route() {
   const dir = direction(parse().parts);
-  if (!S.room) { scene.setMode('menu'); audio.setMood('menu'); }
+  if (!S.room) { window.__scene?.setMode('menu'); audio.setMood('menu'); }
   if (audioUnlocked) audio.sfx('nav');
   document.documentElement.dataset.nav = dir;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -64,7 +63,7 @@ function route() {
 
 async function renderRoute() {
   const { parts, query } = parse();
-  setTimeout(sweepViewers, 0);
+  setTimeout(() => bot3d()?.sweepViewers(), 0);
   // Los titulares de cada pantalla se descifran al aparecer.
   setTimeout(() => { document.querySelectorAll('#app .hero h1, #app h1.question').forEach(h => h.setAttribute('data-decode', '')); decodeAll(); }, 60);
   const [a, b] = parts;
@@ -286,12 +285,12 @@ async function library(query) {
   const [cats, list] = await Promise.all([api('/api/categories'), api(`/api/quizzes?${new URLSearchParams({ q: S.libQ || '', category: S.libCat || '', ...(mine ? { mine: '1' } : {}) })}`)]);
   app.innerHTML = `
     <a class="back" href="#/">‹ Inicio</a><section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Elige un quiz para jugar solo' : 'Elige un quiz'}</div><h1>Biblioteca</h1></section>
-    <div class="mode-strip" role="radiogroup" aria-label="Modo de juego">${WORLDS.filter(w => !solo || w.solo).map(w => `<a class="mode-chip ${w.mode === mode ? 'on' : ''}" role="radio" aria-checked="${w.mode === mode}" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}" style="--c:${w.color}"><img src="${worldArt(w.mode)}" alt="" loading="lazy"><span>${w.icon}</span>${esc(w.name)}</a>`).join('')}</div>
+    <div class="mode-strip" role="radiogroup" aria-label="Modo de juego">${WORLDS.filter(w => !solo || w.solo).map(w => `<a class="mode-chip ${w.mode === mode ? 'on' : ''}" role="radio" aria-checked="${w.mode === mode}" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}" style="--c:${w.color}"><img src="${worldArt(w.mode, 'sm')}" width="34" height="22" alt="" loading="lazy" decoding="async"><span>${w.icon}</span>${esc(w.name)}</a>`).join('')}</div>
     <p class="muted">${esc(world.icon)} <b>${esc(world.name)}</b>: ${esc(world.rules[0])} ${esc(world.rules[1] || '')}</p>
     <div class="tabs"><button class="${mine ? '' : 'on'}" data-act="libtab" data-m="0">Públicos</button>${S.user ? `<button class="${mine ? 'on' : ''}" data-act="libtab" data-m="1">Mis quizzes</button><a class="btn violet" href="#/create">+ Crear quiz</a>` : '<a class="btn ghost small-btn" href="#/login">Inicia sesión para crear quizzes</a>'}</div>
     <div class="row" style="align-items:flex-end"><div style="flex:2;min-width:180px"><label for="q">Buscar</label><input id="q" value="${esc(S.libQ || '')}" placeholder="Título o descripción"></div>
       <div style="flex:1;min-width:150px"><label for="cat">Categoría</label><select id="cat"><option value="">Todas</option>${cats.map(c => `<option ${S.libCat === c.name ? 'selected' : ''} value="${esc(c.name)}">${esc(c.name)} (${c.count})</option>`).join('')}</select></div></div>
-    <div class="grid" style="margin-top:12px">${list.map(q => `<article class="card qcard" style="--accent:${accent(q.category)}"><div class="row between"><span class="pill">${esc(q.category)}</span>${q.isPublic ? '' : '<span class="pill">Privado</span>'}</div><h3>${esc(q.title)}</h3><div class="meta">${q.questionCount} preguntas · por ${esc(q.author)}</div>
+    <div class="grid" style="margin-top:12px">${list.map(q => `<article class="card qcard" style="--accent:${accent(q.category)}"><div class="row between"><span class="pill">${esc(q.category)}</span>${q.isPublic ? '' : '<span class="pill">Privado</span>'}</div><h2 class="qtitle">${esc(q.title)}</h2><div class="meta">${q.questionCount} preguntas · por ${esc(q.author)}</div>
       <div class="row"><a class="btn small-btn" href="${hostQ(q.id)}">${solo ? 'Jugar solo' : 'En directo'}</a>${solo || !world.solo ? '' : `<a class="btn alt small-btn" href="#/host/${q.id}?mode=${mode}&solo=1">Solo</a>`}${q.mine ? `<a class="btn ghost small-btn" href="#/edit/${q.id}">Editar</a>` : `<button class="ghost small-btn" data-act="dup" data-id="${q.id}">Duplicar</button>`}</div></article>`).join('') || '<div class="card empty"><span class="big">∅</span>No hay quizzes con ese filtro. Prueba otra búsqueda o crea el tuyo.</div>'}</div>`;
   const apply = () => { S.libQ = val('#q'); S.libCat = val('#cat'); library(query); };
   let t; document.querySelector('#q').oninput = () => { clearTimeout(t); t = setTimeout(apply, 350); };
@@ -309,7 +308,7 @@ async function hostSetup(id, solo, mode) {
   const range = (id, label, min, max, step, value, unit = '') => `<label for="${id}">${label}: <span id="o${id}"></span>${unit}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${value}">`;
   app.innerHTML = `
     <a class="back" href="#/library?mode=${w.mode}${solo ? '&solo=1' : ''}">‹ Biblioteca</a>
-    <div class="world-banner" style="--c:${w.color}"><img src="${worldArt(w.mode)}" alt=""></div>
+    <div class="world-banner" style="--c:${w.color}"><img src="${worldArt(w.mode)}" srcset="${worldSrcset(w.mode)}" sizes="(max-width: 720px) 100vw, 1040px" width="1280" height="720" alt="" decoding="async" fetchpriority="high"></div>
     <section class="hero" style="padding:4px 0 0"><div class="small">${solo ? 'Partida individual' : 'Nueva partida en directo'} · ${esc(quiz.title)}</div><h1 style="--c:${w.color}"><span class="mode-ico">${w.icon}</span> ${esc(w.name)}</h1><p>${esc(w.story)}</p></section>
     <div class="mode-strip">${WORLDS.filter(x => !solo || x.solo).map(x => `<button class="mode-chip ${x.mode === w.mode ? 'on' : ''}" data-act="pickmode" data-mode="${x.mode}" style="--c:${x.color}"><span>${x.icon}</span>${esc(x.name)}</button>`).join('')}</div>
     <div class="split">
@@ -373,7 +372,7 @@ async function openCapsule() {
   const skin = res.skin;
   S.user.tokens = res.tokens; S.user.skins = res.skins;
   stage.innerHTML = `<div class="reveal-bot" style="--rc:${RARITY_COLOR[skin.rarity]}"><div class="rays"></div><div id="reveal-live"></div><div class="small" style="color:var(--rc)">${skin.rarity}</div><h3>${esc(skin.name)}</h3><p class="muted">${res.duplicate ? `Repetido: +${30} tuercas` : '¡Nuevo acabado!'}</p></div>`;
-  const viewer = mountBot(document.querySelector('#reveal-live'), { ...S.avatar, skin: skin.id }, { size: 200 });
+  const viewer = bot3d()?.mountBot(document.querySelector('#reveal-live'), { ...S.avatar, skin: skin.id }, { size: 200 });
   if (!viewer) document.querySelector('#reveal-live').innerHTML = botSvg({ ...S.avatar, skin: skin.id }, { size: 'lg' });
   document.querySelector('#tokens').textContent = res.tokens;
   setTimeout(() => { if (document.querySelector('#reveal-live')) taller(); }, 4200);
@@ -484,8 +483,23 @@ async function profile() {
 
 // ---------- arranque ----------
 initTouchFx();
-const scene = initScene();
-window.__scene = scene;
+// El fondo 3D y los robots 3D se cargan después de pintar la primera pantalla.
+const idle = fn => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 600));
+// Mejora progresiva: la primera pantalla se pinta ligera (robots en SVG, fondo CSS) y el 3D se activa
+// con la primera interacción. Así la carga no compite con el motor 3D, que es lo más pesado.
+let enhanced = false;
+function enhance() {
+  if (enhanced) return;
+  enhanced = true;
+  window.dispatchEvent(new Event('pg:enhance'));
+  if (!canUse3D()) return;
+  idle(() => {
+    loadBot3D();
+    setTimeout(() => idle(() => import('./scene3d.js').then(m => { window.__scene = m.initScene(); if (!S.room) window.__scene.setMode('menu'); }).catch(() => {})), 600);
+  });
+}
+for (const ev of ['pointermove', 'pointerdown', 'touchstart', 'keydown', 'wheel', 'scroll']) window.addEventListener(ev, enhance, { once: true, passive: true });
+window.addEventListener('hashchange', enhance, { once: true });
 (async function boot() {
   try { S.user = (await api('/api/me')).user; } catch {}
   if (S.user?.avatar && !localStorage.getItem('pg_avatar')) { S.avatar = S.user.avatar; saveProfile(); }

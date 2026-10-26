@@ -1,3 +1,11 @@
+/* Fuentes autoalojadas (subconjunto latino: incluye ñ, tildes, ¿ y ¡). */
+@font-face { font-family: 'Chakra Petch'; src: url('/fonts/chakra-600.woff2') format('woff2'); font-weight: 500 600; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Chakra Petch'; src: url('/fonts/chakra-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; src: url('/fonts/barlow-400.woff2') format('woff2'); font-weight: 400 500; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; src: url('/fonts/barlow-600.woff2') format('woff2'); font-weight: 600 700; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; src: url('/fonts/jbmono-500.woff2') format('woff2'); font-weight: 400 500; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; src: url('/fonts/jbmono-700.woff2') format('woff2'); font-weight: 600 700; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
 /* Playground · tema cyberpunk
    Base casi negra con tinte azul, un acento de acción (lima), cian para líneas y magenta para peligro.
    Tipos: Chakra Petch (titulares y etiquetas), Barlow (texto), JetBrains Mono (números y códigos). */
@@ -363,6 +371,8 @@ button, .btn, .option { position: relative; }
 .topnav a.link:hover::after, .topnav a.link[aria-current='page']::after { transform: scaleX(1); }
 
 /* Transición entre pantallas (View Transitions) con dirección */
+/* La capa de la transición no debe tragarse los toques: los clics llegan a la página real. */
+:root::view-transition { pointer-events: none; }
 #topbar { view-transition-name: topbar; } #tabbar { view-transition-name: tabbar; } #roombar { view-transition-name: roombar; }
 ::view-transition-old(root) { animation: vt-out .22s ease-in both; }
 ::view-transition-new(root) { animation: vt-in .38s cubic-bezier(.2, .9, .2, 1) both; }
@@ -650,3 +660,10 @@ button.cap:hover { transform: translateY(-6px) rotateY(10deg); }
 .mode-chip img { width: 34px; height: 22px; object-fit: cover; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%); }
 .stinger::before { content: ''; position: absolute; inset: 0; background: var(--art) center / cover; opacity: .38; animation: kenburns 6s ease-out both; -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent); mask-image: radial-gradient(closest-side, #000 40%, transparent); }
 @media (max-width: 720px) { .world-detail { grid-template-columns: 1fr; } }
+
+.panel-title { font-size: 1.1rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.qtitle { font-size: 1.1rem; text-transform: none; letter-spacing: 0; margin: 0; }
+
+/* Volt ocupa siempre el mismo hueco (SVG, foto o visor 3D): sin saltos de maquetación. */
+#volt-live { width: 100%; height: 100%; display: grid; place-items: center; }
+#volt-live > svg, #volt-live > img, #volt-live > canvas { width: 100% !important; height: 100% !important; }

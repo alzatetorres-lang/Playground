@@ -110,3 +110,17 @@ export function floatScore(anchor, text, color = 'var(--lime)') {
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 1200);
 }
+
+// WebGL sin GPU (SwiftShader, llvmpipe…): el 3D iría a tirones y bloquearía la página, así que se usa la versión 2D.
+// ?3d=1 en la URL lo fuerza para pruebas.
+export function canUse3D() {
+  if (/[?&]3d=1/.test(location.search)) return true;
+  if (/[?&]3d=0/.test(location.search)) return false;
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    if (!gl) return false;
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    const renderer = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
+    return !/swiftshader|llvmpipe|softpipe|software|basic render|mesa offscreen/i.test(renderer);
+  } catch { return false; }
+}

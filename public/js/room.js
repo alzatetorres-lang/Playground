@@ -6,7 +6,7 @@ import { S } from './state.js';
 import { createCanvas, PALETTE } from './draw.js';
 import { flash, confetti, buzz, decodeAll, floatScore } from './fx.js';
 import { initPace, startPace, paceView, paceAct, paceState, stopPace, fmtScore } from './pace-ui.js';
-import { worldOf, freeWorld, worldArt } from './world.js';
+import { worldOf, freeWorld, worldArt, worldSrcset } from './world.js';
 
 // Fondo 3D y música siguen la fase de la partida.
 const mood = (sceneMode, music) => { window.__scene?.setMode(sceneMode); audio.setMood(music); };
@@ -164,7 +164,7 @@ function lobby(root) {
   canvas?.destroy(); canvas = null;
   const r = S.room, host = isHost();
   root.innerHTML = `
-    <div class="world-banner lobby-banner" style="--c:${worldOf(r.mode).color}"><img src="${worldArt(r.mode || 'classic')}" alt=""><span class="wb-tag">${worldOf(r.mode).icon} ${esc(worldOf(r.mode).name)}</span></div>
+    <div class="world-banner lobby-banner" style="--c:${worldOf(r.mode).color}"><img src="${worldArt(r.mode)}" srcset="${worldSrcset(r.mode)}" sizes="(max-width: 720px) 100vw, 1040px" width="1280" height="720" alt="" decoding="async"><span class="wb-tag">${worldOf(r.mode).icon} ${esc(worldOf(r.mode).name)}</span></div>
     <section class="hero center"><div class="small">${r.settings.solo ? 'Partida individual' : 'Sala de espera'}</div><h1>${esc(r.title)}</h1></section>
     ${r.settings.solo ? '' : `<section class="card radar-card"><div class="radar" aria-hidden="true"><i></i><i></i><i></i><b></b></div><div class="small" style="text-align:center">Código de sala</div><div class="code" id="code" aria-label="${esc(r.code)}">${[...r.code].map((ch, i) => `<span style="--d:${i * 70}ms">${esc(ch)}</span>`).join('')}</div>
       <div class="row center"><button class="violet" data-act="copy">📋 Copiar enlace</button>${navigator.share ? '<button class="alt" data-act="share">📤 Compartir</button>' : ''}</div>

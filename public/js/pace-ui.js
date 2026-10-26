@@ -6,7 +6,7 @@ import { audio } from './audio.js';
 import { S } from './state.js';
 import { flash, buzz, confetti, floatScore } from './fx.js';
 import { worldOf } from './world.js';
-import { RARITY_COLOR } from './bot3d.js';
+import { RARITY_COLOR } from './skins.js';
 
 const P = { info: null, standings: [], view: 'loading', q: null, answered: null, outcomes: null, picked: null, result: null, targets: null, hackOptions: null, hackTarget: null, fish: null, mined: 0, lure: 1, streak: 0, score: 0, events: [], frenzyUntil: 0 };
 let rerender = () => {}, clock = null, auto = null;

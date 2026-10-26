@@ -168,7 +168,7 @@ export function initScene() {
     return api; // sin WebGL: se quedan los orbes CSS
   }
   document.body.classList.add('has-3d');
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.5));
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x06070d, 30, 150);
   const camera = new THREE.PerspectiveCamera(62, 1, 0.1, 400);
@@ -200,8 +200,13 @@ export function initScene() {
   document.addEventListener('visibilitychange', () => { running = document.visibilityState === 'visible'; if (running) { last = performance.now(); requestAnimationFrame(frame); } });
 
   const lerp = (a, b, k) => a + (b - a) * k;
+  // En móvil basta con 30 fps: la mitad de trabajo para el mismo efecto.
+  const minFrame = mobile ? 33 : 0;
+  let lastDraw = 0;
   function frame(now) {
     if (!running) return;
+    if (minFrame && now - lastDraw < minFrame) { if (!reduce) requestAnimationFrame(frame); return; }
+    lastDraw = now;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     const k = 1 - Math.pow(0.02, dt);

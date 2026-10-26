@@ -491,6 +491,7 @@ let enhanced = false;
 function enhance() {
   if (enhanced) return;
   enhanced = true;
+  document.body.classList.add('enhanced');
   window.dispatchEvent(new Event('pg:enhance'));
   if (!canUse3D()) return;
   idle(() => {

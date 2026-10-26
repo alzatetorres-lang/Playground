@@ -667,3 +667,8 @@ button.cap:hover { transform: translateY(-6px) rotateY(10deg); }
 /* Volt ocupa siempre el mismo hueco (SVG, foto o visor 3D): sin saltos de maquetación. */
 #volt-live { width: 100%; height: 100%; display: grid; place-items: center; }
 #volt-live > svg, #volt-live > img, #volt-live > canvas { width: 100% !important; height: 100% !important; }
+
+/* Las animaciones decorativas en bucle esperan a la primera interacción (como el 3D): la carga inicial queda ligera.
+   Las animaciones de entrada no se tocan. */
+body:not(.enhanced) :is(.intro h1 span, .hero .btn:first-child, .map .node .halo, .map .road-dash, .bot-floor, .ticker > div, img.bot, .bot .float, .bot .tip, .bot .lid, .bot .arm-l, .orbs i, .wd-art img, .world-banner img, .nut, .streak),
+body:not(.enhanced) :is(.title-glitch, .bubble)::after { animation-play-state: paused; }

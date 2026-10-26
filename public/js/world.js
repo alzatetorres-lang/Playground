@@ -175,8 +175,9 @@ export function mountHome() {
     let i = 0;
     const t = setInterval(() => { say.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(t); }, 28);
   };
-  type();
-  sayTimer = setInterval(type, 3600);
+  // Volt empieza a hablar con la primera interacción (o ya, si la página ya estaba activa).
+  const startTalking = () => { type(); sayTimer = setInterval(type, 3600); };
+  if (document.body.classList.contains('enhanced')) startTalking(); else { say.textContent = lines[0]; window.addEventListener('pg:enhance', startTalking, { once: true }); }
 
   const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.2 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));

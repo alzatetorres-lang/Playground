@@ -77,7 +77,8 @@ export function initTouchFx() {
 // Texto que se descifra: los caracteres giran entre símbolos y se asientan de izquierda a derecha.
 const GLYPHS = '!<>-_\\/[]{}=+*^?#░▒▓01';
 export function decode(el, { duration = 650 } = {}) {
-  if (!el || el.dataset.decoded || reduce()) return;
+  // En la primera pantalla los titulares salen ya legibles: el efecto empieza tras la primera interacción.
+  if (!el || el.dataset.decoded || reduce() || !document.body.classList.contains('enhanced')) return;
   el.dataset.decoded = '1';
   const nodes = [];
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);

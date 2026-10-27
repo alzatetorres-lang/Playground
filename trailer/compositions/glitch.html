@@ -1,0 +1,58 @@
+<template>
+  <style>
+    @font-face { font-family: 'Chakra Petch'; src: url('assets/fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #gl-flash { position: absolute; inset: 0; background: #fff; }
+    .gl-chip { position: absolute; left: 930px; top: 385px; width: 60px; height: 68px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+    #gl-king { position: absolute; left: 1080px; top: 140px; width: 720px; filter: drop-shadow(0 0 40px rgba(255, 46, 147, .7)); }
+    #gl-king-r, #gl-king-c { position: absolute; left: 1080px; top: 140px; width: 720px; mix-blend-mode: screen; opacity: .6; }
+    #gl-king-r { filter: drop-shadow(0 0 0 #ff0040) hue-rotate(-40deg); }
+    #gl-king-c { filter: hue-rotate(160deg); }
+    .gl-bar { position: absolute; left: 0; right: 0; height: 26px; background: rgba(255, 46, 147, .55); mix-blend-mode: screen; }
+    #gl-text { position: absolute; left: 140px; top: 360px; width: 900px; font-family: 'Chakra Petch'; font-weight: 700; font-size: 92px; line-height: .98; text-transform: uppercase; color: #e8ecff; text-shadow: 6px 0 rgba(255, 46, 147, .8), -6px 0 rgba(39, 243, 255, .6); }
+    #gl-text b { color: #ff2e93; }
+    #gl-sub { position: absolute; left: 144px; top: 300px; font-family: 'JetBrains Mono'; font-size: 30px; letter-spacing: .3em; color: #ff2e93; }
+  </style>
+  <div data-hf-id="hf-o6vf" id="root" data-composition-id="glitch" data-width="1920" data-height="1080" data-layout-allow-overflow>
+    <div data-hf-id="hf-qqmv" class="gl-chip" id="gl-c1" style="background:#c8ff2e"></div>
+    <div data-hf-id="hf-sjgc" class="gl-chip" id="gl-c2" style="background:#27f3ff"></div>
+    <div data-hf-id="hf-0jer" class="gl-chip" id="gl-c3" style="background:#ffc83d"></div>
+    <div data-hf-id="hf-u0rs" class="gl-chip" id="gl-c4" style="background:#5ee7ff"></div>
+    <div data-hf-id="hf-gt3i" class="gl-chip" id="gl-c5" style="background:#ff2e93"></div>
+    <div data-hf-id="hf-ftwy" class="gl-chip" id="gl-c6" style="background:#b06bff"></div>
+    <div data-hf-id="hf-cchz" class="gl-chip" id="gl-c7" style="background:#ff5e5e"></div>
+    <img data-hf-id="hf-zarq" id="gl-king-r" src="assets/glitch.png" alt="" />
+    <img data-hf-id="hf-ckbz" id="gl-king-c" src="assets/glitch.png" alt="" />
+    <img data-hf-id="hf-ta2q" id="gl-king" src="assets/glitch.png" alt="Rey Glitch" />
+    <div data-hf-id="hf-goy7" id="gl-sub">ALERTA · VIRUS DETECTADO</div>
+    <div data-hf-id="hf-ectm" id="gl-text" data-layout-allow-overlap>El Rey Glitch lo rompió en <b data-hf-id="hf-5o4x">7 chips</b></div>
+    <div data-hf-id="hf-rn4b" class="gl-bar" id="gl-b1" style="top:220px"></div>
+    <div data-hf-id="hf-desx" class="gl-bar" id="gl-b2" style="top:540px"></div>
+    <div data-hf-id="hf-vth2" class="gl-bar" id="gl-b3" style="top:810px"></div>
+    <div data-hf-id="hf-jmgh" id="gl-flash"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo('#gl-flash', { opacity: 1 }, { opacity: 0, duration: .35, ease: 'power2.out' }, 0);
+    // Los siete chips salen disparados desde el centro.
+    const dirs = [[-620, -260], [-420, 280], [-80, -330], [240, 300], [520, -240], [700, 120], [-760, 40]];
+    dirs.forEach(([x, y], i) => {
+      tl.fromTo(`#gl-c${i + 1}`, { x: 0, y: 0, rotate: 0, scale: .4, opacity: 1 }, { x, y, rotate: 220 + i * 40, scale: 1, opacity: .95, duration: 1.1, ease: 'expo.out' }, 0.05);
+      tl.to(`#gl-c${i + 1}`, { opacity: 0, duration: .3 }, 2.2);
+    });
+    tl.fromTo('#gl-king', { x: 520, opacity: 0, rotate: 8 }, { x: 0, opacity: 1, rotate: 0, duration: .5, ease: 'expo.out' }, 0.25);
+    tl.fromTo('#gl-king-r', { x: 520, opacity: 0 }, { x: -14, opacity: .55, duration: .5, ease: 'expo.out' }, 0.25);
+    tl.fromTo('#gl-king-c', { x: 520, opacity: 0 }, { x: 14, opacity: .45, duration: .5, ease: 'expo.out' }, 0.25);
+    // Sacudida de glitch: saltos discretos, todos fijos en el tiempo.
+    [0.9, 1.35, 1.8].forEach((t, i) => {
+      tl.to('#gl-king', { x: i % 2 ? 24 : -24, duration: .04, ease: 'steps(1)', yoyo: true, repeat: 3 }, t);
+      tl.fromTo(['#gl-b1', '#gl-b2', '#gl-b3'], { opacity: 0, x: -200 }, { opacity: 1, x: 200, duration: .12, ease: 'steps(3)', stagger: .03, immediateRender: i === 0 }, t);
+      tl.to(['#gl-b1', '#gl-b2', '#gl-b3'], { opacity: 0, duration: .05 }, t + .18);
+    });
+    tl.fromTo('#gl-sub', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: .4, ease: 'power3.out' }, 0.45);
+    tl.fromTo('#gl-text', { opacity: 0, x: -80, skewX: -14 }, { opacity: 1, x: 0, skewX: 0, duration: .45, ease: 'expo.out' }, 0.4);
+    tl.to('#gl-text', { x: 10, duration: .05, ease: 'steps(1)', yoyo: true, repeat: 3 }, 1.35);
+    tl.to('#root', { opacity: 0, duration: .2, ease: 'power2.in' }, 2.58);
+    window.__timelines["glitch"] = tl;
+  </script>
+</template>

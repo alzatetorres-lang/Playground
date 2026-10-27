@@ -1,0 +1,37 @@
+<template>
+  <style>
+    @font-face { font-family: 'Chakra Petch'; src: url('assets/fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #vo-trail { position: absolute; left: 1210px; top: 600px; width: 140px; height: 520px; background: linear-gradient(rgba(39, 243, 255, .85), transparent); filter: blur(18px); transform-origin: 50% 0; }
+    #vo-bot { position: absolute; left: 980px; top: 120px; width: 620px; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .6)) drop-shadow(0 0 34px rgba(39, 243, 255, .45)); }
+    #vo-chispa { position: absolute; left: 1500px; top: 160px; width: 240px; filter: drop-shadow(0 0 26px rgba(200, 255, 46, .6)); }
+    #vo-eyebrow { position: absolute; left: 140px; top: 330px; font-family: 'JetBrains Mono'; font-size: 30px; letter-spacing: .3em; color: #c8ff2e; }
+    #vo-text { position: absolute; left: 140px; top: 390px; width: 860px; font-family: 'Chakra Petch'; font-weight: 700; font-size: 92px; line-height: .98; text-transform: uppercase; color: #e8ecff; }
+    #vo-text span { color: #27f3ff; text-shadow: 0 0 24px rgba(39, 243, 255, .6); }
+    #vo-ring { position: absolute; left: 1080px; top: 840px; width: 420px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(39, 243, 255, .7), transparent); }
+  </style>
+  <div data-hf-id="hf-1v6p" id="root" data-composition-id="volt" data-width="1920" data-height="1080" data-layout-allow-overflow>
+    <div data-hf-id="hf-gyfz" id="vo-ring"></div>
+    <div data-hf-id="hf-d93f" id="vo-trail"></div>
+    <img data-hf-id="hf-f8ag" id="vo-bot" src="assets/volt.png" alt="Volt" />
+    <img data-hf-id="hf-3th1" id="vo-chispa" src="assets/chispa.png" alt="Chispa" />
+    <div data-hf-id="hf-sbeb" id="vo-eyebrow" data-layout-allow-occlusion>CAPÍTULO 3 · VOLT DESPIERTA</div>
+    <div data-hf-id="hf-w862" id="vo-text" data-layout-allow-occlusion>Volt y Chispa salen a <span data-hf-id="hf-6kgz" data-layout-allow-occlusion>recuperarlos</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo('#vo-bot', { y: 700, rotate: -6 }, { y: 0, rotate: 0, duration: .9, ease: 'expo.out' }, 0.05);
+    tl.fromTo('#vo-trail', { scaleY: 1.6, opacity: 1, y: 300 }, { scaleY: .5, opacity: .35, y: 0, duration: .9, ease: 'expo.out' }, 0.05);
+    tl.fromTo('#vo-ring', { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: 'power3.out' }, 0.5);
+    tl.to('#vo-bot', { y: -22, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 1);
+    // Chispa da una vuelta alrededor de Volt (ruta elíptica por fotogramas clave).
+    tl.fromTo('#vo-chispa', { x: 0, y: 0, scale: .6, opacity: 0 }, {
+      keyframes: [{ x: 0, y: 0, scale: .9, opacity: 1, duration: .4 }, { x: -380, y: 140, scale: .6, duration: .6 }, { x: -520, y: 420, scale: .8, duration: .6 }, { x: -120, y: 520, scale: 1.1, duration: .6 }, { x: 40, y: 260, scale: 1, duration: .5 }],
+      ease: 'sine.inOut',
+    }, 0.3);
+    tl.fromTo('#vo-eyebrow', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: .4, ease: 'power3.out' }, 0.35);
+    tl.fromTo('#vo-text', { opacity: 0, y: 40, clipPath: 'inset(0 100% 0 0)' }, { opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)', duration: .7, ease: 'expo.out' }, 0.5);
+    tl.to('#root', { opacity: 0, duration: .2, ease: 'power2.in' }, 2.75);
+    window.__timelines["volt"] = tl;
+  </script>
+</template>

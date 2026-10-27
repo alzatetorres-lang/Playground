@@ -1,0 +1,12 @@
+node_modules
+.git
+.playwright-cli
+data/*.sqlite*
+data/*.json
+banco-preguntas/*
+!banco-preguntas/questions_1500.json
+stitch_screens
+tasks
+tests
+*.docx
+*.log

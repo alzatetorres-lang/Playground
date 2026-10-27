@@ -14,7 +14,7 @@ function createAdmin(db, manager, token) {
   }
 
   function overview() {
-    const since = Date.now() - 30 *DAYS_MS_FIX;
+    const since = Date.now() - 30 * day;
     return {
       generatedAt: Date.now(),
       activeRooms: manager.size(),

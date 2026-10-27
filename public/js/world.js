@@ -33,7 +33,7 @@ export const WORLDS = [
     rules: ['Preguntas a la vez para todos.', 'Fallar o no responder quita una vida (si fallan todos, nadie pierde).', 'Gana el último robot en pie.'] },
 ];
 // Ilustraciones en WebP: 'sm' (400 px) para miniaturas, completa (1280 px) para banners.
-export const worldArt = (mode, size = '') => `/img/worlds/${mode || 'classic'}${size === 'sm' ? '-sm' : ''}.webp`;
+export const worldArt = (mode, size = '') => `/img/worlds/${mode || 'classic'}${size === 'sm' ? '-sm' : size === 'xs' ? '-xs' : ''}.webp`;
 export const worldSrcset = mode => `${worldArt(mode, 'sm')} 400w, /img/worlds/${mode || 'classic'}-md.webp 720w, ${worldArt(mode)} 1280w`;
 export const worldOf = mode => WORLDS.find(w => w.mode === mode) || WORLDS[0];
 

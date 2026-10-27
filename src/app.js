@@ -31,9 +31,11 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
 
   // Comprime HTML, JS, CSS, JSON y SVG (los vídeos y JPEG ya van comprimidos).
   app.use(compression());
-  app.use((_req, res, next) => {
+  app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    if (req.secure) res.setHeader('Strict-Transport-Security', 'max-age=31536000');
     res.setHeader('Referrer-Policy', 'same-origin');
     res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' ws: wss: https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; script-src 'self' https://www.googletagmanager.com; media-src 'self' blob:; frame-ancestors 'none'");
     next();

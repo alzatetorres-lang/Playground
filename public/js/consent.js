@@ -58,8 +58,7 @@
     accept.addEventListener('click', () => choose(true));
     box = el('div', { class: 'consent', role: 'dialog', 'aria-labelledby': 'consent-title', 'aria-describedby': 'consent-text' },
       el('h2', { id: 'consent-title' }, 'Cookies'),
-      el('p', { id: 'consent-text' }, 'Usamos una cookie técnica para mantener tu sesión y guardamos tus ajustes en tu dispositivo. Son necesarias y no piden permiso. ',
-        'Con tu permiso, usamos también Google Analytics para contar visitas de forma agregada. Puedes cambiar de opinión cuando quieras desde «Cookies».'),
+      el('p', { id: 'consent-text' }, 'Usamos cookies técnicas necesarias y, si lo permites, Google Analytics para contar visitas. Puedes cambiarlo en «Cookies».'),
       el('details', {}, el('summary', {}, 'Ver qué se guarda'),
         el('table', {},
           el('tr', {}, el('th', {}, 'Nombre'), el('th', {}, 'Para qué'), el('th', {}, 'Duración')),

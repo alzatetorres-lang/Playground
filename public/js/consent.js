@@ -52,7 +52,7 @@
       return n;
     };
     const row = (a, b, c) => el('tr', {}, el('td', {}, a), el('td', {}, b), el('td', {}, c));
-    const reject = el('button', { type: 'button', class: 'ghost', 'data-consent': 'no' }, 'Rechazar');
+    const reject = el('button', { type: 'button', 'data-consent': 'no' }, 'Rechazar');
     const accept = el('button', { type: 'button', 'data-consent': 'yes' }, 'Aceptar');
     reject.addEventListener('click', () => choose(false));
     accept.addEventListener('click', () => choose(true));

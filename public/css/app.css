@@ -682,4 +682,4 @@ body:not(.enhanced) :is(.title-glitch, .bubble)::after { animation-play-state: p
 .consent table { width: 100%; margin-top: 8px; border-collapse: collapse; }
 .consent th, .consent td { text-align: left; padding: 4px 6px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
 .consent-actions { display: flex; gap: 10px; }
-.consent-actions button { flex: 1; }
+.consent-actions button { flex: 1; background: var(--panel-3); color: var(--ink); box-shadow: inset 0 0 0 1px var(--cyan); }

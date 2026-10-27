@@ -8,6 +8,7 @@ const { seed } = require('./db/seed');
 const { createAuth, createLimiter } = require('./auth');
 const { createQuizStore, validateQuiz } = require('./api/quizzes');
 const { createStats } = require('./api/stats');
+const { createAdmin } = require('./api/admin');
 const { attachSockets } = require('./sockets');
 const rules = require('./rooms/rules');
 const M = require('./rooms/modes');
@@ -34,7 +35,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Referrer-Policy', 'same-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' ws: wss:; script-src 'self'; media-src 'self' blob:; frame-ancestors 'none'");
+    res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' ws: wss: https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; script-src 'self' https://www.googletagmanager.com; media-src 'self' blob:; frame-ancestors 'none'");
     next();
   });
   app.use(express.json({ limit: '200kb' }));
@@ -95,7 +96,7 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
 
   app.get('/robots.txt', (req, res) => {
     const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
-    res.type('text/plain').set('Cache-Control', 'public, max-age=86400').send(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /j/\n\nSitemap: ${origin}/sitemap.xml\n`);
+    res.type('text/plain').set('Cache-Control', 'public, max-age=86400').send(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /j/\nDisallow: /admin\n\nSitemap: ${origin}/sitemap.xml\n`);
   });
   app.get('/sitemap.xml', (req, res) => {
     const origin = publicOrigin || `${req.protocol}://${req.get('host')}`;
@@ -198,6 +199,13 @@ function createApp({ dbFile, secureCookie = false, limits, publicOrigin = proces
   });
 
   app.get('/api/stats', (req, res) => res.json(stats.overview(me(req)?.id ?? null)));
+
+  // Panel de administración: sin ADMIN_TOKEN configurado no existe.
+  const admin = createAdmin(db, manager, process.env.ADMIN_TOKEN);
+  app.get('/api/admin/stats', (req, res) => {
+    if (!admin.authorized(req)) return res.status(401).json({ error: 'No autorizado.' });
+    res.set('Cache-Control', 'no-store').json(admin.overview());
+  });
 
   // Three.js se sirve desde node_modules (mismo origen, sin CDN).
   // Módulos auxiliares de Three.js: reescribimos `from 'three'` para no necesitar import map (CSP sin inline).

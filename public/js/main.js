@@ -130,6 +130,7 @@ function renderChrome() {
       <a class="link" href="#/taller"${cur('taller')}>Taller</a>
       <a class="link" href="#/stats"${cur('stats')}>Récords</a>
       <a class="link" href="${S.user ? '#/me' : '#/login'}"${cur('me')}>${S.user ? esc(S.user.username) : 'Entrar'}</a>
+      <a class="link" href="#/" data-cookies>Cookies</a>
       ${musicHtml()}
     </nav>`;
   bindMusic(top);

@@ -672,3 +672,14 @@ button.cap:hover { transform: translateY(-6px) rotateY(10deg); }
    Las animaciones de entrada no se tocan. */
 body:not(.enhanced) :is(.intro h1 span, .hero .btn:first-child, .map .node .halo, .map .road-dash, .bot-floor, .ticker > div, img.bot, .bot .float, .bot .tip, .bot .lid, .bot .arm-l, .orbs i, .wd-art img, .world-banner img, .nut, .streak),
 body:not(.enhanced) :is(.title-glitch, .bubble)::after { animation-play-state: paused; }
+
+/* Aviso de cookies */
+.consent { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 45; max-width: 640px; margin: 0 auto; padding: 16px 18px; background: var(--panel); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line), 0 12px 40px rgba(0, 0, 0, .6); clip-path: var(--shape); }
+.consent h2 { margin: 0 0 6px; font: 700 1rem/1.2 var(--font-head); letter-spacing: .08em; text-transform: uppercase; color: var(--cyan); }
+.consent p { margin: 0 0 10px; font-size: .92rem; color: var(--muted); }
+.consent details { margin: 0 0 12px; font-size: .85rem; color: var(--muted); }
+.consent summary { cursor: pointer; color: var(--ink); }
+.consent table { width: 100%; margin-top: 8px; border-collapse: collapse; }
+.consent th, .consent td { text-align: left; padding: 4px 6px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.consent-actions { display: flex; gap: 10px; }
+.consent-actions button { flex: 1; }
